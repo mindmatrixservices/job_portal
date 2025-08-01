@@ -1,0 +1,881 @@
+{% extends "recruiter/base.html" %}
+
+{% block content %}
+  
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Posting Form</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .dynamic-row {
+            margin-bottom: 10px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+        }
+        .required-field::after {
+            content: " *";
+            color: red;
+        }
+        .section-header {
+            {% comment %} background-color: #0d6efd;
+            color: white;
+            padding: 10px 15px;
+            margin-bottom: 20px;
+            border-radius: 5px; {% endcomment %}
+            margin: 10px 0;
+            color: #2a2f5b;
+            font-size: 20px;
+            font-weight: 600;
+            line-height: 1.6;
+        }
+        .job-type-selector {
+            margin-bottom: 30px;
+        }
+        .form-container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        
+
+        .remove-table {
+            margin-top: 5px;
+        }
+
+        .dynamic-row {
+            position: relative;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 15px;
+            background-color: #f8f9fa;
+        }
+
+        .remove-location-row {
+            margin-top: 5px;
+        }
+
+        .table td {
+            vertical-align: middle;
+        }        
+    </style>
+</head>
+<body class="bg-light">
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="form-container">
+                    <h1 class="text-center mb-4">Job Posting Form</h1>
+                    
+                    <!-- Job Type Selection -->
+                    <div class="job-type-selector">
+                        {% comment %} <h4 class="mb-3">Select Job Type</h4> {% endcomment %}
+                        <div class="row">
+                            <div class="form-group">
+                                <label class="form-label">Select Job Type *</label>
+                                <div class="selectgroup w-100">
+                                  <label class="selectgroup-item">
+                                    <input type="radio" name="job_posted_for" value="Open" class="selectgroup-input" checked="">
+                                    <span class="selectgroup-button">Open</span>
+                                  </label>
+                                  <label class="selectgroup-item">
+                                    <input type="radio" name="job_posted_for" value="Jobfair" class="selectgroup-input">
+                                    <span class="selectgroup-button">Jobfair</span>
+                                  </label>
+                                  <label class="selectgroup-item">
+                                    <input type="radio" name="job_posted_for" value="Sponsor" class="selectgroup-input">
+                                    <span class="selectgroup-button">Sponsor</span>
+                                  </label>
+                                  
+                                </div>
+                              </div>
+                        </div>
+                    </div>
+
+                    <form id="jobPostingForm">
+                        <!-- 1. Role Type -->
+                        <div class="section-header">
+                            1. Job Type
+                        </div>
+                        <div class="mb-3">
+                            <label for="job_type" class="form-label required-field">Select Job Type</label>
+                            <select class="form-select" id="job_type" name="job_type" required>
+                                <option value="" selected disabled>Select Job Type</option>
+                                <option value="Full-Time">Full-Time</option>
+                                <option value="Part-Time">Part-Time</option>
+                                <option value="Internship">Internship</option>
+                                <option value="Contractual">Contractual</option>
+                                <option value="Walk-In">Walk-In</option>
+                            </select>
+                        </div>
+
+                        <!-- 2. Job Details -->
+                        <div class="section-header">
+                           2. Job Details
+                        </div>
+                        <div class="mb-3">
+                            <label for="title" class="form-label required-field">Job Title</label>
+                            <input type="text" class="form-control" id="title" name="title" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="job_role" class="form-label required-field">Job Role / Functional Role</label>
+                            <textarea class="form-control" id="job_role" name="job_role" rows="3" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="keywords" class="form-label">Keywords (comma separated)</label>
+                            <input type="text" class="form-control" id="keywords" name="keywords">
+                            <div class="form-text">Example: marketing, sales, digital</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="sector" class="form-label required-field">Sector</label>
+                                <select class="form-select" id="sector" name="sector" required>
+                                    <option value="" selected disabled>Select Sector</option>
+                                    <option value="IT">Information Technology</option>
+                                    <option value="Healthcare">Healthcare</option>
+                                    <option value="Finance">Finance</option>
+                                    <option value="Education">Education</option>
+                                    <option value="Manufacturing">Manufacturing</option>
+                                    <option value="Government">Government</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="functional_area" class="form-label required-field">Functional Area</label>
+                                <select class="form-select" id="functional_area" name="functional_area" required>
+                                    <option value="" selected disabled>Select Functional Area</option>
+                                    <option value="Administration">Administration</option>
+                                    <option value="Finance">Finance</option>
+                                    <option value="HR">Human Resources</option>
+                                    <option value="IT">Information Technology</option>
+                                    <option value="Marketing">Marketing</option>
+                                    <option value="Operations">Operations</option>
+                                    <option value="Sales">Sales</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- 3. Eligibility Details -->
+                        <div class="section-header">
+                            3. Eligibility Details
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3 mb-3">
+                                <label for="minAge" class="form-label required-field">Minimum Age</label>
+                                <select class="form-select" id="minAge" name="minAge" required>
+                                    <option value="" selected disabled>Select</option>
+                                    <option value="18">18</option>
+                                    <option value="21">21</option>
+                                    <option value="25">25</option>
+                                    <option value="30">30</option>
+                                    <option value="35">35</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="maxAge" class="form-label required-field">Maximum Age</label>
+                                <select class="form-select" id="maxAge" name="maxAge" required>
+                                    <option value="" selected disabled>Select</option>
+                                    <option value="25">25</option>
+                                    <option value="30">30</option>
+                                    <option value="35">35</option>
+                                    <option value="40">40</option>
+                                    <option value="45">45</option>
+                                    <option value="50">50</option>
+                                    <option value="55">55</option>
+                                    <option value="60">60</option>
+                                    <option value="65">65</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="ageAsOnDate" class="form-label required-field">As on Date</label>
+                                <input type="date" class="form-control" id="ageAsOnDate" name="ageAsOnDate" required>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label class="form-label required-field">Age Relaxation Applicable?</label>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="ageRelaxation" id="ageRelaxationYes" value="Yes" required>
+                                    <label class="form-check-label" for="ageRelaxationYes">Yes</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="ageRelaxation" id="ageRelaxationNo" value="No">
+                                    <label class="form-check-label" for="ageRelaxationNo">No</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label required-field">Job For</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="jobFor" id="fresher" value="Fresher" checked>
+                                <label class="form-check-label" for="fresher">Fresher</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="jobFor" id="experienced" value="Experienced">
+                                <label class="form-check-label" for="experienced">Experienced</label>
+                            </div>
+                        </div>
+                        <div id="experienceFields" class="row" style="display: none;">
+                            <div class="col-md-4 mb-3">
+                                <label for="minExperience" class="form-label">Minimum Experience (Years)</label>
+                                <input type="number" class="form-control" id="minExperience" name="minExperience" min="0">
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="maxExperience" class="form-label">Maximum Experience (Years)</label>
+                                <input type="number" class="form-control" id="maxExperience" name="maxExperience" min="0">
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="technicalSkills" class="form-label">Technical Skills</label>
+                                <select class="form-select" id="technicalSkills" name="technicalSkills">
+                                    <option value="" selected disabled>Select Skills</option>
+                                    <option value="Java">Java</option>
+                                    <option value="Python">Python</option>
+                                    <option value="JavaScript">JavaScript</option>
+                                    <option value="SQL">SQL</option>
+                                    <option value="Cloud Computing">Cloud Computing</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="educationQualification" class="form-label required-field">Educational Qualification</label>
+                            <select class="form-select" id="educationQualification" name="educationQualification" required>
+                                <option value="" selected disabled>Select Qualification</option>
+                                <option value="High School">High School</option>
+                                <option value="Diploma">Diploma</option>
+                                <option value="Bachelor's Degree">Bachelor's Degree</option>
+                                <option value="Master's Degree">Master's Degree</option>
+                                <option value="PhD">PhD</option>
+                                <option value="Professional Certification">Professional Certification</option>
+                            </select>
+                        </div>
+
+                        <!-- 4. Organisation Details -->
+                        <div class="section-header">
+                            4. Organisation Details
+                        </div>
+                        <div class="mb-3">
+                            <label for="orgName" class="form-label required-field">Organisation Name</label>
+                            <input type="text" class="form-control" id="orgName" name="orgName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="orgWebsite" class="form-label">Organisation Website</label>
+                            <input type="url" class="form-control" id="orgWebsite" name="orgWebsite" placeholder="https://example.com">
+                        </div>
+                        <div class="mb-3">
+                            <label for="orgAddress" class="form-label required-field">Organisation Address</label>
+                            <textarea class="form-control" id="orgAddress" name="orgAddress" rows="3" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="orgDescription" class="form-label required-field">Organisation Description</label>
+                            <textarea class="form-control" id="orgDescription" name="orgDescription" rows="3" required></textarea>
+                        </div>
+
+                        <!-- 5. Offering Details -->
+                        <div class="section-header">
+                            5. Offering Details
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label required-field">Vacancies For</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="vacancyFor" id="government" value="Government">
+                                <label class="form-check-label" for="government">Government</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="vacancyFor" id="private" value="Private" checked>
+                                <label class="form-check-label" for="private">Private</label>
+                            </div>
+                        </div>
+                        <div id="governmentFields" class="mb-3" style="display: none;">
+                            <label for="payScale" class="form-label">Pay Scale / Level</label>
+                            <input type="text" class="form-control" id="payScale" name="payScale">
+                        </div>
+                        <div id="privateFields" class="row mb-3">
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">Annual Salary Type</label>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="salaryType" id="yearly" value="Yearly" checked>
+                                    <label class="form-check-label" for="yearly">Yearly</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="salaryType" id="monthly" value="Monthly">
+                                    <label class="form-check-label" for="monthly">Monthly</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="minSalary" class="form-label">Minimum Salary</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">₹</span>
+                                    <input type="number" class="form-control" id="minSalary" name="minSalary" min="0">
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="maxSalary" class="form-label">Maximum Salary</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">₹</span>
+                                    <input type="number" class="form-control" id="maxSalary" name="maxSalary" min="0">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="selectionProcess" class="form-label">Candidate Selection Through</label>
+                            <select class="form-select" id="selectionProcess" name="selectionProcess">
+                                <option value="" selected disabled>Select Process</option>
+                                <option value="Written Test">Written Test</option>
+                                <option value="Interview">Interview</option>
+                                <option value="Both">Both (Written Test + Interview)</option>
+                                <option value="Direct Selection">Direct Selection</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">PWD Applicable</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="pwdApplicable" id="pwdYes" value="Yes">
+                                <label class="form-check-label" for="pwdYes">Yes</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="pwdApplicable" id="pwdNo" value="No" checked>
+                                <label class="form-check-label" for="pwdNo">No</label>
+                            </div>
+                        </div>
+                        <div id="pwdFields" class="" style="display: none;">
+                            <div id="pwdRows">
+                                <div class="dynamic-row">
+                                    <table class="table" style="width:100%">
+                                        <thead>
+                                            <tr>
+                                                <th>Category</th>
+                                                <th>Number of Vacancies</th>
+                                                <th>Location<span class="red_hint">*</span></th>
+                                            </tr>
+                                        </thead>                                        
+                                        <tbody>                                        
+                                        <tr>
+                                          <td><span>Open Category/Unreserved</span></td>
+                                          <td><input type="text" class="form-control sum_vacancies" name="opencategory_total_vacancy1" id="openCategory_vacancy1" minlength="1" maxlength="2" onkeypress="return event.charCode>=48 &amp;&amp; event.charCode<=57" onkeyup="calculateTotal()" placeholder="Number of Vacancies"></td>
+                                          <td rowspan="8">
+                                            <select class="form-control " name="category_location1" id="location2" onchange="showInput(this)">
+                                                <option value=""> Select Location </option>
+                                                
+                                                    <option value="123">Barpather Dhansiri</option>
+                                                
+                                                    <option value="93">Barpeta</option>
+                                                
+                                                    <option value="124">Biswanath Chariali</option>
+                                                
+                                                    <option value="126">Bokajan</option>                                           
+                                                
+                                                    <option value="119">Tinsukia</option>
+                                                
+                                                    <option value="138">Udalguri</option>
+                                                
+                                                    <option value="other_location">Other Location</option>
+                                                </select>
+                                            
+                                                <div class="col-md-4 pad_lr_0" id="custom_location_container1" style="display: none; margin-top: 10px;">
+                                                <input type="text" class="form-control" name="custom_location1" id="custom_location1" placeholder="Enter other location">
+                                                </div>
+                                                <script>
+                                                function showInput(selectElement) {
+                                                    const selectedText = selectElement.options[selectElement.selectedIndex].text;
+                                                    const customLocationContainer = document.getElementById('custom_location_container1');
+                                                    
+                                                    if (selectedText.trim().toLowerCase() === 'other location') {
+                                                    customLocationContainer.style.display = 'block';
+                                                    } else {
+                                                    customLocationContainer.style.display = 'none';
+                                                    document.getElementById('custom_location1').value = ''; // Clear input
+                                                    }
+                                                }
+                                                </script>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><span>OBC</span></td>
+                                            <td><input type="text" class="form-control sum_vacancies" minlength="1" name="obc_total_vacancy1" id="obc_vacancy1" onkeypress="return event.charCode>=48 &amp;&amp; event.charCode<=57" onkeyup="calculateTotal()" placeholder="Number of Vacancies"></td>
+                                        </tr>
+                                        <tr>
+                                            <td><span>Scheduled caste</span></td>
+                                            <td><input type="text" class="form-control sum_vacancies" minlength="1" name="sc_total_vacancy1" id="scheduled_caste_vacancy1" onkeypress="return event.charCode>=48 &amp;&amp; event.charCode<=57" onkeyup="calculateTotal()" placeholder="Number of Vacancies"></td>
+                                            
+                                        </tr>
+                                        <tr>
+                                            <td><span>Scheduled Tribe</span></td>
+                                            <td><input type="text" class="form-control sum_vacancies" minlength="1" name="st_total_vacancy1" id="scheduled_tribe_vacancy1" onkeypress="return event.charCode>=48 &amp;&amp; event.charCode<=57" onkeyup="calculateTotal()" placeholder="Number of Vacancies"></td>
+                                            
+                                        </tr>
+                                        
+                                        <tr>
+                                            <td><span>EWS</span></td>
+                                            <td><input type="text" class="form-control sum_vacancies" minlength="1" name="ews_total_vacancy1" id="ews_vacancy1" onkeypress="return event.charCode>=48 &amp;&amp; event.charCode<=57" onkeyup="calculateTotal()" placeholder="Number of Vacancies"></td>
+                                            
+                                        </tr>
+                                        <tr>
+                                            <td><span>Ex-Servicemen</span></td>
+                                            <td><input type="text" class="form-control sum_vacancies" minlength="1" name="exservicemen_total_vacancy1" id="exservicemen_vacancy1" onkeypress="return event.charCode>=48 &amp;&amp; event.charCode<=57" onkeyup="calculateTotal()" placeholder="Number of Vacancies"></td>
+                                            
+                                        </tr>
+                                        <tr>
+                                            <td><span>Persons with disabilities PwD</span></td>
+                                            <td><input type="text" class="form-control sum_vacancies" minlength="1" name="pwd_total_vacancy1" id="pwd_vacancy1" onkeypress="return event.charCode>=48 &amp;&amp; event.charCode<=57" onkeyup="calculateTotal()" placeholder="Number of Vacancies"></td>
+                                            
+                                        </tr>
+                                        <tr>
+                                          <td><span>Women</span></td>
+                                          <td><input type="text" class="form-control sum_vacancies" minlength="1" name="women_total_vacancy1" id="women_vacancy1" onkeypress="return event.charCode>=48 &amp;&amp; event.charCode<=57" onkeyup="calculateTotal()" placeholder="Number of Vacancies"></td>
+                                          
+                                      </tr>                                       
+                                    </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-secondary btn-sm mt-2" id="addPwdRow"><i class="fas fa-plus me-1"></i> Add More</button>
+                        </div>
+                        <div id="nonPwdFields" class="mb-3">
+                            <div id="locationRows">
+                                <table class="table" style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th width="45%">Location</th>
+                                            <th width="45%">Number of Posts</th>
+                                            <th width="10%">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="dynamic-row">
+                                            <td>
+                                                <select class="form-select" name="location[]">
+                                                    <option value="Delhi">Delhi</option>
+                                                    <option value="Mumbai">Mumbai</option>
+                                                    <option value="Bangalore">Bangalore</option>
+                                                    <option value="Hyderabad">Hyderabad</option>
+                                                    <option value="Chennai">Chennai</option>
+                                                    <option value="Kolkata">Kolkata</option>
+                                                </select>
+                                            </td>
+                                            <td>
+                                                <input type="number" class="form-control" name="locationPosts[]" min="0">
+                                            </td>
+                                            <td class="text-center align-middle">
+                                                <button type="button" class="btn btn-danger btn-sm remove-location-row">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <button type="button" class="btn btn-secondary btn-sm mt-2" id="addLocationRow">
+                                <i class="fas fa-plus me-1"></i> Add More
+                            </button>
+                        </div>
+                        <div class="mb-3">
+                            <label for="totalPosts" class="form-label required-field">Total Number of Posts</label>
+                            <input type="number" class="form-control" id="totalPosts" name="totalPosts" min="1" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="applicationMode" class="form-label">Mode of Application</label>
+                            <select class="form-select" id="applicationMode" name="applicationMode">
+                                <option value="" selected disabled>Select Mode</option>
+                                <option value="Online">Online</option>
+                                <option value="Offline">Offline</option>
+                                <option value="Both">Both</option>
+                            </select>
+                        </div>
+
+                        <!-- 6. Particulars of Indenting Officer -->
+                        <div class="section-header">
+                            6. Particulars of Approching Officer
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="approchingOfficerName" class="form-label required-field">Name</label>
+                                <input type="text" class="form-control" id="approchingOfficerName" name="approchingOfficerName" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="approchingOfficerDesignation" class="form-label required-field">Designation</label>
+                                <input type="text" class="form-control" id="approchingOfficerDesignation" name="approchingOfficerDesignation" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="approchingOfficerEmail" class="form-label required-field">Email</label>
+                            <input type="email" class="form-control" id="approchingOfficerEmail" name="approchingOfficerEmail" required>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="orgSeal" class="form-label">Organisation Seal (Image Upload)</label>
+                                <input type="file" class="form-control" id="orgSeal" name="orgSeal" accept="image/*">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="signature" class="form-label">Signature (Image Upload)</label>
+                                <input type="file" class="form-control" id="signature" name="signature" accept="image/*">
+                            </div>
+                        </div>
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" id="sameAsIndentingOfficer" name="sameAsIndentingOfficer">
+                            <label class="form-check-label" for="sameAsIndentingOfficer">Same as Indenting Officer</label>
+                        </div>
+                        
+                        <div class="section-header">
+                            7. Particulars of Indenting Officer
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="indentingOfficerName" class="form-label required-field">Name</label>
+                                <input type="text" class="form-control" id="indentingOfficerName" name="indentingOfficerName" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="indentingOfficerDesignation" class="form-label required-field">Designation</label>
+                                <input type="text" class="form-control" id="indentingOfficerDesignation" name="indentingOfficerDesignation" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="indentingOfficerEmail" class="form-label required-field">Email</label>
+                            <input type="email" class="form-control" id="indentingOfficerEmail" name="indentingOfficerEmail" required>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="orgSeal" class="form-label">Organisation Seal (Image Upload)</label>
+                                <input type="file" class="form-control" id="orgSeal" name="orgSeal" accept="image/*">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="signature" class="form-label">Signature (Image Upload)</label>
+                                <input type="file" class="form-control" id="signature" name="signature" accept="image/*">
+                            </div>
+                        </div>
+
+                        <!-- 7. Additional Fields for "Open Job" Type Only -->
+                        <div id="openJobFields">
+                            <div class="section-header">
+                                8. Additional Fields for Open Job
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="postValidity" class="form-label">Post Validity</label>
+                                    <input type="date" class="form-control" id="postValidity" name="postValidity">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="postRequestedOn" class="form-label">Post Requested On</label>
+                                    <input type="date" class="form-control" id="postRequestedOn" name="postRequestedOn">
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="message" class="form-label">Message</label>
+                                <textarea class="form-control" id="message" name="message" rows="3"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                            <button type="reset" class="btn btn-secondary me-md-2"><i class="fas fa-undo me-1"></i> Reset</button>
+                            <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane me-1"></i> Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+    <script>
+        $(document).ready(function() {
+            // Show/hide experience fields based on jobFor selection
+            $('input[name="jobFor"]').change(function() {
+                if ($(this).val() === 'Experienced') {
+                    $('#experienceFields').show();
+                    $('#technicalSkills').attr('required', true);
+                } else {
+                    $('#experienceFields').hide();
+                    $('#minExperience, #maxExperience, #technicalSkills').val('');
+                    $('#technicalSkills').removeAttr('required');
+                }
+            });
+
+            // Show/hide government/private fields
+            $('input[name="vacancyFor"]').change(function() {
+                if ($(this).val() === 'Government') {
+                    $('#governmentFields').show();
+                    $('#privateFields').hide();
+                    $('#minSalary, #maxSalary').val('');
+                } else {
+                    $('#governmentFields').hide();
+                    $('#privateFields').show();
+                    $('#payScale').val('');
+                }
+            });
+
+            // Show/hide PWD fields
+            $('input[name="pwdApplicable"]').change(function() {
+                if ($(this).val() === 'Yes') {
+                    $('#pwdFields').show();
+                    $('#nonPwdFields').hide();
+                } else {
+                    $('#pwdFields').hide();
+                    $('#nonPwdFields').show();
+                }
+            });
+
+// Show/hide PWD fields based on radio button selection
+document.querySelectorAll('input[name="pwdApplicable"]').forEach(radio => {
+    radio.addEventListener('change', function() {
+        document.getElementById('pwdFields').style.display = 
+            this.value === 'Yes' ? 'block' : 'none';
+    });
+});
+
+// Counter for dynamic tables
+let tableCounter = 1;
+
+// Function to add a new complete table
+document.getElementById('addPwdRow').addEventListener('click', function() {
+    tableCounter++;
+    const pwdRows = document.getElementById('pwdRows');
+    const newTableDiv = document.createElement('div');
+    newTableDiv.className = 'dynamic-row mt-4';
+    newTableDiv.innerHTML = `
+        <table class="table" style="width:100%">
+            <thead>
+                <tr>
+                    <th>Category</th>
+                    <th>Number of Vacancies</th>
+                    <th>Location<span class="red_hint">*</span></th>
+                </tr>
+            </thead>                                        
+            <tbody>                                        
+                <tr>
+                    <td><span>Open Category/Unreserved</span></td>
+                    <td><input type="text" class="form-control sum_vacancies" name="opencategory_total_vacancy${tableCounter}" id="openCategory_vacancy${tableCounter}" minlength="1" maxlength="2" onkeypress="return event.charCode>=48 && event.charCode<=57" onkeyup="calculateTotal()" placeholder="Number of Vacancies"></td>
+                    <td rowspan="9">
+                        <select class="form-control" name="category_location${tableCounter}" id="location${tableCounter}" onchange="showInput(this)">
+                            <option value=""> Select Location </option>
+                            <option value="123">Barpather Dhansiri</option>
+                            <option value="93">Barpeta</option>
+                            <option value="124">Biswanath Chariali</option>
+                            <option value="126">Bokajan</option>                                           
+                            <option value="119">Tinsukia</option>
+                            <option value="138">Udalguri</option>
+                            <option value="other_location">Other Location</option>
+                        </select>
+                        <div class="col-md-4 pad_lr_0" id="custom_location_container${tableCounter}" style="display: none; margin-top: 10px;">
+                            <input type="text" class="form-control" name="custom_location${tableCounter}" id="custom_location${tableCounter}" placeholder="Enter other location">
+                        </div>
+                    </td>
+                    
+                </tr>
+                <tr>
+                    <td><span>OBC</span></td>
+                    <td><input type="text" class="form-control sum_vacancies" minlength="1" name="obc_total_vacancy${tableCounter}" id="obc_vacancy${tableCounter}" onkeypress="return event.charCode>=48 && event.charCode<=57" onkeyup="calculateTotal()" placeholder="Number of Vacancies"></td>
+                </tr>
+                <tr>
+                    <td><span>Scheduled caste</span></td>
+                    <td><input type="text" class="form-control sum_vacancies" minlength="1" name="sc_total_vacancy${tableCounter}" id="scheduled_caste_vacancy${tableCounter}" onkeypress="return event.charCode>=48 && event.charCode<=57" onkeyup="calculateTotal()" placeholder="Number of Vacancies"></td>
+                </tr>
+                <tr>
+                    <td><span>Scheduled Tribe</span></td>
+                    <td><input type="text" class="form-control sum_vacancies" minlength="1" name="st_total_vacancy${tableCounter}" id="scheduled_tribe_vacancy${tableCounter}" onkeypress="return event.charCode>=48 && event.charCode<=57" onkeyup="calculateTotal()" placeholder="Number of Vacancies"></td>
+                </tr>
+                <tr>
+                    <td><span>EWS</span></td>
+                    <td><input type="text" class="form-control sum_vacancies" minlength="1" name="ews_total_vacancy${tableCounter}" id="ews_vacancy${tableCounter}" onkeypress="return event.charCode>=48 && event.charCode<=57" onkeyup="calculateTotal()" placeholder="Number of Vacancies"></td>
+                </tr>
+                <tr>
+                    <td><span>Ex-Servicemen</span></td>
+                    <td><input type="text" class="form-control sum_vacancies" minlength="1" name="exservicemen_total_vacancy${tableCounter}" id="exservicemen_vacancy${tableCounter}" onkeypress="return event.charCode>=48 && event.charCode<=57" onkeyup="calculateTotal()" placeholder="Number of Vacancies"></td>
+                </tr>
+                <tr>
+                    <td><span>Persons with disabilities PwD</span></td>
+                    <td><input type="text" class="form-control sum_vacancies" minlength="1" name="pwd_total_vacancy${tableCounter}" id="pwd_vacancy${tableCounter}" onkeypress="return event.charCode>=48 && event.charCode<=57" onkeyup="calculateTotal()" placeholder="Number of Vacancies"></td>
+                </tr>
+                <tr>
+                    <td><span>Women</span></td>
+                    <td><input type="text" class="form-control sum_vacancies" minlength="1" name="women_total_vacancy${tableCounter}" id="women_vacancy${tableCounter}" onkeypress="return event.charCode>=48 && event.charCode<=57" onkeyup="calculateTotal()" placeholder="Number of Vacancies"></td>
+                </tr>
+                <tr>
+                    <td colspan="3" class="text-center">
+                        <button type="button" class=" btn btn-danger btn-sm remove-table"><i class="fas fa-trash"></i> Remove </button>
+                    </td>
+                </tr>                                      
+            </tbody>
+        </table>
+    `;
+    
+    pwdRows.appendChild(newTableDiv);
+    
+    // Recalculate totals after adding new table
+    calculateTotal();
+});
+
+// Remove table functionality using event delegation
+document.addEventListener('click', function(e) {
+    if (e.target.classList.contains('remove-table') || e.target.closest('.remove-table')) {
+        const button = e.target.classList.contains('remove-table') ? 
+                      e.target : e.target.closest('.remove-table');
+        const tableDiv = button.closest('.dynamic-row');
+        
+        // Don't allow removing the first table
+        if (tableDiv && !tableDiv.previousElementSibling) {
+            alert("You cannot remove the first table.");
+            return;
+        }
+        
+        if (tableDiv) {
+            tableDiv.remove();
+            calculateTotal();
+        }
+    }
+});
+
+// Global showInput function that works with all tables
+function showInput(selectElement) {
+    const rowNumber = selectElement.id.replace('location', '');
+    const customLocationContainer = document.getElementById(`custom_location_container${rowNumber}`);
+    
+    if (customLocationContainer) {
+        const selectedText = selectElement.options[selectElement.selectedIndex].text;
+        
+        if (selectedText.trim().toLowerCase() === 'other location') {
+            customLocationContainer.style.display = 'block';
+        } else {
+            customLocationContainer.style.display = 'none';
+            document.getElementById(`custom_location${rowNumber}`).value = '';
+        }
+    }
+}
+
+
+            // Add dynamic location row
+            // Counter for location rows
+let locationRowCounter = 1;
+
+// Function to add new location row
+document.getElementById('addLocationRow').addEventListener('click', function() {
+    locationRowCounter++;
+    const locationRows = document.querySelector('#locationRows tbody');
+    
+    const newRow = document.createElement('tr');
+    newRow.className = 'dynamic-row';
+    newRow.innerHTML = `
+        <td>
+            <select class="form-select" name="location[]">
+                <option value="Delhi">Delhi</option>
+                <option value="Mumbai">Mumbai</option>
+                <option value="Bangalore">Bangalore</option>
+                <option value="Hyderabad">Hyderabad</option>
+                <option value="Chennai">Chennai</option>
+                <option value="Kolkata">Kolkata</option>
+            </select>
+        </td>
+        <td>
+            <input type="number" class="form-control" name="locationPosts[]" min="0">
+        </td>
+        <td class="text-center align-middle">
+            <button type="button" class="btn btn-danger btn-sm remove-location-row">
+                <i class="fas fa-trash"></i>
+            </button>
+        </td>
+    `;
+    
+    locationRows.appendChild(newRow);
+});
+
+// Remove location row functionality
+document.addEventListener('click', function(e) {
+    if (e.target.classList.contains('remove-location-row') || 
+        e.target.closest('.remove-location-row')) {
+        e.preventDefault();
+        const button = e.target.classList.contains('remove-location-row') ? 
+                      e.target : e.target.closest('.remove-location-row');
+        const row = button.closest('tr');
+        const tbody = row.closest('tbody');
+        const allRows = tbody.querySelectorAll('tr');
+        
+        // Check if this is the last removable row (2nd row or later)
+        if (allRows.length <= 1) {
+            // Create and show a temporary warning message
+            const warning = document.createElement('div');
+            warning.className = 'alert alert-warning position-fixed top-0 start-50 translate-middle-x mt-2';
+            warning.style.zIndex = '1060';
+            warning.style.minWidth = '300px';
+            warning.textContent = 'You must keep at least one location';
+            document.body.appendChild(warning);
+            
+            // Remove after 2 seconds
+            setTimeout(() => warning.remove(), 2000);
+            return;
+        }
+        
+        // Only allow removal if it's not the first row and there are other rows
+        if (row && row.rowIndex > 0) 
+            {row.remove();
+        }
+    }
+});
+
+            // Show/hide job type specific fields
+            $('input[name="job_posted_for"]').change(function() {
+                if ($(this).val() === 'Open Job') {
+                    $('#openJobFields').show();
+                } else {
+                    $('#openJobFields').hide();
+                    $('#postValidity, #postRequestedOn, #message').val('');
+                }
+            });
+
+            // Form validation
+            $('#jobPostingForm').submit(function(e) {
+                // You can add additional validation here if needed
+                console.log('Form submitted');
+                // e.preventDefault(); // Uncomment to prevent actual submission for demo
+            });
+        });
+
+
+
+        $(document).ready(function() {
+            // Handle "Same as Indenting Officer" checkbox
+            $('#sameAsIndentingOfficer').change(function() {
+                if ($(this).is(':checked')) {
+                    // Copy values from Approching Officer to Indenting Officer
+                    $('#indentingOfficerName').val($('#approchingOfficerName').val());
+                    $('#indentingOfficerDesignation').val($('#approchingOfficerDesignation').val());
+                    $('#indentingOfficerEmail').val($('#approchingOfficerEmail').val());
+                    
+                    // Disable the Indenting Officer fields
+                    $('#indentingOfficerName, #indentingOfficerDesignation, #indentingOfficerEmail').prop('disabled', true);
+                } else {
+                    // Clear and enable the Indenting Officer fields
+                    $('#indentingOfficerName, #indentingOfficerDesignation, #indentingOfficerEmail').val('').prop('disabled', false);
+                }
+            });
+            
+            // Update Indenting Officer fields when Approching Officer fields change (if checkbox is checked)
+            $('#approchingOfficerName, #approchingOfficerDesignation, #approchingOfficerEmail').on('input', function() {
+                if ($('#sameAsIndentingOfficer').is(':checked')) {
+                    $('#indentingOfficerName').val($('#approchingOfficerName').val());
+                    $('#indentingOfficerDesignation').val($('#approchingOfficerDesignation').val());
+                    $('#indentingOfficerEmail').val($('#approchingOfficerEmail').val());
+                }
+            });
+        });
+
+
+
+
+
+    </script>
+</body>
+</html>
+
+{% endblock %}

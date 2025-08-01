@@ -1,0 +1,651 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Employment Exchange Dashboard</title>
+    <meta
+      content="width=device-width, initial-scale=1.0, shrink-to-fit=no"
+      name="viewport"
+    />
+    
+    <link
+      rel="icon"
+      href="{% static 'assets/img/kaiadmin/favicon.ico' %}"
+      type="image/x-icon"
+    />
+
+    <!-- Fonts and icons -->
+    <script src="{% static 'assets/js/plugin/webfont/webfont.min.js' %}"></script>
+    <script>
+      WebFont.load({
+        google: { families: ["Public Sans:300,400,500,600,700"] },
+        custom: {
+          families: [
+            "Font Awesome 5 Solid",
+            "Font Awesome 5 Regular",
+            "Font Awesome 5 Brands",
+            "simple-line-icons",
+          ],
+          urls: ["{% static 'assets/css/fonts.min.css' %}"],
+        },
+        active: function () {
+          sessionStorage.fonts = true;
+        },
+      });
+    </script>
+
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'assets/css/plugins.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'assets/css/kaiadmin.min.css' %}" />
+
+    <!-- CSS Just for demo purpose, don't include it in your project -->
+    <link rel="stylesheet" href="{% static 'assets/css/demo.css' %}" />
+  </head>
+  <body>
+    <div class="wrapper">
+      <!-- Sidebar -->
+      <div class="sidebar" data-background-color="dark">
+        <div class="sidebar-logo">
+          <!-- Logo Header -->
+          <div class="logo-header" data-background-color="dark">
+            <a href="index.html" class="logo">
+              {% comment %} <img
+                src="{% static 'assets/img/kaiadmin/logo_light.svg ' %}"
+                alt="navbar brand"
+                class="navbar-brand"
+                height="20"
+              /> {% endcomment %}
+              <h3  class="navbar-brand">DEE</h3>
+            </a>
+            <div class="nav-toggle">
+              <button class="btn btn-toggle toggle-sidebar">
+                <i class="gg-menu-right"></i>
+              </button>
+              <button class="btn btn-toggle sidenav-toggler">
+                <i class="gg-menu-left"></i>
+              </button>
+            </div>
+            <button class="topbar-toggler more">
+              <i class="gg-more-vertical-alt"></i>
+            </button>
+          </div>
+          <!-- End Logo Header -->
+        </div>
+        <div class="sidebar-wrapper scrollbar scrollbar-inner">
+          <div class="sidebar-content">
+            <ul class="nav nav-secondary">
+              <li class="nav-item active">
+                <a
+                  
+                  href="#"
+                 
+                  
+                >
+                  <i class="fas fa-home"></i>
+                  <p>Dashboard</p>
+                  <span class="caret"></span>
+                </a>
+                {% comment %} <div class="collapse" id="dashboard">
+                  <ul class="nav nav-collapse">
+                    <li>
+                      <a href="../demo1/index.html">
+                        <span class="sub-item">Dashboard 1</span>
+                      </a>
+                    </li>
+                  </ul>
+                </div> {% endcomment %}
+              </li>
+              <li class="nav-section">
+                <span class="sidebar-mini-icon">
+                  <i class="fa fa-ellipsis-h"></i>
+                </span>
+                <h4 class="text-section">MIS Reports</h4>
+              </li>
+              <li class="nav-item">
+                <a data-bs-toggle="collapse" href="#base1">
+                  <i class="fas fa-layer-group"></i>
+                  <p>MIS Reports</p>
+                  <span class="caret"></span>
+                </a>
+                <div class="collapse" id="base1">
+                  <ul class="nav nav-collapse">
+                    <li>
+                      <a href="components/avatars.html">
+                        <span class="sub-item">MIS Dashboard</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="components/buttons.html">
+                        <span class="sub-item">MIS Report by Category</span>
+                      </a>
+                    </li>
+                    
+                  </ul>
+                </div>
+              </li>
+              <li class="nav-item">
+                <a data-bs-toggle="collapse" href="#base2">
+                  <i class="fas fa-layer-group"></i>
+                  <p>Old MIS Reports</p>
+                  <span class="caret"></span>
+                </a>
+                <div class="collapse" id="base2">
+                  <ul class="nav nav-collapse">
+                    <li>
+                      <a href="components/avatars.html">
+                        <span class="sub-item">MIS Dashboard</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="components/buttons.html">
+                        <span class="sub-item">MIS Report by Category</span>
+                      </a>
+                    </li>
+                    
+                  </ul>
+                </div>
+              </li>
+              <li class="nav-item">
+                <a data-bs-toggle="collapse" href="#base3">
+                  <i class="fas fa-layer-group"></i>
+                  <p>Job Portals</p>
+                  <span class="caret"></span>
+                </a>
+                <div class="collapse" id="base3">
+                  <ul class="nav nav-collapse">
+                    <li>
+                      <a href="components/avatars.html">
+                        <span class="sub-item">MIS Dashboard</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="components/buttons.html">
+                        <span class="sub-item">Jobseeker MIS</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="components/buttons.html">
+                        <span class="sub-item">Employer MIS</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="components/buttons.html">
+                        <span class="sub-item">Post & Notification MIS</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="components/buttons.html">
+                        <span class="sub-item">Placement MIS</span>
+                      </a>
+                    </li>
+                    
+                  </ul>
+                </div>
+              </li>
+              
+              
+              
+              
+              <li class="nav-section">
+                <span class="sidebar-mini-icon">
+                  <i class="fa fa-ellipsis-h"></i>
+                </span>
+                <h4 class="text-section">Jobfair</h4>
+              </li>
+              <li class="nav-item">
+                <a data-bs-toggle="collapse" href="#base4">
+                  <i class="fas fa-layer-group"></i>
+                  <p>Jobfair </p>
+                  <span class="caret"></span>
+                </a>
+                <div class="collapse" id="base4">
+                  <ul class="nav nav-collapse">
+                    <li>
+                      <a href="components/avatars.html">
+                        <span class="sub-item">Create Job Fair</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="components/avatars.html">
+                        <span class="sub-item">Offline Job Fair</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="components/avatars.html">
+                        <span class="sub-item">Job Fair Related Post</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="components/avatars.html">
+                        <span class="sub-item">Selected list</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="components/avatars.html">
+                        <span class="sub-item">Jobfair MIS</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="components/avatars.html">
+                        <span class="sub-item">Recruitment Drive MIS</span>
+                      </a>
+                    </li>
+                   
+                    
+                  </ul>
+                </div>
+              </li>
+              <li class="nav-item">
+                <a data-bs-toggle="collapse" href="#base5">
+                  <i class="fas fa-layer-group"></i>
+                  <p>Sponsor  </p>
+                  <span class="caret"></span>
+                </a>
+                <div class="collapse" id="base5">
+                  <ul class="nav nav-collapse">
+                    <li>
+                      <a href="components/avatars.html">
+                        <span class="sub-item">Sponsor Related Post</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="components/avatars.html">
+                        <span class="sub-item">Selected list</span>
+                      </a>
+                    </li>
+                   
+                    
+                  </ul>
+                </div>
+              </li>
+              <li class="nav-section">
+                <span class="sidebar-mini-icon">
+                  <i class="fa fa-ellipsis-h"></i>
+                </span>
+                <h4 class="text-section">User Management</h4>
+              </li>
+              <li class="nav-item">
+                <a data-bs-toggle="collapse" href="#base11">
+                  <i class="fas fa-layer-group"></i>
+                  <p>User Management</p>
+                  <span class="caret"></span>
+                </a>
+                <div class="collapse" id="base11">
+                  <ul class="nav nav-collapse">
+                    <li>
+                      <a href="components/avatars.html">
+                        <span class="sub-item">Create Account</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="components/buttons.html">
+                        <span class="sub-item">Delete Account</span>
+                      </a>
+                    </li>
+                    
+                  </ul>
+                </div>
+              </li>
+              <li class="nav-section">
+                <span class="sidebar-mini-icon">
+                  <i class="fa fa-ellipsis-h"></i>
+                </span>
+                <h4 class="text-section">Recruiter </h4>
+              </li>
+              <li class="nav-item">
+                <a href="widgets.html">
+                  <i class="fas fa-desktop"></i>
+                  <p>Pending Approval </p>
+                 
+                </a>
+              </li>
+
+              <li class="nav-section">
+                <span class="sidebar-mini-icon">
+                  <i class="fa fa-ellipsis-h"></i>
+                </span>
+                <h4 class="text-section">EMI & Activity Status Module </h4>
+              </li>
+              <li class="nav-item">
+                <a data-bs-toggle="collapse" href="#base6">
+                  <i class="fas fa-layer-group"></i>
+                  <p>Activity Status Module</p>
+                  <span class="caret"></span>
+                </a>
+                <div class="collapse" id="base6">
+                  <ul class="nav nav-collapse">
+                    <li>
+                      <a href="components/avatars.html">
+                        <span class="sub-item">Dashboard</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="components/avatars.html">
+                        <span class="sub-item"> Submit Activities Data
+                        </span>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="components/avatars.html">
+                        <span class="sub-item"> View Activities Data
+                        </span>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="components/avatars.html">
+                        <span class="sub-item"> Submit Recruitment Data
+                        </span>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="components/avatars.html">
+                        <span class="sub-item">  View Recruitment Data
+                        </span>
+                      </a>
+                    </li>
+                   
+                    
+                  </ul>
+                </div>
+              </li>
+              <li class="nav-item">
+                <a data-bs-toggle="collapse" href="#base7">
+                  <i class="fas fa-layer-group"></i>
+                  <p>Employer Reports </p>
+                  <span class="caret"></span>
+                </a>
+                <div class="collapse" id="base7">
+                  <ul class="nav nav-collapse">
+                    <li>
+                      <a href="components/avatars.html">
+                        <span class="sub-item"> ER1 Report</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="components/avatars.html">
+                        <span class="sub-item">  ER2 Report 
+                        </span>
+                      </a>
+                    </li>
+                    
+                   
+                    
+                  </ul>
+                </div>
+              </li>
+              <li class="nav-item">
+                <a data-bs-toggle="collapse" href="#base10">
+                  <i class="fas fa-layer-group"></i>
+                  <p>EMI Statement  </p>
+                  <span class="caret"></span>
+                </a>
+                <div class="collapse" id="base10">
+                  <ul class="nav nav-collapse">
+                    <li>
+                      <a href="components/avatars.html">
+                        <span class="sub-item">  Submit Data</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="components/avatars.html">
+                        <span class="sub-item">   View Data  
+                        </span>
+                      </a>
+                    </li>
+                    
+                   
+                    
+                  </ul>
+                </div>
+              </li>
+              
+                </div>
+              </li>
+              
+              
+              
+            </ul>
+          </div>
+        </div>
+      </div>
+      <!-- End Sidebar -->
+
+      <div class="main-panel">
+        <div class="main-header">
+          <div class="main-header-logo">
+            <!-- Logo Header -->
+            <div class="logo-header" data-background-color="dark">
+              <a href="index.html" class="logo">
+                <img
+                  src="assets/img/kaiadmin/logo_light.svg"
+                  alt="navbar brand"
+                  class="navbar-brand"
+                  height="20"
+                />
+              </a>
+              <div class="nav-toggle">
+                <button class="btn btn-toggle toggle-sidebar">
+                  <i class="gg-menu-right"></i>
+                </button>
+                <button class="btn btn-toggle sidenav-toggler">
+                  <i class="gg-menu-left"></i>
+                </button>
+              </div>
+              <button class="topbar-toggler more">
+                <i class="gg-more-vertical-alt"></i>
+              </button>
+            </div>
+            <!-- End Logo Header -->
+          </div>
+          <!-- Navbar Header -->
+          <nav
+            class="navbar navbar-header navbar-header-transparent navbar-expand-lg border-bottom"
+          >
+            <div class="container-fluid">
+              <nav
+                class="navbar navbar-header-left navbar-expand-lg navbar-form nav-search p-0 d-none d-lg-flex"
+              >
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <button type="submit" class="btn btn-search pe-1">
+                      <i class="fa fa-search search-icon"></i>
+                    </button>
+                  </div>
+                  <input
+                    type="text"
+                    placeholder="Search ..."
+                    class="form-control"
+                  />
+                </div>
+              </nav>
+
+              <ul class="navbar-nav topbar-nav ms-md-auto align-items-center">
+                <li
+                  class="nav-item topbar-icon dropdown hidden-caret d-flex d-lg-none"
+                >
+                  <a
+                    class="nav-link dropdown-toggle"
+                    data-bs-toggle="dropdown"
+                    href="#"
+                    role="button"
+                    aria-expanded="false"
+                    aria-haspopup="true"
+                  >
+                    <i class="fa fa-search"></i>
+                  </a>
+                  <ul class="dropdown-menu dropdown-search animated fadeIn">
+                    <form class="navbar-left navbar-form nav-search">
+                      <div class="input-group">
+                        <input
+                          type="text"
+                          placeholder="Search ..."
+                          class="form-control"
+                        />
+                      </div>
+                    </form>
+                  </ul>
+                </li>
+                
+
+                <li class="nav-item topbar-user dropdown hidden-caret">
+                  <a
+                    class="dropdown-toggle profile-pic"
+                    data-bs-toggle="dropdown"
+                    href="#"
+                    aria-expanded="false"
+                  >
+                    <div class="avatar-sm">
+                      <img
+                        src="assets/img/profile.jpg"
+                        alt="..."
+                        class="avatar-img rounded-circle"
+                      />
+                    </div>
+                    <span class="profile-username">
+                      <span class="op-7">Hi,</span>
+                      <span class="fw-bold">Hizrian</span>
+                    </span>
+                  </a>
+                  <ul class="dropdown-menu dropdown-user animated fadeIn">
+                    <div class="dropdown-user-scroll scrollbar-outer">
+                      <li>
+                        <div class="user-box">
+                          <div class="avatar-lg">
+                            <img
+                              src="assets/img/profile.jpg"
+                              alt="image profile"
+                              class="avatar-img rounded"
+                            />
+                          </div>
+                          <div class="u-text">
+                            <h4>Hizrian</h4>
+                            <p class="text-muted">hello@example.com</p>
+                           
+                          </div>
+                        </div>
+                      </li>
+                      <li>
+                       
+                       
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">Change Password</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">Logout</a>
+                      </li>
+                    </div>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+          </nav>
+          <!-- End Navbar -->
+        </div>
+
+        <div class="container">
+          <div class="page-inner">
+        {% block content %}{% endblock %}
+    </div>
+</div>
+
+<footer class="footer">
+  <div class="container-fluid d-flex justify-content-between">
+    <nav class="pull-left">
+      <ul class="nav">
+        <li class="nav-item">
+          <a class="nav-link" href="http://www.themekita.com">
+            ThemeKita
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#"> Help </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#"> Licenses </a>
+        </li>
+      </ul>
+    </nav>
+    <div class="copyright">
+      2024, made with <i class="fa fa-heart heart text-danger"></i> by
+      <a href="http://www.themekita.com">ThemeKita</a>
+    </div>
+    <div>
+      Distributed by
+      <a target="_blank" href="https://themewagon.com/">ThemeWagon</a>.
+    </div>
+  </div>
+</footer>
+</div>
+
+<!-- Custom template | don't include it in your project! -->
+
+<!-- End Custom template -->
+</div>
+<!--   Core JS Files   -->
+<script src="{% static 'assets/js/core/jquery-3.7.1.min.js' %}"></script>
+<script src="{% static 'assets/js/core/popper.min.js' %}"></script>
+<script src="{% static 'assets/js/core/bootstrap.min.js' %}"></script>
+
+<!-- jQuery Scrollbar -->
+<script src="{% static 'assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js' %}"></script>
+
+<!-- Chart JS -->
+<script src="{% static 'assets/js/plugin/chart.js/chart.min.js' %}"></script>
+
+<!-- jQuery Sparkline -->
+<script src="{% static 'assets/js/plugin/jquery.sparkline/jquery.sparkline.min.js' %}"></script>
+
+<!-- Chart Circle -->
+<script src="{% static 'assets/js/plugin/chart-circle/circles.min.js' %}"></script>
+
+<!-- Datatables -->
+<script src="{% static 'assets/js/plugin/datatables/datatables.min.js' %}"></script>
+
+<!-- Bootstrap Notify -->
+<script src="{% static 'assets/js/plugin/bootstrap-notify/bootstrap-notify.min.js' %}"></script>
+
+<!-- jQuery Vector Maps -->
+<script src="{% static 'assets/js/plugin/jsvectormap/jsvectormap.min.js' %}"></script>
+<script src="{% static 'assets/js/plugin/jsvectormap/world.js' %}"></script>
+
+<!-- Sweet Alert -->
+<script src="{% static 'assets/js/plugin/sweetalert/sweetalert.min.js' %}"></script>
+
+<!-- Kaiadmin JS -->
+<script src="{% static 'assets/js/kaiadmin.min.js' %}"></script>
+
+<!-- Kaiadmin DEMO methods, don't include it in your project! -->
+<script src="{% static 'assets/js/setting-demo.js' %}"></script>
+<script src="{% static 'assets/js/demo.js' %}"></script>
+<script>
+$("#lineChart").sparkline([102, 109, 120, 99, 110, 105, 115], {
+type: "line",
+height: "70",
+width: "100%",
+lineWidth: "2",
+lineColor: "#177dff",
+fillColor: "rgba(23, 125, 255, 0.14)",
+});
+
+$("#lineChart2").sparkline([99, 125, 122, 105, 110, 124, 115], {
+type: "line",
+height: "70",
+width: "100%",
+lineWidth: "2",
+lineColor: "#f3545d",
+fillColor: "rgba(243, 84, 93, .14)",
+});
+
+$("#lineChart3").sparkline([105, 103, 123, 100, 95, 105, 115], {
+type: "line",
+height: "70",
+width: "100%",
+lineWidth: "2",
+lineColor: "#ffa534",
+fillColor: "rgba(255, 165, 52, .14)",
+});
+</script>
+</body>
+</html>

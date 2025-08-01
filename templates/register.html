@@ -1,0 +1,707 @@
+{% extends "base.html" %}
+
+{% block title %}Register - Career Counselling{% endblock %}
+
+{% block content %}
+
+<style>
+    body {
+        background-color: #f4f7f8;
+        font-family: 'Arial', sans-serif;
+    }
+    .register-container {
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        padding: 30px;
+    }
+    .left-section {
+        color: white;
+        padding: 40px;
+        border-radius: 10px 0 0 10px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        height: 100%;
+    }
+    .left-section h2 {
+        font-size: 28px;
+        font-weight: bold;
+    }
+    .left-section p {
+        font-size: 16px;
+        margin-top: 10px;
+    }
+    .btn-otp, .btn-verify, .btn-resend {
+        background-color: #007bff;
+        border: none;
+        color: white;
+        padding: 8px 12px;
+        cursor: pointer;
+        transition: 0.3s;
+        font-size: 14px;
+    }
+    .btn-otp:hover, .btn-verify:hover, .btn-resend:hover {
+        background-color: #0056b3;
+    }
+    .btn-resend {
+        display: none;
+    }
+    .countdown {
+        font-size: 14px;
+        color: red;
+        margin-top: 5px;
+    }
+    .register-btn {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+    .register-btn.enabled {
+        opacity: 1;
+        cursor: pointer;
+    }
+    @media (max-width: 768px) {
+        .left-section {
+            border-radius: 10px 10px 0 0;
+            text-align: center;
+            padding: 30px;
+        }
+    }
+    .ui-dialog.ui-widget.ui-widget-content.ui-corner-all.ui-front.no-close.ui-dialog-buttons.ui-resizable {
+        z-index: 2000;
+        height: 213px !important;
+    }
+    .ui-dialog .ui-dialog-titlebar {
+        position: relative;
+        background-color: #CCCCCC;
+        margin-top: -3px;
+        width: 103%;
+        margin-left: -3px;
+    }
+    .ui-dialog .ui-dialog-title {
+        float: left;
+        margin: 0.1em 0;
+        white-space: nowrap;
+        width: 90%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        font-size: 19px;
+    }
+    .ui-dialog .ui-dialog-content {
+        position: relative;
+        border: 0;
+        padding: 1.5em 1em;
+        background: none;
+        overflow: auto;
+    }
+    .ui-dialog.ui-corner-all.ui-widget.ui-widget-content.ui-front.ui-dialog-buttons.ui-resizable {
+        height: 175px !important;
+    }
+
+    .password-wrapper {
+        position: relative;
+    }
+    .toggle-password {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        cursor: pointer;
+        color: gray;
+        transition: 0.3s;
+    }
+    .toggle-password:hover {
+        color: black;
+    }
+
+
+    #submit_button:disabled{
+        background-color: #a5f4bb;
+        color: #6e6d6d;
+      }
+</style>
+
+<!-- FontAwesome Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+<!-- SweetAlert -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<div class="container mt-5" >
+    <div class="row justify-content-center">
+        <div class="col-lg-8 register-container">
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="home-tab" data-toggle="tab" data-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">Job Seeker</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="profile-tab" data-toggle="tab" data-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">Employer</button>
+            </li>
+            
+        </ul>
+        <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                <h3 class="text-center mt-4"><i class="fas fa-user-plus" style="font-size:26px;"></i> Job Seeker</h3>
+                <form class="form-contact contact_form" method="post" id="jobseekerform" enctype="multipart/form-data" novalidate>
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <label>Registration No</label>
+                            <div class="form-group d-flex">
+                                <input type="text" name="mobile" id="regno" class="form-control" placeholder="Enter your Registration No" 
+                                    pattern="[0-9]{10}" maxlength="10" required
+                                    oninput="this.value = this.value.replace(/[^0-9]/g, '');">
+                                <button type="button" class="genric-btn primary small" id="sendOtpjs" style="width: 105px;padding: 0px;">Send OTP</button>
+                            </div>
+                                <small class="text-danger d-none" id="mobileErrorjs">Valid registration number is required!</small>
+                        </div>
+                            
+                        <div class="col-12">
+                            <div class="form-group otp-input" id="otpSectionjs" style="display:none;">
+                                <label>Enter OTP</label>
+                                <div class="input-group">
+                                    <input type="text" id="otpjs" name="otpjs" class="form-control" 
+                                        pattern="[0-9]{6}" maxlength="6" required
+                                        oninput="this.value = this.value.replace(/[^0-9]/g, '');">
+                                    <button type="button" class="genric-btn primary small" id="verifyOtpjs">Verify</button>
+                                    <p class="countdown d-none p-1 m-0" id="countdownText">Resend OTP in <span id="countdownjs">180</span>s</p>
+                                    <button type="button" class="genric-btn primary small" id="resendOtpjs" style="margin-left: 10px;">Resend OTP</button>
+                                </div>
+                                <small class="text-danger d-none" id="otpErrorjs">Invalid OTP!</small>
+                            </div>
+                        </div>
+                    </div>
+                    </form>
+                    <ul class="list-unstyled mt-4">
+                        <li>Already have an account? <a style="color:blue;" href="#">Login now</a></li>
+                        <li><strong>Note:</strong> If you have do not have registered no, please create account in Sewa Setu first.<a style="color:blue;" href="https://sewasetu.assam.gov.in/">Create an account</a></li>
+                    </ul>
+            </div>
+            <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                <h3 class="text-center mt-4"><i class="fas fa-user-plus" style="font-size:26px;"></i> Employer Registration</h3>
+                <form class="form-contact contact_form" method="post" id="contactForm" enctype="multipart/form-data" novalidate>
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label>Company Name</label>
+                                <input class="form-control" name="company_name" id="company_name" type="text" required>
+                                <small class="text-danger d-none" id="company_nameError">Company name is required!</small>
+                            </div>
+                        </div>
+                        
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>Company Email</label>
+                                <input class="form-control" name="email" id="email" type="email" required>
+                                <small class="text-danger d-none" id="emailError">Valid email is required!</small>
+                            </div>
+                        </div>
+                        
+                        <div class="col-sm-6">
+                            <label>Contact No</label>
+                            <div class="form-group d-flex">
+                                <input type="text" name="mobile" id="mobile" class="form-control" 
+                                    pattern="[0-9]{10}" maxlength="10" required
+                                    oninput="this.value = this.value.replace(/[^0-9]/g, '');">
+                                <button type="button" class="genric-btn primary small" id="sendOtp" style="width: 105px;padding: 0px;">Send OTP</button>
+                            </div>
+                                <small class="text-danger d-none" id="mobileError">Valid 10-digit phone number is required!</small>
+                        </div>
+                        
+                        <div class="col-12">
+                            <div class="form-group otp-input" id="otpSection" style="display:none;">
+                                <label>Enter OTP</label>
+                                <div class="input-group">
+                                    <input type="text" id="otp" name="otp" class="form-control" 
+                                        pattern="[0-9]{6}" maxlength="6" required
+                                        oninput="this.value = this.value.replace(/[^0-9]/g, '');">
+                                    <button type="button" class="genric-btn primary small" id="verifyOtp">Verify</button>
+                                    <p class="countdown d-none p-1 m-0" id="countdownText">Resend OTP in <span id="countdown">180</span>s</p>
+                                    <button type="button" class="genric-btn primary small" id="resendOtp" style="margin-left: 10px;">Resend OTP</button>
+                                </div>
+                                <small class="text-danger d-none" id="otpError">Invalid OTP!</small>
+                            </div>
+                        </div>
+                        
+                        <div class="col-6">
+                            <label>Address</label>
+                            <div class="form-group">
+                                <input type="text" name="address" id="address" class="form-control" required>
+                                <small class="text-danger d-none" id="addressError">Address is required!</small>
+                            </div>
+                        </div>
+                        
+                        <div class="col-6">
+                            <label>Pin Code</label>
+                            <div class="form-group">
+                                <input type="text" name="pin_code" id="pin_code" class="form-control" 
+                                    pattern="[0-9]{6}" maxlength="6" required
+                                    oninput="this.value = this.value.replace(/[^0-9]/g, '');">
+                                <small class="text-danger d-none" id="pinError">6-digit PIN code is required!</small>
+                            </div>
+                        </div>
+                        
+                        <div class="col-6 mt-1">
+                            <label>Type of Establishment</label>
+                            <div class="form-group">
+                                <select name="establishment_type" id="establishment_type" class="form-select" required>
+                                    <option value="" disabled selected>Select Type of Establishment</option>
+                                    <option value="1">Central Government</option>
+                                    <option value="2">State Government</option>
+                                    <option value="Central Quasi/Central PSU">Central Quasi/Central PSU</option>
+                                    <option value="State Quasi/State PSU">State Quasi/State PSU</option>
+                                    <option value="Autonomous">Autonomous</option>
+                                    <option value="Private (ACT)">Private (ACT)</option>
+                                    <option value="Private (NON-ACT)">Private (NON-ACT)</option>
+                                </select>
+                                <small class="text-danger d-none" id="establishmentError">Establishment type is required!</small>
+                            </div>
+                        </div>
+                        
+                        <div class="col-6 mt-1">
+                            <label>Establishment Code</label>
+                            <div class="form-group">
+                                <select name="establishment_code" id="establishment_code" class="form-select" required>
+                                    <option value="" disabled selected>Select Type of Establishment</option>
+                                    <option value="1">Central Government</option>
+                                    <option value="2">State Government</option>
+                                    <option value="Central Quasi/Central PSU">Central Quasi/Central PSU</option>
+                                    <option value="State Quasi/State PSU">State Quasi/State PSU</option>
+                                    <option value="Autonomous">Autonomous</option>
+                                    <option value="Private (ACT)">Private (ACT)</option>
+                                    <option value="Private (NON-ACT)">Private (NON-ACT)</option>
+                                </select>
+                                <small class="text-danger d-none" id="establishmentCodeError">Establishment code is required!</small>
+                            </div>
+                        </div>
+                        
+                        <div class="col-12 mt-1">
+                            <label>Economic Activity Details</label>
+                            <div class="form-group">
+                                <textarea class="form-control w-100" name="economic_activity_details" 
+                                        id="economic_activity_details" cols="30" rows="9" required></textarea>
+                                <small class="text-danger d-none" id="economicActivityError">Economic Activity Details is required!</small>
+                            </div>
+                        </div>
+                        
+                        <div class="col-6">
+                            <label>Company Identification Number</label>
+                            <div class="form-group">
+                                <input type="text" name="company_registration_no" id="company_registration_no" 
+                                    class="form-control" required>
+                                <small class="text-danger d-none" id="companyRegError">Company Identification Number is required!</small>
+                            </div>
+                        </div>
+                        
+                        <div class="col-6">
+                            <label>Company PAN Number</label>
+                            <div class="form-group">
+                                <input type="text" name="company_pan_no" id="company_pan_no" 
+                                    class="form-control" pattern="[A-Z]{5}[0-9]{4}[A-Z]{1}" required>
+                                <small class="text-danger d-none" id="panError">Valid PAN number is required (e.g., ABCDE1234F)</small>
+                            </div>
+                        </div>
+                        
+                        <div class="col-6">
+                            <label>Company GST Number</label>
+                            <div class="form-group">
+                                <input type="text" name="company_gst_no" id="company_gst_no" 
+                                    class="form-control" pattern="[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}">
+                                <small class="text-danger d-none" id="gstError">Invalid GST number format</small>
+                            </div>
+                        </div>
+                        
+                        <div class="col-6">
+                            <label>Employment Exchange</label>
+                            <select name="employment_exchange" id="employment_exchange" class="form-select">
+                                <option value="" disabled selected>Select Employment Exchange</option>
+                                <option value="Employment Exchange Guwahati">Employment Exchange Guwahati</option>
+                                <!-- Add more options as needed -->
+                            </select>
+                        </div>
+                        
+                        <div class="col-6">
+                            <label>Upload Logo</label>
+                            <div class="form-group">
+                                <input class="form-control" type="file" id="logo" name="logo" accept="image/jpeg, image/png">
+                                <small class="form-text text-muted">Upload your Company's Logo (JPEG, PNG only)</small>
+                                <small class="text-danger d-none" id="logoError">Please upload a valid image file (JPEG/PNG)</small>
+                            </div>
+                        </div>
+                        
+                        <div class="col-6">
+                            <label>Upload Seal</label>
+                            <div class="form-group">
+                                <input class="form-control" type="file" id="seal" name="seal" accept="image/jpeg, image/png">
+                                <small class="form-text text-muted">Upload your Company's Seal (JPEG, PNG only)</small>
+                                <small class="text-danger d-none" id="sealError">Please upload a valid image file (JPEG/PNG)</small>
+                            </div>
+                        </div>
+                        
+                        <div class="col-6">
+                            <label>GST Certificate</label>
+                            <div class="form-group">
+                                <input class="form-control" type="file" id="gst_certificate" name="gst_certificate" accept=".pdf">
+                                <small class="form-text text-muted">Upload your Company's GST Certificate (PDF only)</small>
+                                <small class="text-danger d-none" id="gstCertError">Please upload a PDF file</small>
+                            </div>
+                        </div>
+                        
+                        <div class="col-6">
+                            <label>Upload PAN Card</label>
+                            <div class="form-group">
+                                <input class="form-control" type="file" id="pan_card" name="pan_card" accept="image/jpeg, image/png">
+                                <small class="form-text text-muted">Upload your Company's PAN Card (JPEG, PNG only)</small>
+                                <small class="text-danger d-none" id="panCardError">Please upload a valid image file (JPEG/PNG)</small>
+                            </div>
+                        </div>
+
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label>Password</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                                    </div>
+                                    <input type="password" name="password" id="password" 
+                                        class="form-control" placeholder="Enter password"
+                                        oninput="validatePassword()" required>
+                                    <span class="toggle-password" onclick="togglePassword('password', 'eye-icon1')">
+                                        <i class="fa fa-eye-slash" id="eye-icon1"></i>
+                                    </span>
+                                </div>
+                            </div>
+                                <small class="text-danger d-none" id="passwordError">Password must meet requirements</small>
+                                <small id="passwordStrength" class="form-text"></small>
+                        </div>
+
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label>Confirm Password</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                                    </div>
+                                    <input type="password" name="confirm_password" id="confirm_password" 
+                                        class="form-control" placeholder="Confirm password"
+                                        oninput="validateConfirmPassword()" required>
+                                    <span class="toggle-password" onclick="togglePassword('confirm_password', 'eye-icon2')">
+                                        <i class="fa fa-eye-slash" id="eye-icon2"></i>
+                                    </span>
+                                </div>
+                                <small class="text-danger d-none" id="confirmPasswordError">Passwords do not match!</small>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group mt-5 text-center">
+                        <button type="button" class="genric-btn primary circle" id="submitBtn" disabled>Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+            
+        </div>
+        
+
+        
+
+    </div>
+</div>
+
+<!-- jQuery -->
+{% comment %} <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> {% endcomment %}
+
+    
+    <!-- jQuery UI (required for .dialog()) -->
+<!-- Load jQuery 1.12.4 -->
+<!-- Load jQuery 1.12.4 -->
+<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+
+<!-- Load jQuery UI (Compatible with jQuery 1.12.4) -->
+<link rel="stylesheets" href="https://code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+
+
+
+{% comment %} <script>
+    $(document).ready(function() {
+        $("#myDialog").dialog({ autoOpen: false });
+    
+        $("#openDialog").click(function() {
+            $("#myDialog").dialog("open");
+        });
+    });
+    
+    let correctOtp = "1234"; // Fixed OTP
+    let countdownTimer;
+
+
+    document.getElementById("sendOtp").addEventListener("click", function () {
+        document.getElementById("otpSection").style.display = "block";
+        document.getElementById("sendOtp").disabled = true;
+        document.getElementById("countdownText").classList.remove("d-none");
+        document.getElementById("resendOtp").style.display = "none";
+
+        let timeLeft = 3;
+        document.getElementById("countdown").innerText = timeLeft;
+
+        countdownTimer = setInterval(() => {
+            timeLeft--;
+            document.getElementById("countdown").innerText = timeLeft;
+            if (timeLeft <= 0) {
+                clearInterval(countdownTimer);
+                document.getElementById("countdownText").classList.add("d-none");
+                document.getElementById("resendOtp").style.display = "block";
+                document.getElementById("sendOtp").disabled = false;
+            }
+        }, 1000);
+
+        Swal.fire("OTP Sent!", "Check your phone for the OTP.", "info");
+    });
+
+    document.getElementById("resendOtp").addEventListener("click", function () {
+        document.getElementById("sendOtp").click();
+    });
+
+    document.getElementById("verifyOtp").addEventListener("click", function () {
+        let otp = document.getElementById("otp").value.trim();
+        if (otp === correctOtp) {
+            Swal.fire("OTP Verified!", "You can now register.", "success");
+            document.getElementById("otpSection").style.display = "none";
+            document.getElementById("registerBtn").disabled = false;
+            document.getElementById("registerBtn").classList.add("enabled");
+        } else {
+            Swal.fire("Invalid OTP!", "Please enter the correct OTP.", "error");
+        }
+    });
+
+    var $ = jQuery.noConflict();
+    $('.mainselect').change(function(){
+        if($('#user_type').val()=='CS'){
+            $('.selectlabel').hide();
+            $('#employment_exchange_name').val("");
+            $('.selectzone').show();
+            $('#zone_id').prop('required', true);
+            $('#employment_exchange_name').prop('required', false);
+ 
+         }
+        
+    });
+
+    $('form#user_management_form').submit(function(e){
+        e.preventDefault();
+        let name = $('#name').val().trim();
+        let email = $('#email').val().trim();
+        let mobile = $('#mobile').val().trim();
+        let address = $('#address').val().trim();
+        let pin = $('#pin').val().trim();
+        let establishment = $('#establishment_dpdn').val();
+        let establishment_code = $('#establishment_code_dpdn').val();
+        let economic_activity_details = $('#economic_activity_details').val().trim();
+        let password = $('#password').val();  
+        let confirm_password = $('#confirm_password').val();
+        let logo = $('#logo')[0].files[0];
+        let seal = $('#seal')[0].files[0];
+        
+        // Error elements
+        let nameError = $('#nameError');
+        let emailError = $('#emailError');
+        let mobilerror = $('#mobilerror');
+        let addressError = $('#addressError');
+        let pinError = $('#pinError');
+        let establishmentError = $('#establishmentError');
+        let establishment_codeError = $('#establishment_codeError');
+        let economicActivityError = $('#economicActivityError');
+        let passwordError = $('#passwordError');
+        let confirmPasswordError = $('#confirmPasswordError');
+        let logoError = $('#logoError');
+        let sealError = $('#sealError');
+    
+        let valid = true;
+    
+        // Name Validation (Only alphabets, min 3 characters)
+        if (name === "") {
+            nameError.removeClass('d-none').text('Full Name is required.');
+            valid = false;
+        } else {
+            nameError.addClass('d-none');
+        }
+    
+        // Email Validation
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            emailError.removeClass('d-none').text('Enter a valid email address.');
+            valid = false;
+        } else {
+            emailError.addClass('d-none');
+        }
+    
+        // Phone Validation (10 digits only)
+        if (!/^\d{10}$/.test(mobile)) {
+            mobilerror.removeClass('d-none').text('Enter a valid 10-digit phone number.');
+            valid = false;
+        } else {
+            mobilerror.addClass('d-none');
+        }
+    
+        // Address Validation
+        if (address === "") {
+            // You might want to add addressError element to your HTML
+            // For now, I'll just set valid = false
+            valid = false;
+        }
+    
+        // Pin Validation (6 digits)
+        if (!/^\d{6}$/.test(pin)) {
+            // You might want to add pinError element to your HTML
+            // For now, I'll just set valid = false
+            valid = false;
+        }
+    
+        // Establishment Validation
+        if (!establishment) {
+            establishmentError.removeClass('d-none').text('Establishment type is required.');
+            valid = false;
+        } else {
+            establishmentError.addClass('d-none');
+        }
+    
+        // Establishment Code Validation
+        if (!establishment_code) {
+            establishment_codeError.removeClass('d-none').text('Establishment code is required.');
+            valid = false;
+        } else {
+            establishment_codeError.addClass('d-none');
+        }
+    
+        // Economic Activity Details Validation
+        if (economic_activity_details === "") {
+            // You might want to add economicActivityError element to your HTML
+            // For now, I'll just set valid = false
+            valid = false;
+        }
+    
+        // Logo Validation
+        if (!logo) {
+            // You might want to add logoError element to your HTML
+            // For now, I'll just set valid = false
+            valid = false;
+        } else {
+            // Check file type
+            let validImageTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+            if (!validImageTypes.includes(logo.type)) {
+                // Invalid file type
+                valid = false;
+            }
+            // Check file size (e.g., max 2MB)
+            if (logo.size > 2 * 1024 * 1024) {
+                // File too large
+                valid = false;
+            }
+        }
+    
+        // Seal Validation
+        if (!seal) {
+            // You might want to add sealError element to your HTML
+            // For now, I'll just set valid = false
+            valid = false;
+        } else {
+            // Check file type
+            let validImageTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+            if (!validImageTypes.includes(seal.type)) {
+                // Invalid file type
+                valid = false;
+            }
+            // Check file size (e.g., max 2MB)
+            if (seal.size > 2 * 1024 * 1024) {
+                // File too large
+                valid = false;
+            }
+        }
+    
+        
+    
+        if (!valid) return; // Stop form submission if validation fails
+    
+        // Create FormData object to handle file uploads
+        let formData = new FormData();
+        formData.append('name', name);
+        formData.append('email', email);
+        formData.append('mobile', mobile);
+        formData.append('address', address);
+        formData.append('pin', pin);
+        formData.append('establishment', establishment);
+        formData.append('establishment_code', establishment_code);
+        formData.append('economic_activity_details', economic_activity_details);
+        formData.append('password', password);
+        formData.append('confirm_password', confirm_password);
+        formData.append('logo', logo);
+        formData.append('seal', seal);
+        formData.append('csrfmiddlewaretoken', $('input[name=csrfmiddlewaretoken]').val());
+    
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            data: formData,
+            processData: false,  // Important for file uploads
+            contentType: false,  // Important for file uploads
+            url: "/career_counselling/counsellor_register/",
+            success: function(data) {
+                if (data.error === true) {
+                    if (data.details === "password_error") {
+                        $(".password_err").show().html('<p style="color: red; font-size: 13px; margin-top: 2px;">' + data.response + '</p>');
+                    } else if (data.details === "email_error") {
+                        $(".email_err").show().html('<p style="color: red; font-size: 13px; margin-top: 2px;">' + data.response + '</p>');
+                    } else {
+                        Swal.fire('Error', data.response, 'error').then(() => {
+                            window.location = '.';
+                        });
+                    }
+                } else {
+                    Swal.fire({
+                        title: 'Success!!!',
+                        text: data.response,
+                        icon: 'success'
+                    }).then(() => {
+                        window.location.href = data.url;
+                    });
+                }
+            },
+            error: function(xhr, errmsg, err) {
+                // Handle AJAX errors
+                Swal.fire('Error', 'An error occurred while processing your request.', 'error');
+            }
+        });
+    });
+      
+   
+   
+
+      function open_dialog_with_url(text, title, url) {
+        $("<div>").text(text).dialog({
+            modal: true,
+            title: title,
+            buttons: [
+                {
+                    text: "OK",
+                    click: function () {
+                        $(this).dialog("close");
+                        if (url) {
+                            window.location.href = url; // Redirect only if URL is provided
+                        }
+                    }
+                }
+            ]
+        });
+    }
+    
+
+     function check1(){
+        $(".email_err").hide();
+     }
+    
+
+    
+</script> {% endcomment %}
+
+{% endblock %}

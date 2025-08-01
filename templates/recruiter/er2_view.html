@@ -1,0 +1,38 @@
+{% extends "recruiter/base.html" %}
+
+{% block content %}
+
+<div class="container">
+    
+    <table id="example" class="display" style="width:90%; margin-left: 200px; margin-top: 300px; " >
+            <thead>
+                <tr>
+
+                    <th style="background-color: #28aeec;">Submission Date</th>
+                    <th style="background-color: #28aeec;">Name.</th>
+                    <th style="background-color: #28aeec;">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for objt in filter_data|dictsortreversed:"submission_date"  %}
+                <tr>
+
+                    <td>{{ objt.submission_date | date:"d-m-Y" }}</td>
+                    <td>{{ objt.employer_name }}</td>
+                    <td>
+                       
+                                <a href="{% url 'recruiter:new_er2_report_detail' objt.id %}">
+                                    <button type="button" class="btn btn-outline-danger btn-sm "><i class="bi bi-eye"></i></button>
+                                </a>
+                          
+                    </td>
+                    
+
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+
+{% endblock %}

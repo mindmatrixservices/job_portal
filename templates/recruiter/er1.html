@@ -1,0 +1,571 @@
+{% extends "recruiter/base.html" %}
+
+{% block content %}
+  
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E.R.1 Form</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- SweetAlert2 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <style>
+        .form-step {
+            display: none;
+        }
+        .form-step.active {
+            display: block;
+        }
+        .step-indicator {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            counter-reset: step;
+        }
+        .step {
+            position: relative;
+            flex: 1;
+            text-align: center;
+        }
+        .step:before {
+            content: counter(step);
+            counter-increment: step;
+            width: 30px;
+            height: 30px;
+            line-height: 30px;
+            display: block;
+            margin: 0 auto 10px;
+            border-radius: 50%;
+            background-color: #dee2e6;
+            color: #495057;
+        }
+        .step.active:before {
+            background-color: #0d6efd;
+            color: white;
+        }
+        .step.completed:before {
+            background-color: #198754;
+            color: white;
+        }
+        .step:not(:last-child):after {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 50%;
+            width: 100%;
+            height: 2px;
+            background-color: #dee2e6;
+            z-index: -1;
+        }
+        .step.completed:not(:last-child):after {
+            background-color: #198754;
+        }
+        .table-responsive {
+            overflow-x: auto;
+        }
+        .required-field::after {
+            content: " *";
+            color: red;
+        }
+        .section-header {
+            background-color: #0d6efd;
+            color: white;
+            padding: 10px 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+        .form-container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        .is-invalid {
+            border-color: #dc3545;
+        }
+        .invalid-feedback {
+            color: #dc3545;
+            display: none;
+            width: 100%;
+            margin-top: 0.25rem;
+            font-size: 0.875em;
+        }
+        .is-invalid ~ .invalid-feedback {
+            display: block;
+        }
+    </style>
+</head>
+<body class="bg-light">
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="form-container">
+                    <h1 class="text-center mb-4">E.R.1 Form</h1>
+                    
+                    <!-- Step Indicators -->
+                    <div class="step-indicator">
+                        <div class="step active" id="step1-indicator">
+                            <span>Quarter Selection</span>
+                        </div>
+                        <div class="step" id="step2-indicator">
+                            <span>E.R Ⅰ Return</span>
+                        </div>
+                        <div class="step" id="step3-indicator">
+                            <span>Vacancies</span>
+                        </div>
+                        <div class="step" id="step4-indicator">
+                            <span>Manpower Shortages</span>
+                        </div>
+                    </div>
+
+                    <form id="er1Form">
+                        <!-- Step 1: Quarter Selection -->
+                        <div class="form-step active" id="step1">
+                            <div class="section-header">
+                                <h3 class="mb-0">Select Quarter</h3>
+                            </div>
+                            <div class="mb-4">
+                                <label for="quarter" class="form-label required-field">Select Quarter</label>
+                                <select class="form-select" id="quarter" name="quarter" required>
+                                    <option value="" selected disabled>Select Quarter</option>
+                                    <option value="31st March">First Quarter (1st January - 31st March)</option>
+                                    <option value="30th June">Second Quarter (1st April - 30th June)</option>
+                                    <option value="30th September">Third Quarter (1st July - 30th September)</option>
+                                    <option value="31st December">Forth Quarter (1st October - 31st December)</option>
+                                </select>
+                                <div class="invalid-feedback">Please select a quarter</div>
+                            </div>
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                <button type="button" class="btn btn-primary next-step" data-next="step2">Next <i class="fas fa-arrow-right ms-1"></i></button>
+                            </div>
+                        </div>
+
+                        <!-- Step 2: E.R Ⅰ Return -->
+                        <div class="form-step" id="step2">
+                            <div class="section-header">
+                                <h3 class="mb-0">E.R Ⅰ Return</h3>
+                            </div>
+                            <p class="mb-4">Quarterly return to be submitted to the local Employment Exchange for the quarter ended: <span id="quarterDisplay">30th June 2025</span></p>
+                            <p class="mb-4">"The following information is required under the Employment Exchanges (Compulsory Notification of Vacancies) Rules, 1960 to assist in evaluating trends in employment and for action to correct imbalances between labour supply and demand."</p>
+                            
+                            <div class="mb-3">
+                                <label for="employerName" class="form-label required-field">Employer Name</label>
+                                <input type="text" class="form-control" id="employerName" name="employerName" required>
+                                <div class="invalid-feedback">Please enter employer name</div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="employerAddress" class="form-label required-field">Employer Address</label>
+                                <input type="text" class="form-control" id="employerAddress" name="employerAddress" required>
+                                <div class="invalid-feedback">Please enter employer address</div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="businessNature" class="form-label required-field">Nature of Business / Principal Activity</label>
+                                <input type="text" class="form-control" id="businessNature" name="businessNature" required>
+                                <div class="invalid-feedback">Please enter nature of business</div>
+                            </div>
+                            <div class="mb-4">
+                                <label class="form-label required-field">Office Type</label>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="officeType" id="headOffice" value="Head Office" required>
+                                    <label class="form-check-label" for="headOffice">Head Office</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="officeType" id="branchOffice" value="Branch Office">
+                                    <label class="form-check-label" for="branchOffice">Branch Office</label>
+                                </div>
+                                <div class="invalid-feedback">Please select office type</div>
+                            </div>
+                            
+                            <h5 class="mb-3">1.(a) Employment</h5>
+                            <div class="table-responsive mb-3">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Category</th>
+                                            <th>Number on the last working day of the previous quarter</th>
+                                            <th>Number on the last working day of the quarter under report</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Men</td>
+                                            <td><input type="number" class="form-control" name="menPrevious" required>
+                                                <div class="invalid-feedback">Required</div>
+                                            </td>
+                                            <td><input type="number" class="form-control" name="menCurrent" required>
+                                                <div class="invalid-feedback">Required</div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Women</td>
+                                            <td><input type="number" class="form-control" name="womenPrevious" required>
+                                                <div class="invalid-feedback">Required</div>
+                                            </td>
+                                            <td><input type="number" class="form-control" name="womenCurrent" required>
+                                                <div class="invalid-feedback">Required</div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Total</td>
+                                            <td><input type="number" class="form-control" name="totalPrevious" required>
+                                                <div class="invalid-feedback">Required</div>
+                                            </td>
+                                            <td><input type="number" class="form-control" name="totalCurrent" required>
+                                                <div class="invalid-feedback">Required</div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label for="employmentChangeReason" class="form-label">*(b) Please indicate the main reasons for any increase or decrease in employment if the change is more than 5% during the quarter</label>
+                                <textarea class="form-control" id="employmentChangeReason" name="employmentChangeReason" rows="3"></textarea>
+                            </div>
+                            
+                            <p class="text-muted mb-4">Note: Establishments are reminded of their obligation under the Employment Exchanges (Compulsory Notification of Vacancies) Act for notifying to Employment Exchanges details of vacancies specified under the Act, before they are filled.</p>
+                            
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-between">
+                                <button type="button" class="btn btn-secondary prev-step" data-prev="step1"><i class="fas fa-arrow-left me-1"></i> Previous</button>
+                                <button type="button" class="btn btn-primary next-step" data-next="step3">Next <i class="fas fa-arrow-right ms-1"></i></button>
+                            </div>
+                        </div>
+
+                        <!-- Step 3: VACANCIES -->
+                        <div class="form-step" id="step3">
+                            <div class="section-header">
+                                <h3 class="mb-0">2. VACANCIES</h3>
+                            </div>
+                            <h5 class="mb-3">2(a). Number of vacancies occurred and notified during the quarter and the number filled during the quarter: <span class="quarter-display">30th June 2025</span></h5>
+                            
+                            <div class="table-responsive mb-3">
+                                <table class="table table-bordered">
+                                    <caption>*Number of vacancies which come within the purview of the Act</caption>
+                                    <thead>
+                                        <tr>
+                                            <th>*Occurred</th>
+                                            <th>*Employment Exchange</th>
+                                            <th>*Filled</th>
+                                            <th>*Sources (Describe the source from which filled)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><input type="text" class="form-control" placeholder="Total Occurred" name="vacanciesOccurred" required>
+                                                <div class="invalid-feedback">Required</div>
+                                            </td>
+                                            <td><h4 class="mb-0">District Employment Exchange – Guwahati</h4></td>
+                                            <td><input type="text" class="form-control" placeholder="Total Filled" name="vacanciesFilled" required>
+                                                <div class="invalid-feedback">Required</div>
+                                            </td>
+                                            <td><input type="text" class="form-control" placeholder="Total Sources" name="vacanciesSources" required>
+                                                <div class="invalid-feedback">Required</div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label for="nonNotificationReason" class="form-label required-field">*2(b). Reasons for not notifying all vacancies occurred during the quarter under report vide 2(a) above. Otherwise give "None":</label>
+                                <textarea class="form-control" id="nonNotificationReason" name="nonNotificationReason" rows="3" required></textarea>
+                                <div class="invalid-feedback">Please provide reasons or write "None"</div>
+                            </div>
+                            
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-between">
+                                <button type="button" class="btn btn-secondary prev-step" data-prev="step2"><i class="fas fa-arrow-left me-1"></i> Previous</button>
+                                <button type="button" class="btn btn-primary next-step" data-next="step4">Next <i class="fas fa-arrow-right ms-1"></i></button>
+                            </div>
+                        </div>
+
+                        <!-- Step 4: Manpower Shortages -->
+                        <div class="form-step" id="step4">
+                            <div class="section-header">
+                                <h3 class="mb-0">Manpower Shortages</h3>
+                            </div>
+                            <h5 class="mb-3">Vacancies/posts unfilled because of shortage of suitable applicants</h5>
+                            
+                            <div class="table-responsive mb-3">
+                                <table class="table table-bordered" id="shortagesTable">
+                                    <caption>Number of unfilled vacancies/posts</caption>
+                                    <thead>
+                                        <tr>
+                                            <th>Name of the occupation or designation of the post</th>
+                                            <th>Essential Qualification prescribed</th>
+                                            <th>Essential Experience</th>
+                                            <th>Experience not necessary</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><input type="text" class="form-control" name="occupation[]" required>
+                                                <div class="invalid-feedback">Required</div>
+                                            </td>
+                                            <td><input type="text" class="form-control" name="qualification[]" required>
+                                                <div class="invalid-feedback">Required</div>
+                                            </td>
+                                            <td><input type="text" class="form-control" name="experience[]"></td>
+                                            <td class="text-center"><input type="checkbox" class="form-check-input" name="experienceNotNeeded[]"></td>
+                                            <td class="text-center"><button type="button" class="btn btn-danger btn-sm remove-row"><i class="fas fa-trash"></i></button></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <button type="button" class="btn btn-secondary" id="addShortageRow"><i class="fas fa-plus me-1"></i> Add Row</button>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label for="employerSignature" class="form-label required-field">Upload Employer Signature</label>
+                                <input type="file" class="form-control" id="employerSignature" name="employerSignature" accept=".jpg,.jpeg" required>
+                                <div class="invalid-feedback">Please upload a valid JPG/JPEG signature file</div>
+                                <div class="form-text">Only JPG/JPEG files allowed</div>
+                            </div>
+                            
+                            <p class="text-muted mb-4">Note: This return shall relate to quarter ending 31st March, 30th June, 30th September, 31st December and shall be rendered to the local Employment Exchange within 30 days after the end of the quarter concerned.</p>
+                            
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-between">
+                                <button type="button" class="btn btn-secondary prev-step" data-prev="step3"><i class="fas fa-arrow-left me-1"></i> Previous</button>
+                                <button type="submit" class="btn btn-success"><i class="fas fa-check me-1"></i> Submit</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- SweetAlert2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Update quarter display based on selection
+            const quarterSelect = document.getElementById('quarter');
+            const quarterDisplays = document.querySelectorAll('.quarter-display, #quarterDisplay');
+            
+            quarterSelect.addEventListener('change', function() {
+                const selectedQuarter = this.value;
+                const year = new Date().getFullYear();
+                quarterDisplays.forEach(display => {
+                    display.textContent = `${selectedQuarter} ${year}`;
+                });
+            });
+            
+            // Step navigation
+            const steps = document.querySelectorAll('.form-step');
+            const stepIndicators = document.querySelectorAll('.step-indicator .step');
+            
+            function goToStep(stepNumber) {
+                // Hide all steps
+                steps.forEach(step => step.classList.remove('active'));
+                
+                // Show current step
+                document.getElementById(`step${stepNumber}`).classList.add('active');
+                
+                // Update step indicators
+                stepIndicators.forEach((indicator, index) => {
+                    indicator.classList.remove('active', 'completed');
+                    if (index + 1 === stepNumber) {
+                        indicator.classList.add('active');
+                    } else if (index + 1 < stepNumber) {
+                        indicator.classList.add('completed');
+                    }
+                });
+            }
+            
+            // Next step buttons
+            document.querySelectorAll('.next-step').forEach(button => {
+                button.addEventListener('click', function() {
+                    const currentStep = this.closest('.form-step');
+                    const nextStepId = this.getAttribute('data-next');
+                    
+                    // Validate current step before proceeding
+                    if (validateStep(currentStep.id)) {
+                        goToStep(parseInt(nextStepId.replace('step', '')));
+                    }
+                });
+            });
+            
+            // Previous step buttons
+            document.querySelectorAll('.prev-step').forEach(button => {
+                button.addEventListener('click', function() {
+                    const prevStepId = this.getAttribute('data-prev');
+                    goToStep(parseInt(prevStepId.replace('step', '')));
+                });
+            });
+            
+            // Form submission
+            document.getElementById('er1Form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                if (validateStep('step4')) {
+                    // Show success message with SweetAlert
+                    Swal.fire({
+                        title: 'Success!',
+                        text: 'Your form has been submitted successfully.',
+                        icon: 'success',
+                        confirmButtonText: 'OK',
+                        confirmButtonColor: '#198754'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // Here you would typically submit the form data to the server
+                            // For demo purposes, we'll just reset the form
+                            this.reset();
+                            goToStep(1);
+                        }
+                    });
+                } else {
+                    // Show error message if validation fails
+                    Swal.fire({
+                        title: 'Validation Error',
+                        text: 'Please fill in all required fields correctly.',
+                        icon: 'error',
+                        confirmButtonText: 'OK',
+                        confirmButtonColor: '#dc3545'
+                    });
+                }
+            });
+            
+            // Validate a step
+            function validateStep(stepId) {
+                const step = document.getElementById(stepId);
+                const inputs = step.querySelectorAll('input[required], select[required], textarea[required]');
+                let isValid = true;
+                
+                inputs.forEach(input => {
+                    if (!input.value.trim()) {
+                        input.classList.add('is-invalid');
+                        isValid = false;
+                    } else {
+                        input.classList.remove('is-invalid');
+                    }
+                });
+                
+                // Special validation for radio buttons
+                if (stepId === 'step2') {
+                    const radioGroup = step.querySelectorAll('input[name="officeType"]');
+                    let radioChecked = false;
+                    radioGroup.forEach(radio => {
+                        if (radio.checked) radioChecked = true;
+                    });
+                    if (!radioChecked) {
+                        const radioContainer = step.querySelector('.form-check-input').closest('.mb-4');
+                        radioContainer.querySelector('.invalid-feedback').style.display = 'block';
+                        isValid = false;
+                    } else {
+                        const radioContainer = step.querySelector('.form-check-input').closest('.mb-4');
+                        radioContainer.querySelector('.invalid-feedback').style.display = 'none';
+                    }
+                }
+                
+                // Special validation for file upload
+                if (stepId === 'step4') {
+                    const fileInput = document.getElementById('employerSignature');
+                    if (fileInput.files.length === 0) {
+                        fileInput.classList.add('is-invalid');
+                        isValid = false;
+                    } else {
+                        const file = fileInput.files[0];
+                        if (!file.type.match('image/jpeg') && !file.type.match('image/jpg')) {
+                            fileInput.classList.add('is-invalid');
+                            isValid = false;
+                        } else {
+                            fileInput.classList.remove('is-invalid');
+                        }
+                    }
+                }
+                
+                if (!isValid) {
+                    // Scroll to the first invalid input
+                    const firstInvalid = step.querySelector('.is-invalid');
+                    if (firstInvalid) {
+                        firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                }
+                
+                return isValid;
+            }
+            
+            // Add dynamic row to shortages table
+            document.getElementById('addShortageRow').addEventListener('click', function() {
+                const tbody = document.querySelector('#shortagesTable tbody');
+                const newRow = document.createElement('tr');
+                newRow.innerHTML = `
+                    <td><input type="text" class="form-control" name="occupation[]" required>
+                        <div class="invalid-feedback">Required</div>
+                    </td>
+                    <td><input type="text" class="form-control" name="qualification[]" required>
+                        <div class="invalid-feedback">Required</div>
+                    </td>
+                    <td><input type="text" class="form-control" name="experience[]"></td>
+                    <td class="text-center"><input type="checkbox" class="form-check-input" name="experienceNotNeeded[]"></td>
+                    <td class="text-center"><button type="button" class="btn btn-danger btn-sm remove-row"><i class="fas fa-trash"></i></button></td>
+                `;
+                tbody.appendChild(newRow);
+                
+                // Show success toast
+                Swal.fire({
+                    position: 'top-end',
+                    icon: 'success',
+                    title: 'New row added',
+                    showConfirmButton: false,
+                    timer: 1500,
+                    toast: true
+                });
+            });
+            
+            // Remove row from shortages table
+            document.addEventListener('click', function(e) {
+                if (e.target && e.target.closest('.remove-row')) {
+                    const row = e.target.closest('tr');
+                    if (document.querySelectorAll('#shortagesTable tbody tr').length > 1) {
+                        // Show confirmation dialog
+                        Swal.fire({
+                            title: 'Are you sure?',
+                            text: "You won't be able to revert this!",
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: 'Yes, delete it!'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                row.remove();
+                                Swal.fire(
+                                    'Deleted!',
+                                    'The row has been removed.',
+                                    'success'
+                                );
+                            }
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Cannot delete',
+                            text: 'You must have at least one row.',
+                            confirmButtonColor: '#3085d6'
+                        });
+                    }
+                }
+            });
+            
+            // Initialize with step 1
+            goToStep(1);
+        });
+    </script>
+</body>
+</html>
+{% endblock %}

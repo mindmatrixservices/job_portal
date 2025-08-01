@@ -1,0 +1,460 @@
+{% extends "base.html" %}
+
+{% block title %}Register - Career Counselling{% endblock %}
+
+{% block content %}
+<script src="https://www.google.com/recaptcha/api.js"></script>
+<style>
+    body {
+        background-color: #f4f7f8;
+        font-family: 'Arial', sans-serif;
+    }
+    .register-container {
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        padding: 30px;
+    }
+    .left-section {
+        background: #fff;
+        color: white;
+        padding: 40px;
+        border-radius: 10px 0 0 10px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        height: 100%;
+    }
+    .left-section h2 {
+        font-size: 28px;
+        font-weight: bold;
+    }
+    .left-section p {
+        font-size: 16px;
+        margin-top: 10px;
+    }
+    body {
+        background-color: #f4f7f8;
+        font-family: 'Arial', sans-serif;
+    }
+    .login-container {
+        max-width: 400px;
+        margin: 80px auto;
+        padding: 30px;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    }
+    .login-container h3 {
+        margin-bottom: 20px;
+        color: #333;
+        font-weight: bold;
+    }
+    .input-group-prepend .input-group-text {
+        background: #fff;
+        border-right: none;
+        color: #007bff;
+        font-size: 18px;
+    }
+    .form-control {
+        border-left: none;
+    }
+    .password-wrapper {
+        position: relative;
+    }
+    .toggle-password {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        cursor: pointer;
+        color: gray;
+        transition: 0.3s;
+    }
+    .toggle-password:hover {
+        color: black;
+    }
+    @media (max-width: 768px) {
+        .left-section {
+            border-radius: 10px 10px 0 0;
+            text-align: center;
+            padding: 30px;
+        }
+    }
+</style>
+
+<!-- FontAwesome Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+<!-- SweetAlert -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+
+        <!-- Right Side (Registration Form) -->
+        <div class="col-lg-8 register-container">
+            <h3 class="text-center"><i class="fas fa-sign-in-alt"></i> Login</h3>
+            <form id="CSApplicantForm" name="CSApplicantForm" class="CSApplicantForm" method="POST"
+                  enctype="multipart/form-data">
+                  {% csrf_token %}
+                <div class="form-group">
+                <label>User Type</label>
+                    <select name="establishment_type" id="establishment_type" class="form-select" required>
+                        <option value="" disabled selected>Select User Type</option>
+                        <option value="1">Job Seeker</option>
+                        <option value="2">Employer</option>
+                        <option value="3">District Employment Exchange</option>
+                        <option value="4">Department</option>
+                    </select>
+                    <small class="text-danger d-none" id="establishmentError">Establishment type is required!</small>
+                </div>
+                
+                <div class="form-group">
+                    <label>Email</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                        </div>
+                        <input type="email" name="email" class="form-control"  id="userlogin_email" placeholder="Enter Email ID" required>
+                    </div>
+                    <small class="text-danger d-none" id="userError">Invalid Account Credentials</small>
+                </div>
+    
+                <div class="form-group">
+                    <label>Password</label>
+                    <div class="input-group password-wrapper">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                        </div>
+                        <input type="password" id="userlogin_password" name="password" class="form-control" placeholder="Enter password" required> 
+                        <span class="toggle-password" onclick="togglePassword()">
+                            <i class="fa fa-eye" id="eye-icon"></i>
+                        </span>
+                    </div>
+                    <small class="text-danger d-none" id="passError">Password is required!</small>
+                </div>
+                <div class="form-group last mb-4">
+                    <label for="captcha">Enter the text as shown in the image </label>
+  
+                    <input type="text" placeholder="Enter Captcha" class="form-control"  id="cpatchaTextBox" name="captcha" autocomplete="off" required>
+                    <p id="captcha_response_message"></p>
+         
+                  </div>
+                  <div id="captcha"> 
+                  </div>
+                  
+                {% if messages %}
+                {% for message in messages %}
+                    <div class="alert {% if message.tags == 'success' %}alert-success{% else %}alert-danger{% endif %}" role="alert">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+                {% endif %}
+                
+                {% comment %} <button type="submit" class="btn btn-primary w-100">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </button> {% endcomment %}
+                {% comment %} <button type="submit" class="btn btn-default login_form_button" id="button_value">Login Here</button> {% endcomment %}
+                <button type="submit" class="btn btn-default login_form_button " id="button_value" >Log In</button>
+                {% comment %} <div class="text-center">
+                    <input type="submit" value="Log In" class="btn btn-block btn-primary " style="display: inline-block; background:rgb(219, 0, 95); border-color: #6c63ff; margin-top: 30px; width: 50%;">
+                    </div> {% endcomment %}
+    
+                <!-- Register Navigation Link -->
+                <p class="register-link text-center">
+                    <i class="fas fa-user-plus"></i> Don't have an account? <a class="text-primary" href="{% url 'register' %}">Register here</a>
+                </p>
+            </form>
+        </div>
+
+    </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script>
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+    {% comment %} <script>
+        var code;
+        function createCaptcha() {
+          //clear the contents of captcha div first 
+          document.getElementById('captcha').innerText = "";
+          var charsArray =
+          "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ@!#$%^&*";
+          var lengthOtp = 6;
+          var captcha = [];
+          for (var i = 0; i < lengthOtp; i++) {
+            //below code will not allow Repetition of Characters
+            var index = Math.floor(Math.random() * charsArray.length + 1); //get the next character from the array
+            if (captcha.indexOf(charsArray[index]) == -1)
+              captcha.push(charsArray[index]);
+            else i--;
+          }
+          var canv = document.createElement("canvas");
+          canv.id = "captcha";
+          canv.width = 150;
+          canv.height = 40;
+          var ctx = canv.getContext("2d");
+          ctx.font = "18px Georgia";
+          ctx.strokeText(captcha.join(""), 0, 30);
+          //storing captcha so that can validate you can save it somewhere else according to your specific requirements
+          code = captcha.join("");
+          document.getElementById("captcha").appendChild(canv); // adds the canvas to the body element
+          var formData = new FormData();
+          formData.append('captcha', code);
+          formData.append('csrfmiddlewaretoken', getCookie('csrftoken'));
+        
+          fetch('/store_captcha_in_session/', {
+            method: 'POST',
+            body: formData,
+          })
+          .then(response => {
+            if (response.ok) {
+              console.log("Session stored successfully");
+            } else {
+              console.error("Error storing session:", response.statusText);
+            }
+          })
+          .catch(error => {
+            console.error('Error storing session:', error);
+          });
+        }
+
+        function togglePassword() {
+            var passwordInput = document.getElementById("userlogin_password");
+            var eyeIcon = document.getElementById("eye-icon");
+    
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+                eyeIcon.classList.remove("fa-eye");
+                eyeIcon.classList.add("fa-eye-slash");
+            } else {
+                passwordInput.type = "password";
+                eyeIcon.classList.remove("fa-eye-slash");
+                eyeIcon.classList.add("fa-eye");
+            }
+        }
+        
+        function validateCaptcha() {
+          event.preventDefault();
+          
+          if (document.getElementById("cpatchaTextBox").value == code) {
+            return true;
+          }else{
+            //$('.error_message').html("Invalid Captcha. Try Again");
+            //$('#demo').plainModal('open');
+            //alert("Invalid Captcha. try Again");
+            createCaptcha();
+            return false;
+          }
+        }
+        
+        // Function to get CSRF token from cookie
+        function getCookie(name) {
+          var cookieValue = null;
+          if (document.cookie && document.cookie !== '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+              var cookie = cookies[i].trim();
+              if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+              }
+            }
+          }
+          return cookieValue;
+        }
+        
+        function getCSRFToken() {
+          var csrfToken = null;
+          if (document.cookie && document.cookie !== '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+              var cookie = cookies[i].trim();
+              if (cookie.startsWith('csrftoken=')) {
+                csrfToken = decodeURIComponent(cookie.substring('csrftoken='.length));
+                break;
+              }
+            }
+          }
+          return csrfToken;
+        }
+        
+        function encrypt_password(password, key) {
+            var cipher = CryptoJS.lib.WordArray.random(16);
+            var iv = CryptoJS.enc.Base64.stringify(cipher);
+            var encrypted = CryptoJS.AES.encrypt(password, CryptoJS.enc.Utf8.parse(key), {
+                iv: cipher,
+                padding: CryptoJS.pad.Pkcs7,
+                mode: CryptoJS.mode.CBC
+            });
+            return {
+                iv: iv,
+                ct: encrypted.toString()
+            };
+        }
+         // Function to check previous sessions
+     function checkPreviousSessions(user) {
+        var csrfToken = $('input[name="csrfmiddlewaretoken"]').val();
+        
+        
+        // Create FormData object and append CSRF token
+        var sessionFormData = new FormData();
+        sessionFormData.append('csrfmiddlewaretoken', csrfToken);
+        sessionFormData.append('user', user);
+        
+        sessionFormData.append('counsellor_id', $('#counsellor_id').val());
+    
+        fetch('/check_previous_sessions/', {
+            method: 'POST',
+            body: sessionFormData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.has_previous_sessions) {
+                // Prompt the user that previous session will be terminated
+                if (confirm('You have previous active sessions. Logging in now will terminate those sessions. Do you want to continue?')) {
+                    // If user confirms, terminate previous sessions and proceed with login
+                    loginUser(sessionFormData);
+                } else {
+                    // If user cancels, do nothing
+                    return;
+                }
+            } else {
+                // If user has no previous sessions, proceed with login directly
+                loginUser(sessionFormData);
+            }
+        })
+        .catch(error => {
+            console.error('Error checking previous sessions:', error);
+        });
+    }
+        $('form#CSApplicantForm').submit(function(e) {
+            e.preventDefault();
+            register_type = $('#user_register_type').val();
+            $('.loaderContainer').css('display', 'flex'); //Loader after clicking 'Apply Now'
+            $('body').css('overflow-y', 'hidden');
+            var captchaTextBoxValue = $("#cpatchaTextBox").val();
+            
+            // Create form data
+            var formData = new FormData();
+            formData.append('captcha', captchaTextBoxValue);
+        
+            // Get CSRF token value
+            var csrfToken = $('input[name="csrfmiddlewaretoken"]').val();
+            formData.append('csrfmiddlewaretoken', csrfToken); // Add CSRF token to form data
+        
+            // Send POST request with form data
+            fetch('/validate_captcha/', {
+                method: 'POST',
+                body: formData,
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.valid) {
+                    var url;
+                    var serializedData;
+        
+                    if (register_type == 'login') {
+                        url = '/validate_credential_jobseeker/';
+                        var password = $('#userlogin_password').val();
+                        var key = "my_secret_key_1234".slice(0, 16);  // Truncate the key to 16 bytes
+        
+                        // Encryption
+                        var encryptedPassword = encrypt_password(password, key);
+                        console.log("Encrypted Password:", encryptedPassword);
+        
+                        // Create form data with hashed password
+                        var loginFormData = new FormData();
+                        loginFormData.append('email', $('#userlogin_email').val());
+                        loginFormData.append('password', encryptedPassword.ct); // Send the encrypted password to the server
+                        loginFormData.append('iv', encryptedPassword.iv); // Send the IV to the server
+                        loginFormData.append('csrfmiddlewaretoken', csrfToken);
+        
+                        serializedData = new URLSearchParams(loginFormData).toString();
+                    } else if (register_type == 'forgot_password') {
+                        url = '/user/forgot_password/';
+                        var loginFormData = new FormData();
+                        loginFormData.append('email', $('#userlogin_email').val());
+                       
+                        loginFormData.append('csrfmiddlewaretoken', csrfToken);
+        
+                        serializedData = new URLSearchParams(loginFormData).toString();
+    
+                    } else {
+                        url = '/registration/using_email/';
+                    }
+        
+                    $.ajax({
+                        type: 'POST',
+                        dataType: 'json',
+                        data: serializedData,
+                        contentType: 'application/x-www-form-urlencoded', // Set the content type explicitly
+                        url: url,
+                        success: function (data) {
+                            if (data.error == false) {
+                                console.log("main if :",data)
+                                $('.loaderContainer').css('display', 'none'); //Loader closed after response from server'
+                                $('body').css('overflow-y', 'unset');
+        
+                                if(register_type == 'forgot_password') {
+                                    open_dialog_with_url('Password reset Successfull, Check you email for new password', "Success!", '/');
+                                } else if(register_type == 'login') {
+                                    var user= data.user;
+                                    // If credentials are valid, check if user has previous sessions
+                                    checkPreviousSessions(user);
+                                } else {
+                                    window.location = data.redirect_url;
+                                }
+                            } else if (data.response) {
+                                console.log("else if main :",data)
+                                $('.loaderContainer').css('display', 'none'); //Loader closed after response from server'
+                                $('body').css('overflow-y', 'unset');
+                                $('p.hint').remove();
+                                for (var key in data.response) {
+                                    $('#userError').removeClass('d-none').text("Invalid Account Credentials");
+                                    //$('#userlogin_' + key).after('<p class="hint">' + data.response[key] + '</p>');
+                                }
+                            } else {
+                                console.log("else :",data)
+                                $('.loaderContainer').css('display', 'none'); //Loader closed after response from server'
+                                $('body').css('overflow-y', 'unset');
+                                $('p.hint').remove();
+                                $('#userlogin_response_message').html('<p class="hint">' + data.response_message + '</p>');
+                            }
+                        }
+                    });
+        
+                } else {
+                    // CAPTCHA is invalid, regenerate it and show error message
+                    createCaptcha();
+                    $('#captcha_response_message').html('<p class="hint text-danger">' + "Invalid Captcha. Try Again" + '</p>');
+                    $(".loaderContainer").css("display", "none"); //Loader closed after response from server'
+                    $("body").css("overflow-y", "unset");
+                }
+        
+            }).catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    
+         // Function to handle login
+         function loginUser(formData) {
+            fetch('/cs_login_user_email/', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error == false) {
+                    window.location = data.redirect_url;
+                } 
+            })
+            .catch(error => {
+                console.error('AJAX Error:', error);
+                // Handle the error appropriately
+            });
+        }
+    </script> {% endcomment %}
+
+{% endblock %}

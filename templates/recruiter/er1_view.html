@@ -1,0 +1,41 @@
+{% extends "recruiter/base.html" %}
+
+{% block content %}
+
+<div class="container">
+    
+    <table id="example" class="display" style="width:90%; margin-left: 200px; margin-top: 300px; " >
+            <thead>
+                <tr>
+
+                    <th style="background-color: #28aeec;">Submission Date</th>
+                    <th style="background-color: #28aeec;">Serial No.</th>
+                    <th style="background-color: #28aeec;">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for objt in filter_data|dictsortreversed:"date"  %}
+                <tr>
+
+                    <td>{{ objt.date | date:"d-m-Y" }}</td>
+                    <td>{{ objt.serial_no }}</td>
+                    <td>
+                        {% with serial_no=objt.serial_no %}
+                            {% with increment_number=serial_no|cut:"/"|slice:"15:"|slice:"0:4" %}
+                            <a href="{% url 'emi_module:new_er1_report_detail' increment_number=increment_number %}">
+
+                                    <button type="button" class="btn btn-outline-danger btn-sm "><i class="bi bi-eye"></i></button>
+                                </a>
+                            {% endwith %}
+                        {% endwith %}
+                    </td>
+                    
+
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+
+{% endblock %}

@@ -1,0 +1,535 @@
+{% load static %}  <!-- Add this at the top -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>{% block title %}Career Counselling{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <link rel="shortcut icon" type="image/x-icon" href="new_assets/img/favicon.ico">
+    {% comment %} <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"> {% endcomment %}
+    <!-- Bootstrap CSS -->
+
+    <!-- Custom CSS -->
+    <!-- Flatpickr CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+    <!-- CSS here -->
+    <!-- Flatpickr CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="{% static 'new_assets/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'new_assets/css/owl.carousel.min.css' %}">
+    <link rel="stylesheet" href="{% static 'new_assets/css/flaticon.css' %}">
+    <link rel="stylesheet" href="{% static 'new_assets/css/price_rangs.css' %}">
+    <link rel="stylesheet" href="{% static 'new_assets/css/slicknav.css' %}">
+    <link rel="stylesheet" href="{% static 'new_assets/css/animate.min.css' %}">
+    <link rel="stylesheet" href="{% static 'new_assets/css/magnific-popup.css' %}">
+    <link rel="stylesheet" href="{% static 'new_assets/css/fontawesome-all.min.css' %}">
+    <link rel="stylesheet" href="{% static 'new_assets/css/themify-icons.css' %}">
+    <link rel="stylesheet" href="{% static 'new_assets/css/slick.css' %}">
+    <link rel="stylesheet" href="{% static 'new_assets/css/nice-select.css' %}">
+    <link rel="stylesheet" href="{% static 'new_assets/css/style.css' %}">
+    <style>
+        /* Profile Menu Container */
+        .profile-menu {
+            position: relative;
+            display: inline-block;
+        }
+    
+        /* Profile Icon */
+        .profile-icon {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            padding: 10px;
+            font-size: 18px;
+            color: #333;
+            transition: 0.3s;
+            border-radius: 5px;
+        }
+    
+        .profile-icon:hover {
+            background-color: #f0f0f0;
+        }
+    
+        .profile-icon i {
+            font-size: 20px;
+            margin-right: 8px;
+        }
+    
+        /* Dropdown Menu */
+        .sub_dropdown {
+            position:absolute;
+            width:170px;
+            background:#fff;
+            left:0;
+            top:120%;
+            visibility:hidden;
+            opacity:0;
+            border-top:5px solid #fb246a;
+            box-shadow:0 0 10px 3px rgba(0,0,0,0.05);
+            padding:17px 0;
+            -webkit-transition:.3s;
+            -moz-transition:.3s;
+            -o-transition:.3s;
+            transition:.3s}
+        
+    
+        /* Show dropdown */
+        .profile-menu.active .sub_dropdown {
+            visibility:visible;
+            opacity:1;
+            top:100%;
+            z-index: 900;
+        }
+    
+        .sub_dropdown li {
+            margin-left:7px;
+            display:block
+        }
+    
+        .sub_dropdown li a {
+            padding:6px 10px !important;
+            font-size:14px;
+            color:#0b1c39;
+            font-weight:500;
+            font-family:"Barlow",sans-serif;
+        }
+    
+        .sub_dropdown li a i {
+            margin-right: 8px;
+            font-size: 16px;
+        }
+    
+        /* Hover Effect */
+        {% comment %} .sub_dropdown li:hover {
+            background: #007bff;
+        } {% endcomment %}
+    
+        .sub_dropdown li:hover a {
+            color:#fb246a;
+        }
+
+        .btn {
+            margin: 5px !important;  /* Override Bootstrap's default margin */
+        }
+        
+        .dropdown-menu {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            min-width: 150px;
+        }
+        
+        .dropdown-menu a {
+            padding: 10px 15px;
+            font-size: 16px;
+            color: #333;
+            transition: background-color 0.3s ease-in-out;
+        }
+        
+        .dropdown-menu a:hover {
+            background-color: #f1f1f1;
+            color: #000;
+        }
+        
+    </style>
+    {% comment %} Style for dropdown of login and register button {% endcomment %}
+    <style>
+        .dropdown-hover:hover .dropdown-menu {
+            display: block;
+            margin-top: 0; /* Optional: removes gap between button and menu */
+        }
+        </style>
+        
+</head>
+<body onload="createCaptcha()">
+    <!-- Preloader Start -->
+    <div id="preloader-active">
+        <div class="preloader d-flex align-items-center justify-content-center">
+            <div class="preloader-inner position-relative">
+                <div class="preloader-circle"></div>
+                <div class="preloader-img pere-text">
+                    <img src="{% static 'new_assets/img/logo.png' %}" alt="">
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Preloader Start -->
+    <!-- Navigation Bar -->
+    <header>
+        <!-- Header Start -->
+       <div class="header-area header-transparrent">
+           <div class="headder-top header-sticky">
+                <div class="container-fluid">
+                    <div class="row align-items-center">
+                        <div class="col-lg-3 col-md-2">
+                            <!-- Logo -->
+                            <div class="logo">
+                                <a href="index.html"><img src="{% static 'new_assets/img/Assam4.png' %}" alt=""></a> 
+                                {% comment %} logo 199x64 {% endcomment %}
+                            </div>  
+                        </div>
+                        <div class="col-lg-9 col-md-9 mt-3">
+                            <div class="menu-wrapper">
+                                <!-- Main-menu -->
+                                <div class="main-menu">
+                                    <nav class="d-none d-lg-block">
+                                        <ul id="navigation">
+                                            <li>
+                                                <a href="{% url 'home' %}">Home</a>
+                                            </li>
+                                            <li><a href="{% url 'about' %}">About</a></li>
+                                            <li><a href="#">Resource</a>
+                                                <ul class="submenu">
+                                                    <li><a href="{% url 'guidelines' %}">Guidelines</a></li>
+                                                    <li><a href="{% url 'tnc' %}">Terms & Conditions</a></li>
+                                                </ul>
+                                            </li>
+                                            <li><a href="{% url 'contactus' %}">Contact</a></li>
+                                        </ul>
+                                    </nav>
+                                </div>          
+                                <!-- Header-btn -->
+                                {% comment %} {% if request.session.user_id %}
+                                <div class="header-btn d-none f-right d-lg-block">
+                                    <div class="profile-menu" id="profileMenu">
+                                        <!-- Profile Icon -->
+                                        <div class="profile-icon" id="profileIcon">
+                                            <i class="fas fa-user"></i> Profile
+                                        </div>
+                                        <!-- Submenu -->
+                                        <ul class="sub_dropdown" id="submenu">
+                                            <li><a href="{% url 'career_counselling_portal:my_session' %}"><i class="fas fa-calendar-alt"></i> My Sessions</a></li>
+                                            <li><a href="#"><i class="fas fa-user"></i> Profile</a></li>
+                                            <li><a href="{% url 'career_counselling_portal:get_out' %}"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            {% else %} {% endcomment %}
+                            <div class="d-flex justify-content-start">
+                                <div class="header-btn f-right d-lg-block">
+                                    <a href="{% url 'register' %}" class="genric-btn danger-border circle arrow medium btn head-btn1">Register</a>
+                                    <a href="{% url 'login' %}" class="genric-btn danger-border circle arrow medium btn head-btn2">Login</a>
+                            </div>                
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Mobile Menu -->
+                    <div class="col-12">
+                        <div class="mobile_menu d-block d-lg-none"></div>
+                    </div>
+                </div>
+           </div>
+       </div>
+        <!-- Header End -->
+    </header>
+
+    
+        {% block content %}{% endblock %}
+   
+
+    <!-- Footer -->
+    <footer>
+        <!-- Footer Start-->
+        <div class="footer-area footer-bg footer-padding mt-5">
+            <div class="container">
+                <div class="row d-flex justify-content-between">
+                    <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6">
+                       <div class="single-footer-caption mb-50">
+                         <div class="single-footer-caption mb-30">
+                             <div class="footer-tittle">
+                                 <h4>About Us</h4>
+                                 <div class="footer-pera">
+                                     <p>Heaven frucvitful doesn't cover lesser dvsays appear creeping seasons so behold.</p>
+                                </div>
+                             </div>
+                         </div>
+
+                       </div>
+                    </div>
+                    <div class="col-xl-3 col-lg-3 col-md-4 col-sm-5">
+                        <div class="single-footer-caption mb-50">
+                            <div class="footer-tittle">
+                                <h4>Contact Info</h4>
+                                <ul>
+                                    <li>
+                                    <p>Address :Your address goes
+                                        here, your demo address.</p>
+                                    </li>
+                                    <li><a href="#">Phone : +8880 44338899</a></li>
+                                    <li><a href="#">Email : test@email.com</a></li>
+                                </ul>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-lg-3 col-md-4 col-sm-5">
+                        <div class="single-footer-caption mb-50">
+                            <div class="footer-tittle">
+                                <h4>Important Link</h4>
+                                <ul>
+                                    <li><a href="#"> View Project</a></li>
+                                    <li><a href="#">Contact Us</a></li>
+                                    <li><a href="#">Testimonial</a></li>
+                                    <li><a href="#">Proparties</a></li>
+                                    <li><a href="#">Support</a></li>
+                                    <li><a href="">Institutional Request</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-lg-3 col-md-4 col-sm-5">
+                        <div class="single-footer-caption mb-50">
+                            <div class="footer-tittle">
+                                <h4>Newsletter</h4>
+                                <div class="footer-pera footer-pera2">
+                                 <p>Heaven fruitful doesn't over lesser in days. Appear creeping.</p>
+                             </div>
+                             <!-- Form -->
+                             <div class="footer-form" >
+                                 <div id="mc_embed_signup">
+                                     <form target="_blank" action="#"
+                                     method="get" class="subscribe_form relative mail_part">
+                                         <input type="email" name="email" id="newsletter-form-email" placeholder="Email Address"
+                                         class="placeholder hide-on-focus" onfocus="this.placeholder = ''"
+                                         onblur="this.placeholder = ' Email Address '">
+                                         <div class="form-icon">
+                                             <button type="submit" name="submit" id="newsletter-submit"
+                                             class="email_icon newsletter-submit button-contactForm"><img src="assets/img/icon/form.png" alt=""></button>
+                                         </div>
+                                         <div class="mt-10 info"></div>
+                                     </form>
+                                 </div>
+                             </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+               <!--  -->
+               <div class="row footer-wejed justify-content-between">
+                    <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6">
+                        <!-- logo -->
+                        <div class="footer-logo mb-20">
+                        <a href="index.html"><img src="{% static 'new_assets/img/Assam4.png' %}" alt=""></a>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-lg-3 col-md-4 col-sm-5">
+                    <div class="footer-tittle-bottom">
+                        <span>5000+</span>
+                        <p>Talented Hunter</p>
+                    </div>
+                    </div>
+                    <div class="col-xl-3 col-lg-3 col-md-4 col-sm-5">
+                        <div class="footer-tittle-bottom">
+                            <span>451</span>
+                            <p>Talented Hunter</p>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-lg-3 col-md-4 col-sm-5">
+                        <!-- Footer Bottom Tittle -->
+                        <div class="footer-tittle-bottom">
+                            <span>568</span>
+                            <p>Talented Hunter</p>
+                        </div>
+                    </div>
+               </div>
+            </div>
+        </div>
+        <!-- footer-bottom area -->
+        <div class="footer-bottom-area footer-bg">
+            <div class="container">
+                <div class="footer-border">
+                     <div class="row d-flex justify-content-between align-items-center">
+                         <div class="col-xl-10 col-lg-10 ">
+                             <div class="footer-copy-right">
+                                 <p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+  Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved by <a href="#" target="_blank">AMTRON</a>
+  <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
+                             </div>
+                         </div>
+                         <div class="col-xl-2 col-lg-2">
+                             {% comment %} <div class="footer-social f-right">
+                                 <a href="#"><i class="fab fa-facebook-f"></i></a>
+                                 <a href="#"><i class="fab fa-twitter"></i></a>
+                                 <a href="#"><i class="fas fa-globe"></i></a>
+                                 <a href="#"><i class="fab fa-behance"></i></a>
+                             </div> {% endcomment %}
+                         </div>
+                     </div>
+                </div>
+            </div>
+        </div>
+        <!-- Footer End-->
+    </footer>
+
+   
+    <!-- Custom JS -->
+   
+    <!-- JS here -->
+     <!-- Flatpickr JS -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+
+
+	
+		<!-- All JS Custom Plugins Link Here here -->
+        <script src="{% static 'new_assets/js/vendor/modernizr-3.5.0.min.js' %}"></script>
+		<!-- Jquery, Popper, Bootstrap -->
+         <!-- Load jQuery 1.12.4 -->
+        <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+        
+
+        <!-- Load jQuery UI (Compatible with jQuery 1.12.4) -->
+        <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+
+		{% comment %} <script src="{% static 'new_assets/js/vendor/jquery-1.12.4.min.js' %}"></script> {% endcomment %}
+        <script src="{% static 'new_assets/js/popper.min.js' %}"></script>
+        <script src="{% static 'new_assets/js/bootstrap.min.js' %}"></script>
+	    <!-- Jquery Mobile Menu -->
+        <script src="{% static 'new_assets/js/jquery.slicknav.min.js' %}"></script>
+
+		<!-- Jquery Slick , Owl-Carousel Plugins -->
+        <script src="{% static 'new_assets/js/owl.carousel.min.js' %}"></script>
+        <script src="{% static 'new_assets/js/slick.min.js' %}"></script>
+        <script src="{% static 'new_assets/js/price_rangs.js' %}"></script>
+        
+		<!-- One Page, Animated-HeadLin -->
+        <script src="{% static 'new_assets/js/wow.min.js' %}"></script>
+		<script src="{% static 'new_assets/js/animated.headline.js' %}"></script>
+        <script src="{% static 'new_assets/js/jquery.magnific-popup.js' %}"></script>
+
+		<!-- Scrollup, nice-select, sticky -->
+        <script src="{% static 'new_assets/js/jquery.scrollUp.min.js' %}"></script>
+        <script src="{% static 'new_assets/js/jquery.nice-select.min.js' %}"></script>
+		<script src="{% static 'new_assets/js/jquery.sticky.js' %}"></script>
+        
+        <!-- contact js -->
+        <script src="{% static 'new_assets/js/contact.js' %}"></script>
+        <script src="{% static 'new_assets/js/jquery.form.js' %}"></script>
+        <script src="{% static 'new_assets/js/jquery.validate.min.js' %}"></script>
+        <script src="{% static 'new_assets/js/mail-script.js' %}"></script>
+        <script src="{% static 'new_assets/js/jquery.ajaxchimp.min.js' %}"></script>
+        
+		<!-- Jquery Plugins, main Jquery -->	
+        <script src="{% static 'new_assets/js/plugins.js' %}"></script>
+        <script src="{% static 'new_assets/js/main.js' %}"></script>
+        <script src="{% static 'new_assets/js/recruiter.js' %}"></script>
+        
+      <script> function csrfSafeMethod(method) {
+        // these HTTP methods do not require CSRF protection
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+      }
+      $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+            // Include CSRF token in headers for non-safe requests
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", getCSRFToken());
+            }
+        }
+    });
+      function getCSRFToken() {
+        var csrfToken = null;
+        if (document.cookie && document.cookie !== '') {
+          var cookies = document.cookie.split(';');
+          for (var i = 0; i < cookies.length; i++) {
+            var cookie = cookies[i].trim();
+            if (cookie.startsWith('csrftoken=')) {
+              csrfToken = decodeURIComponent(cookie.substring('csrftoken='.length));
+              break;
+            }
+          }
+        }
+        return csrfToken;
+      }
+    
+      function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+          var cookies = document.cookie.split(';');
+          for (var i = 0; i < cookies.length; i++) {
+            var cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+              cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+              break;
+            }
+          }
+        }
+        return cookieValue;
+      }
+    
+    
+    var code;
+  
+    
+    function createCaptcha() {
+      //clear the contents of captcha div first 
+      document.getElementById('captcha').innerText = "";
+      var charsArray =
+      "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ@!#$%^&*";
+      var lengthOtp = 6;
+      var captcha = [];
+      for (var i = 0; i < lengthOtp; i++) {
+        //below code will not allow Repetition of Characters
+        var index = Math.floor(Math.random() * charsArray.length + 1); //get the next character from the array
+        if (captcha.indexOf(charsArray[index]) == -1)
+          captcha.push(charsArray[index]);
+        else i--;
+      }
+      var canv = document.createElement("canvas");
+      canv.id = "captcha";
+      canv.width = 150;
+      canv.height = 40;
+      var ctx = canv.getContext("2d");
+      ctx.font = "25px Georgia";
+      ctx.strokeText(captcha.join(""), 0, 30);
+      //storing captcha so that can validate you can save it somewhere else according to your specific requirements
+      code = captcha.join("");
+      document.getElementById("captcha").appendChild(canv); // adds the canvas to the body element
+      var formData = new FormData();
+      formData.append('captcha', code);
+      formData.append('csrfmiddlewaretoken', getCookie('csrftoken'));
+    
+      fetch('/career_counselling_portal/store_captcha_in_session/', {
+        method: 'POST',
+        body: formData,
+      })
+      .then(response => {
+        if (response.ok) {
+          console.log("Session stored successfully");
+        } else {
+          console.error("Error storing session:", response.statusText);
+        }
+      })
+      .catch(error => {
+        console.error('Error storing session:', error);
+      });
+    }
+    
+      </script>
+
+      <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const profileIcon = document.getElementById("profileIcon");
+            const profileMenu = document.getElementById("profileMenu");
+    
+            // Toggle dropdown on click
+            profileIcon.addEventListener("click", function (event) {
+                event.stopPropagation(); // Prevent closing when clicking on the profile icon
+                profileMenu.classList.toggle("active");
+            });
+    
+            // Close dropdown when clicking outside
+            document.addEventListener("click", function (event) {
+                if (!profileMenu.contains(event.target)) {
+                    profileMenu.classList.remove("active");
+                }
+            });
+        });
+    </script>
+    
+</body>
+</html>

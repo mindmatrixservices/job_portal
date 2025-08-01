@@ -1,0 +1,221 @@
+{% extends "base.html" %}
+
+{% block title %}About Us - Job Portal{% endblock %}
+
+{% block content %}
+<style>
+    /* Government-style CSS */
+    .govt-heading {
+        color: #28395a;
+        border-bottom: 2px solid #28395a;
+        padding-bottom: 10px;
+        font-weight: 700;
+        font-size: 24px;
+    }
+    
+    .govt-content-box {
+        background: #f8f9fa;
+        padding: 25px;
+        border-radius: 5px;
+        border-left: 4px solid #28395a;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .vision-box {
+        border-left-color: #2e7d32;
+        background: #f1f8e9;
+    }
+    
+    .mission-box {
+        border-left-color: #1565c0;
+        background: #e3f2fd;
+    }
+    
+    .stakeholders-list {
+        columns: 2;
+        -webkit-columns: 2;
+        -moz-columns: 2;
+        list-style-type: none;
+        padding: 0;
+    }
+    
+    .stakeholders-list li {
+        padding: 8px 0;
+        padding-left: 30px;
+        position: relative;
+        font-size: 16px;
+    }
+    
+    .stakeholders-list li:before {
+        content: "•";
+        color: #28395a;
+        font-size: 20px;
+        position: absolute;
+        left: 10px;
+    }
+    
+    .history-content p {
+        margin-bottom: 15px;
+        line-height: 1.6;
+    }
+    
+    @media (max-width: 768px) {
+        .stakeholders-list {
+            columns: 1;
+            -webkit-columns: 1;
+            -moz-columns: 1;
+        }
+    }
+
+    /* Simple Attractive Hero Styles */
+    .guidelines-hero {
+        background-color: #f5f9ff;
+        padding: 3rem 0;
+        margin-top: 2rem;
+        border-bottom: 1px solid #e0e9ff;
+    }
+    
+    .hero-content {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 0 15px;
+    }
+    
+    .guidelines-hero h1 {
+        color: #1a3e72;
+        font-size: 2.2rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    
+    .guidelines-hero .lead {
+        color: #4a5568;
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+    
+    .breadcrumb {
+        padding: 0;
+        margin-bottom: 1.5rem;
+        background: transparent;
+    }
+    
+    .breadcrumb-item a {
+        color: #4a5568;
+        text-decoration: none;
+        transition: color 0.2s;
+    }
+    
+    .breadcrumb-item a:hover {
+        color: #1a3e72;
+        text-decoration: underline;
+    }
+    
+    .breadcrumb-item.active {
+        color: #718096;
+    }
+    
+    .breadcrumb-item + .breadcrumb-item::before {
+        content: ">";
+        padding: 0 8px;
+        color: #a0aec0;
+    }   
+    
+    @media (max-width: 768px) {
+        .guidelines-hero {
+            padding: 2rem 0;
+        }
+        
+        .guidelines-hero h1 {
+            font-size: 1.8rem;
+        }
+        
+        .terms-content h2 {
+            font-size: 1.3rem;
+        }
+    }
+</style>
+
+<main>
+    <div class="guidelines-hero mt-5">
+        <div class="container">
+            <div class="hero-content">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">About Us</li>
+                    </ol>
+                </nav>
+                <h1>About Us</h1>
+                <p class="lead">Connecting job seekers with top companies to build meaningful careers.</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- About Details Start -->
+    <div class="about-details py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="about-details-cap mb-50">
+                        <h3 class="mb-30 govt-heading">HISTORY OF EMPLOYMENT SERVICE</h3>
+                        <div class="history-content govt-content-box">
+                            <p>The Employment Service came into existence in India under the stress of post second world-war demobilization. Towards the end of the Second World War, the need for a machinery which could handle orderly reabsorption of civil life, of a large number of service personnel and war workers who were about to be released as keenly felt.</p>
+                            
+                            <p>Having regard to the complexity of the problem and in order to ensure uniformity in policies and effective co-ordination of efforts it was considered necessary that the proposed machinery be directed and controlled by the Central Government. In accordance with a scheme that was agreed upon by the Central and State Governments, the Directorate General of Resettlement and Employment (D.G.R.&E) was set up in July 1945 and Employment Exchanges were gradually opened in several parts of the country.</p>
+                            
+                            <p>This transition of the Employment Service from a resettlement agency to an all India placement organisation resulted in an enormous increase of work, which called for long-term measures. It was felt that the organisation which was hurriedly set-up to tackle the immediate problem of resettlement of released war service personnel, required to be restructured if it was to function as an effective machinery which could facilitate and further the employment process. Accordingly, the Training and Employment Services Organisation Committee (popularly known as Shiva Rao Committee) was appointed in 1952 (under the chairmanship of Shri B. Shiva Rao), to review the set-up and functions of the Employment Service and to make recommendations for its reorganization. The Committee submitted their report in 1954 which was mainly responsible for the present structure of the organisation and diversification of its functions in the field of Occupational Research, Vocational Guidance and Employment Market Information. Based on the recommendations of the committee, the day-to-day administration of the organisation was handed over to the State Governments with effect from 1st November 1956.</p>
+                            
+                            <p>The administration of the Directorate of National Employment Service which was under the control of the Government of India was transferred to the State Government and tagged with the Department with effect from 1st November, 1956. The "Craftsmen Training Scheme" which was formerly under Education (CTM) Department was transferred to the Labour Department on 1st April 1964 and constituted as a wing of the Directorate of Employment and Craftsmen Training under the Labour and Employment Department.</p>
+                            
+                            <p>Now, the Directorate of Employment and Craftsmen Training, Assam (DECT) is under the newly created Skill, Employment and Entrepreneurship Department, Govt. of Assam having two wings – (1) Employment Service Wing and (2) Craftsmen Training Wing. At present Employment Service is being provided by 52 no of Employment Exchanges across the state of Assam.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="about-details-cap mb-50">
+                        <h3 class="mb-30 govt-heading">OUR VISION</h3>
+                        <div class="govt-content-box vision-box">
+                            <p>To provide a platform to respective stakeholders for responsive transparent and efficient employment service in order to meet the skill needs of a dynamic society and to enhance employability of jobseekers.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-6">
+                    <div class="about-details-cap mb-50">
+                        <h3 class="mb-30 govt-heading">OUR MISSION</h3>
+                        <div class="govt-content-box mission-box">
+                            <p>To facilitate employment opportunities to all jobseekers in the State of Assam either through paid employment or self-employment and to provide vocational/ educational guidance and other services to the utmost satisfaction of the stakeholders.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="about-details-cap mb-50">
+                        <h3 class="mb-30 govt-heading">OUR STAKEHOLDERS</h3>
+                        <div class="govt-content-box">
+                            <ul class="stakeholders-list">
+                                <li>Job Seekers of Assam</li>
+                                <li>Employers ( Public/ Private)</li>
+                                <li>Students</li>
+                                <li>Entrepreneurs</li>
+                                <li>Skill providers</li>
+                                <li>Departments</li>
+                                <li>Government</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- About Details End -->
+</main>
+
+
+{% endblock %}

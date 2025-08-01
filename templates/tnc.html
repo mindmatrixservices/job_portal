@@ -1,0 +1,193 @@
+{% extends "base.html" %}
+
+{% block title %}TERMS & CONDITIONS - Job Portal{% endblock %}
+
+{% block content %}
+<style>
+    /* Simple Attractive Hero Styles */
+    .guidelines-hero {
+        background-color: #f5f9ff;
+        padding: 3rem 0;
+        margin-top: 2rem;
+        border-bottom: 1px solid #e0e9ff;
+    }
+    
+    .hero-content {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 0 15px;
+    }
+    
+    .guidelines-hero h1 {
+        color: #1a3e72;
+        font-size: 2.2rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    
+    .guidelines-hero .lead {
+        color: #4a5568;
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+    
+    .breadcrumb {
+        padding: 0;
+        margin-bottom: 1.5rem;
+        background: transparent;
+    }
+    
+    .breadcrumb-item a {
+        color: #4a5568;
+        text-decoration: none;
+        transition: color 0.2s;
+    }
+    
+    .breadcrumb-item a:hover {
+        color: #1a3e72;
+        text-decoration: underline;
+    }
+    
+    .breadcrumb-item.active {
+        color: #718096;
+    }
+    
+    .breadcrumb-item + .breadcrumb-item::before {
+        content: ">";
+        padding: 0 8px;
+        color: #a0aec0;
+    }
+
+    /* Terms Content Styles */
+    .terms-content {
+        max-width: 800px;
+        margin: 2rem auto;
+        padding: 0 15px;
+        line-height: 1.6;
+        color: #333;
+    }
+    
+    .terms-content h2 {
+        color: #1a3e72;
+        font-size: 1.5rem;
+        margin-top: 2.5rem;
+        margin-bottom: 1rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid #e0e9ff;
+    }
+    
+    .terms-content h3 {
+        color: #1a3e72;
+        font-size: 1.2rem;
+        margin-top: 1.8rem;
+        margin-bottom: 0.8rem;
+    }
+    
+    .terms-content p {
+        margin-bottom: 1rem;
+    }
+    
+    .terms-content ul {
+        padding-left: 1.8rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .terms-content li {
+        margin-bottom: 0.8rem;
+    }
+    
+    .notice-box {
+        background-color: #f8fafc;
+        border-left: 4px solid #1a3e72;
+        padding: 1rem;
+        margin: 1.5rem 0;
+    }
+    
+    @media (max-width: 768px) {
+        .guidelines-hero {
+            padding: 2rem 0;
+        }
+        
+        .guidelines-hero h1 {
+            font-size: 1.8rem;
+        }
+        
+        .terms-content h2 {
+            font-size: 1.3rem;
+        }
+    }
+</style>
+
+<main>
+    <!-- Hero Section -->
+    <div class="guidelines-hero">
+        <div class="hero-content">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Terms & Conditions</li>
+                </ol>
+            </nav>
+            <h1>TERMS & CONDITIONS</h1>
+            <p class="lead">Find all the necessary documents and instructions for using our job portal services</p>
+        </div>
+    </div>
+
+    <!-- Terms Content - Your Exact Text Preserved -->
+    <div class="terms-content">
+        <p>This Terms of Use Agreement is a legally binding agreement between job.assam.gov.in, Employer (including employers, recruiting firms, staffing agencies, and recruiters) and Job Candidate/User of this web site, including all information, products, services, software, databases, and web site available from job.assam.gov.in</p>
+        
+        <p>By accessing information on job.assam.gov.in, User acknowledges that he/ she has read, understood and agrees to comply with the terms of this Agreement. By using job.assam.gov.in as a Job Candidate, Employer, and/or submitting any content, the User agrees to be bound by and comply with this Agreement. You understand and agree that job.assam.gov.in is provided to you on an AS IS and AS AVAILABLE basis. job.assam.gov.in reserves the right to modify, suspend or discontinue the System with or without notice at any time and without any liability to you.</p>
+        
+        <h2>TERMS & CONDITIONS APPLICABLE TO EMPLOYERS</h2>
+        
+        <div class="notice-box">
+            <p>Employers / Placement Agencies are advised to read the Terms of Use carefully. Agreement to the Terms of Use is necessary for further access to the Job portal.</p>
+        </div>
+        
+        <ul>
+            <li>Directorate of Employment & Craftsmen Training, Assam reserves the right, to modify the terms, either partially or fully at any time.</li>
+            <li>The Employers / Placement Agencies will be solely responsible for the correctness, authenticity or updating of any information about the Organisation / agency or jobs offered for their respective role. The Employers / Placement Agencies should not post or submit any incomplete, false or inaccurate information..</li>
+            <li>The Employer / Placement Agencies shall not use any Resume / Database or any part of it owned by any purpose other than fulfilment of manpower requirement in an organization, like sale or promotion of any products or services.</li>
+            <li>The Employer/ Placement Agencies shall not post any job that pays commission only like pyramid scheme, franchisee, distributorship etc.</li>
+            <li>The Directorate of Employment & Craftsmen Training, Assam shall have the sole discretion on whether or not to publish any advertisement posted by any Employer/ Placement Agency. It shall also have the discretion to discontinue permission for enrolment without assigning any reason.</li>
+            <li>At the time of enrolment of the job-seekers, Job Portal does not guarantee the authenticity of certificates relating to the Caste, Address, Qualification etc. The Job Portal, however, does not verify the information on Experience, Physical Measurement or contact details. Employers / Placement Agencies are responsible for checking the authenticity of the information provided by the job-seekers. The Employer shall have to inform through Job Portal about the selection and placement of the job-seekers against the jobs posted in the Portal immediately. The Placement Agencies shall also have the obligation to disclose the information related to the placement of the job-seekers against the jobs posted in the website mentioning the details of the Employers to whom the services are provided by the Agency.</li>
+            <li>The Employer/ Placement Agencies shall always act strictly as per law of the land in respect of any service taken from Job Portal or for any employment provided to the job-seekers through Job Portal .Posting of irrelevant, defamatory, obscene, communal, racist, offensive, abusive, hateful, discriminatory contents or resume whether implicitly or explicitly is strictly prohibited. Job Portal must not be used for causing social tension, anxiety, harassment, inconvenience or embarrassment, to any person or group of persons. No one shall use the services for any illegal or immoral purpose with malafide intentions and ulterior motives.</li>
+            <li>Use of the Job Portal is limited to registered and authorized account holders. Employers can modify the profile and change the authorized person anytime during the valid period. The Employers / Placement Agencies are responsible for maintaining the confidentiality of their password and account</li>
+            <li>An Employer shall not use or attempt to use any engine, software, tool, agent, or other device or mechanism (including browsers, spiders, robots, avatars, or intelligent agents) to navigate or search the System.</li>
+            <li>An Employer shall not post duplicate positions, multiple positions within one advertisement, or copy (plagiarize) other employment advertisements or candidate profiles.</li>
+        </ul>
+        
+        <h2>TERMS & CONDITIONS APPLICABLE TO JOBSEEKERS</h2>
+        
+        <ul>
+            <li>Jobseekers must be 18 years of age or older to visit or use job.assam.gov.in in any manner. By visiting job.assam.gov.in or accepting these Terms of Use, You declare that You are 18 years of age or older, and that You have the right, authority and capacity to use the Job Portal and agree to and abide by these Terms of Use. You also agree that you will use job.assam.gov.in in a manner consistent with any and all applicable laws and regulations.</li>
+            <li>Jobseekers must be 18 years of age or older to visit or use job.assam.gov.in in any manner. By visiting job.assam.gov.in or accepting these Terms of Use, You declare that You are 18 years of age or older, and that You have the right, authority and capacity to use the Job Portal and agree to and abide by these Terms of Use. You also agree that you will use job.assam.gov.in in a manner consistent with any and all applicable laws and regulations.</li>
+            <li>Any Profile/Resume You submit must be accurate and describe You, an individual person. The Profile requires standard fields to be completed.</li>
+            <li>You acknowledge and agree that You are solely responsible for the form, content and accuracy of any resume or material contained therein placed by You on the job.assam.gov.in. (job portal).</li>
+            <li>job.assam.gov.in reserves the right to offer third party services and products to You based on the preferences that You identify in Your registration and at any time thereafter or You have agreed to receive, such offers may be made by job.assam.gov.in or by third parties.</li>
+            <li>You understand and acknowledge that You have no ownership rights in Your account and that if You cancel/terminate Your job.assam.gov.in account, all Your account information from job.assam.gov.in, including resumes, Profiles, cover letters, saved jobs, questionnaires will be marked as deleted in and may be deleted from our databases. Information may continue to be available for some period of time because of delays in propagating such deletion through job.assam.gov.in's web servers. In addition, third parties may retain saved copies of Your Information.</li>
+            <li>job.assam.gov.in reserves the right to delete Your account and all of Your Information after a significant duration of inactivity.</li>
+        </ul>
+        
+        <h3>Prohibited Uses of the Job Portal include:</h3>
+        <ul>
+            <li>Post any resume or apply for any job on behalf of another party.</li>
+            <li>Set more than one copy of the same resume to public at any one time.</li>
+            <li>Post or submit to Job.assam.gov.in any incomplete, false or inaccurate biographical information or information which is not your own.</li>
+            <li>Delete or revise any material posted by any other person or entity.</li>
+            <li>Take any action that imposes an unreasonable or disproportionately large load on job.assam.gov.in Site's infrastructure;</li>
+            <li>Use the job.assam.gov.in Services for any unlawful purpose or any illegal activity, or post or submit any content, resume that is defamatory, libelous, implicitly or explicitly offensive, vulgar, obscene, threatening, abusive, hateful, racist, discriminatory, of a menacing character or likely to cause annoyance, inconvenience, embarrassment, anxiety or could cause harassment to any person or include any links to pornographic, indecent or sexually explicit material of any kind.</li>
+        </ul>
+        
+        <h3>Reservation of rights:</h3>
+        <p>Any rights not expressly granted herein are reserved.</p>
+        
+        <h3>Govt letter:</h3>
+        <p>The govt letter no ecf 148119/109 Dated Dispur the 16 th March 2023 attached herewith at ANNEXURE-I is applicable for all stakeholders.</p>
+        
+        <h3>Revisions::</h3>
+        <p>job.assam.gov.in may revise these Terms& Conditions at any time by posting an updated version to http://www.job.assam.gov.in. You should visit this page periodically to review the most current Agreement because it is binding on Users.</p>
+    </div>
+</main>
+{% endblock %}

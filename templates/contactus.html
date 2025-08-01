@@ -1,0 +1,289 @@
+{% extends "base.html" %}
+
+{% block title %}Contact Us - Job Portal{% endblock %}
+
+{% block content %}
+<style>
+    /* Hero Section Styles */
+    .contact-hero {
+        background-color: #f5f9ff;
+        padding: 3rem 0;
+        margin-top: 2rem;
+        border-bottom: 1px solid #e0e9ff;
+    }
+    
+    .hero-content {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 0 15px;
+    }
+    
+    .contact-hero h1 {
+        color: #1a3e72;
+        font-size: 2.2rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    
+    .contact-hero .lead {
+        color: #4a5568;
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+    
+    .breadcrumb {
+        padding: 0;
+        margin-bottom: 1.5rem;
+        background: transparent;
+    }
+    
+    .breadcrumb-item a {
+        color: #4a5568;
+        text-decoration: none;
+        transition: color 0.2s;
+    }
+    
+    .breadcrumb-item a:hover {
+        color: #1a3e72;
+        text-decoration: underline;
+    }
+    
+    .breadcrumb-item.active {
+        color: #718096;
+    }
+    
+    .breadcrumb-item + .breadcrumb-item::before {
+        content: ">";
+        padding: 0 8px;
+        color: #a0aec0;
+    }
+
+    /* Contact Content Styles */
+    .contact-container {
+        max-width: 1200px;
+        margin: 2rem auto;
+        padding: 0 15px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 30px;
+    }
+    
+    .feedback-form {
+        flex: 1;
+        min-width: 300px;
+        background: white;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    .contact-info {
+        flex: 1;
+        min-width: 300px;
+        background: white;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    .form-title {
+        color: #1a3e72;
+        font-size: 1.5rem;
+        margin-bottom: 1.5rem;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #e0e9ff;
+    }
+    
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+    
+    .form-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+        color: #1a3e72;
+    }
+    
+    .form-group label span {
+        color: #e53e3e;
+    }
+    
+    .form-control {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #e2e8f0;
+        border-radius: 4px;
+        font-size: 1rem;
+    }
+    
+    .form-control:focus {
+        outline: none;
+        border-color: #1a3e72;
+        box-shadow: 0 0 0 2px rgba(26, 62, 114, 0.1);
+    }
+    
+    textarea.form-control {
+        min-height: 120px;
+        resize: vertical;
+    }
+    
+    .btn-submit {
+        background-color: #1a3e72;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 1rem;
+        transition: background-color 0.2s;
+    }
+    
+    .btn-submit:hover {
+        background-color: #0d2b57;
+    }
+    
+    .btn-cancel {
+        background-color: #e2e8f0;
+        color: #4a5568;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 1rem;
+        margin-left: 10px;
+        transition: background-color 0.2s;
+    }
+    
+    .btn-cancel:hover {
+        background-color: #cbd5e0;
+    }
+    
+    .contact-info h3 {
+        color: #1a3e72;
+        font-size: 1.5rem;
+        margin-bottom: 1.5rem;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #e0e9ff;
+    }
+    
+    .info-item {
+        margin-bottom: 1.5rem;
+    }
+    
+    .info-item h4 {
+        color: #1a3e72;
+        font-size: 1.1rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .info-item p {
+        color: #4a5568;
+        line-height: 1.6;
+    }
+    
+    @media (max-width: 768px) {
+        .contact-hero {
+            padding: 2rem 0;
+        }
+        
+        .contact-hero h1 {
+            font-size: 1.8rem;
+        }
+        
+        .contact-container {
+            flex-direction: column;
+        }
+    }
+</style>
+
+<main>
+    <!-- Hero Section -->
+    <div class="contact-hero">
+        <div class="hero-content">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Contact Us</li>
+                </ol>
+            </nav>
+            <h1>Contact Us</h1>
+            <p class="lead">Get in touch with us for any queries or feedback</p>
+        </div>
+    </div>
+
+    <!-- Contact Content -->
+    <div class="contact-container">
+        <!-- Feedback Form -->
+        <div class="feedback-form">
+            <h2 class="form-title">JOBSEEKER'S FEEDBACK</h2>
+            <form>
+                <div class="form-group">
+                    <label for="fullname">Full Name<span>*</span></label>
+                    <input type="text" id="fullname" class="form-control" placeholder="Full Name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="regno">Employment Exchange Registration No.</label>
+                    <input type="text" id="regno" class="form-control" placeholder="Employment Exchange Registration No.">
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Email<span>*</span></label>
+                    <input type="email" id="email" class="form-control" placeholder="Email" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="mobile">Mobile Number</label>
+                    <input type="tel" id="mobile" class="form-control" placeholder="Mobile Number">
+                </div>
+                
+                <div class="form-group">
+                    <label for="feedbacktype">Type of Feedback<span>*</span></label>
+                    <select id="feedbacktype" class="form-control" required>
+                        <option value="">Select A Category</option>
+                        <option value="subject">Subject</option>
+                        <option value="login">Login Issue/E-mail Not Received</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="comment">Comment<span>*</span></label>
+                    <textarea id="comment" class="form-control" placeholder="Comment" required></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <button type="submit" class="btn-submit">Submit</button>
+                    <button type="reset" class="btn-cancel">Cancel</button>
+                </div>
+            </form>
+        </div>
+        
+        <!-- Contact Information -->
+        <div class="contact-info">
+            <h3>Contact Information</h3>
+            
+            <div class="info-item">
+                <h4>Email:</h4>
+                <p>support@assamjobsportal.org</p>
+            </div>
+            
+            <div class="info-item">
+                <h4>Phone Number:</h4>
+                <p>9401499240</p>
+            </div>
+            
+            <div class="info-item">
+                <h4>Address:</h4>
+                <p>AK Azad Rd, Rehabari, Guwahati, Assam 781008</p>
+            </div>
+            
+            <div class="info-item">
+                <h4>Business Hours:</h4>
+                <p>Monday - Saturday : 10:00 - 5:00</p>
+                <p>2nd & 4th Saturday, Sunday : Closed</p>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

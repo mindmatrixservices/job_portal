@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/vfs_fonts.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.3.3/purify.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <title>ER1 Form</title>
+
+    <style>
+        @import url(https://fonts.googleapis.com/css?family=Montserrat);
+
+
+
+
+        .form-section {
+            background: white;
+           
+            padding: 20px 30px;
+            
+            width: 90%;
+            margin: 0 auto 20px;
+
+        }
+
+        .fs-title {
+            font-size: 22px;
+
+            color: #07031d;
+            margin-top: 30px;
+            letter-spacing: 2px;
+            font-weight: 900;
+            margin-left: 39%;
+        }
+
+        .fs-subtitle {
+            font-weight: normal;
+            color: #2511ba;
+            font-size: 16px;
+            margin-top: 10px;
+            color: #666;
+            margin-bottom: 20px;
+
+        }
+
+
+        .form-section h2,
+        .form-section h4,
+        .form-section h3 {
+            margin-bottom: 20px;
+        }
+
+        .form-section input[type="text"],
+        .form-section input[type="number"],
+        .form-section textarea {
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 0px;
+            margin-bottom: 10px;
+            width: 100%;
+            box-sizing: border-box;
+            font-family: montserrat;
+            color: #2C3E50;
+            font-size: 13px;
+        }
+
+        .form-section input[type="text"]:focus,
+        .form-section input[type="number"]:focus,
+        .form-section textarea:focus {
+            border: 1px solid #0920ee;
+            outline-width: 0;
+            transition: All 0.5s ease-in;
+        }
+
+        .form-section .form-check-inline {
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+
+        .form-section .form_label {
+            width: 100%;
+            text-align: left;
+            margin: 12px 3px;
+            font-size: 16px;
+            font-weight: 700;
+            color: #413939;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+
+        }
+
+        td,
+        th {
+            border: 2px solid #978686;
+            padding: 10px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #e7e0e0;
+            font-weight: bold;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        tr:hover {
+            background-color: #e6f7ff;
+        }
+
+        .header {
+            background-color: #c1dcde;
+        }
+
+        .highlight {
+            background-color: #efb888;
+        }
+
+        .error-message {
+            color: red;
+            font-size: 12px;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+
+        @media print {
+            .btn-print {
+                display: none;
+            }
+        }
+    </style>
+
+
+</head>
+
+<body>
+
+
+
+    <button class="btn btn-danger btn-print" style="margin-left: 45%;"
+        onclick="javascript:window.print()">Print</button>
+  
+
+
+
+
+
+
+    <div class="moving_down">
+
+        <div class="form-section">
+            <h2 class="fs-title">ER1 Report</h2>
+
+            <h4 style="color: #2511ba; font-size: small;">Quarterly return to be submitted to the local Employment
+                Exchange for the quarter
+                ended : {{ employer_view.selected_quarter_user}} </h4>
+            <!-- <h3 class="fs-subtitle">Quarterly return to be submitted to the local Employment Exchange for the quarter
+                ended : {{ employer_view.selected_quarter_user}}</h3> -->
+
+            <h5 style="font-size: smaller;">The following information is required under the Employment Exchanges
+                (Compulsory Notification of Vacancies) Rules, 1960 to assist in evaluating trends in employment and for
+                action to correct imbalances between labour supply and demand.</h5>
+
+
+            
+                <label class="form_label" for="emp_name"> <strong>Name and address of the Employer :</strong> {{ employer_view.emp_name }}, {{ employer_view.emp_address }} </label>
+          
+                <div class="business-activity-wrapper">
+                    <label class="form_label" for="emp_bus_activity"><strong>Nature of Business/Principal Activity: </strong>{{ employer_view.emp_nature_of_bussiness }}</label>
+                   
+                </div>
+    
+    
+                <div class="business-activity-wrapper">
+                    <label class="form_label"><strong>Whether Head Office or Branch Office: </strong>{{ employer_view.office_type }}</label>
+                   
+                </div>
+    
+
+            <h4 style="margin-top: 20px;">1.(a) Employment</h4>
+            <table class="table">
+                <tr>
+                    <th colspan="5" style="background-color: #1f90c3; color: #FFF; padding: 15px; text-align: left;">
+                        Total number of persons including working proprietors/ partners/ commission agents/ contingent
+                        paid and contractual workers on the pay rolls of the establishment excluding part-time workers
+                        and apprentices (The figure should include every person whose wage or salary is paid by the
+                        establishment).
+                    </th>
+                </tr>
+                <tr>
+                    <th></th>
+                    <th>On the last working day of the previous quarter</th>
+                    <th>On the last working day of the quarter under report</th>
+                </tr>
+                <tr>
+                    <td style="text-align: center; font-size: medium; padding-top: 25px;"><strong>Men</strong></td>
+                    <td><input type="number" name="men_previous_quarter" class="form-control" placeholder="men_p"
+                            style="margin-top: 10px;" readonly min="0" required
+                            value="{{ employer_view.men_previous_quarter }}" /></td>
+                    <td><input type="number" name="men_current_quarter" class="form-control" placeholder="men_c"
+                            style="margin-top: 10px;" readonly min="0" required
+                            value="{{ employer_view.men_current_quarter }}" /></td>
+                </tr>
+                <tr>
+                    <td style="text-align: center; font-size: medium; padding-top: 25px;"><strong>Women</strong></td>
+                    <td><input type="number" name="women_previous_quarter" class="form-control" placeholder="women_p"
+                            style="margin-top: 10px;" min="0" readonly required
+                            value="{{ employer_view.women_previous_quarter }}" /></td>
+                    <td><input type="number" name="women_current_quarter" class="form-control" placeholder="women_c"
+                            style="margin-top: 10px;" min="0" readonly required
+                            value="{{ employer_view.women_current_quarter }}" /></td>
+                </tr>
+                <tr>
+                    <td style="text-align: center; font-size: medium; background-color: #e7e0e0; padding-top: 25px;">
+                        <strong>Total</strong>
+                    </td>
+                    <td style="background-color: #e7e0e0"><input type="number" name="total_previous_quarter"
+                            class="form-control" placeholder="total_p" style="margin-top: 10px;" readonly min="0"
+                            required value="{{ employer_view.total_previous_quarter }}" />
+                    </td>
+                    <td style="background-color: #e7e0e0"><input type="number" name="total_current_quarter"
+                            class="form-control" placeholder="total_c" style="margin-top: 10px;" readonly min="0"
+                            required value="{{ employer_view.total_current_quarter }}" />
+                    </td>
+                </tr>
+            </table>
+
+            <label for="emp_reason" style="margin-top: 50px;">(b) Please indicate the main reasons for any increase or
+                decrease in employment if the increase or decrease is more than 5 percent during the quarter:</label>
+            <input type="text" class="form-control" style="margin-top: 10px;" min="0" readonly required
+                value="{{ employer_view.emp_reason }}" />
+
+            <h5 style="font-size: small;"><strong>Note:-</strong>Establishments are reminded of their obligation under
+                the Employment Exchanges
+                (Compulsory Notification of Vacancies) Act for notifying to Employment Exchanges details of
+                vacancies specified under the Act, before they are filled.</h5>
+
+
+
+            <h2 class="fs-title">2.VACANCIES</h2>
+
+            <h6 style="font-weight: 700;">2(a). Number of vacancies occurred and notified during the quarter and the
+                number filled during the quarter : {{ employer_view.selected_quarter_user}}</h6>
+
+
+            <table border="1" style="margin-top: 30px;">
+                <tr>
+
+                    <th colspan="4" style="text-align: center; background-color: #1f90c3; color: #FFF;">Number
+                        of vacancies which come within the
+                        purview of the Act</th>
+                </tr>
+                <tr>
+                    <th rowspan="2" style="text-align: center; background-color: #1f90c3; color: #FFF;">occurred
+                    </th>
+                    <th style="text-align: center; background-color: #1f90c3; color: #FFF;">Notified</th>
+                    <th rowspan="2" style="text-align: center; background-color: #1f90c3; color: #FFF;">Filled
+                    </th>
+                    <th rowspan="2" style="text-align: center; background-color: #1f90c3; color: #FFF;">Sources
+                        (Describe the
+                        source from which filled)
+                    </th>
+
+                </tr>
+                <tr>
+                    <td style="background-color: #1f90c3; color: #FFF;">Employment Exchange</td>
+
+
+
+                </tr>
+                <tr>
+                    <td>
+                        <h5>1</h5>
+                    </td>
+                    <td>
+                        <h5>2</h5>
+                    </td>
+                    <td>
+                        <h5>3</h5>
+                    </td>
+                    <td>
+                        <h5>4</h5>
+                    </td>
+
+                </tr>
+                <tr>
+                    <td> <input type="number" name="vacancy_occured" id="vacancy_occured" style="  margin-top: 10px;"
+                            class="form-control" min="0" readonly 
+                            value="{{ employer_view.vacancy_occured_purview }}" /></td>
+                    <td><input type="text" name="vacancy_emp_exchange" style="  margin-top: 10px;" class="form-control"
+                            min="0"  value="{{ employer_view.vacancy_emp_exchange_purview }}" readonly/></td>
+                    <td><input type="number" name="vacancy_filled" id="vacancy_filled" style="  margin-top: 10px;"
+                            class="form-control" min="0" readonly 
+                            value="{{ employer_view.vacancy_filled_purview }}" /></td>
+                    <td><input type="text" name="vacancy_source" style="  margin-top: 10px;" class="form-control"
+                            min="0" readonly  value="{{ employer_view.vacancy_source_purview }}" /></td>
+
+                </tr>
+            </table>
+
+            <label class="form_label" for="vacancy_reason_for_not_notifying" style="margin-top: 50px;"> 2(b).
+                Reasons for not notifying all vacancies occurred during the quarter under report vide 2(a) above
+                Otherwise
+                give "None" :</label>
+            <input type="text" name="vacancy_source" style="  margin-top: 10px;" class="form-control" min="0" readonly
+                required value="{{ employer_view.vacancy_reason_for_not_notifying }}" />
+
+            <h2 class="fs-title" style="margin-left: 190px;">3.Manpower Shortage</h2>
+
+            <h4 style="color: #2511ba; font-size: medium; margin-left: 5%;">Vacancies/ posts unfilled because of
+                shortage of suitable applicants. </h4>
+
+            <table border="1" style="margin-top: 30px;" id="vacancy-table">
+                <tr>
+                    <th rowspan="2" style="text-align: center;  background-color: #1f90c3; color: #FFF;">Name of
+                        the occupation or designation of the
+                        post</th>
+                    <th colspan="4" style="text-align: center;  background-color: #1f90c3; color: #FFF;">Number
+                        of unfilled vacancies/ posts</th>
+                </tr>
+                <tr>
+                    <th style="text-align: center;  background-color: #1f90c3; color: #FFF;">Essential
+                        Qualification prescribed</th>
+                    <th style="text-align: center;  background-color: #1f90c3; color: #FFF;">Essential
+                        Experience</th>
+                    <th style="text-align: center;  background-color: #1f90c3; color: #FFF;">Experience not
+                        necessary</th>
+                </tr>
+                {% for shortage in manpower_shortages %}
+                <tr>
+                    <td>{{ shortage.mp_shortage_occupation }}</td>
+                    <td>{{ shortage.mp_essential_qual }}</td>
+                    <td>{{ shortage.mp_essential_exp|default:"Not Required" }}</td>
+                    <td>{{ shortage.mp_exp_not }}</td>
+
+                </tr>
+                {% endfor %}
+
+
+            </table>
+
+            <label class="form_label" for="dif_occupations" style="margin-top: 20px;">Please list any
+                other occupations for which this establishment had recently any difficulty in obtaining
+                suitable applicants Or "None" :
+            </label>
+            <textarea id="dif_occupations" rows="4" cols="20" readonly>{{ employer_view.dif_occupations }}</textarea>
+
+
+
+            <div style="display: flex;">
+                <div>
+                    <p style="margin-top: 20px; margin-bottom: 0px;">To,</p>
+                    <p>The&nbsp;Employment&nbsp;Exchange</p>
+                    <p style="margin-bottom: 0px; margin-top: -15px;">{{employer_view.vacancy_emp_exchange_purview}}</p>
+                </div>
+                
+                <div style="margin-top: 20px; margin-left: 200px;">
+                    <label class="form_label">Signature of Employer</label>
+                    <img src="{{ employer_view.signature_upload.url }}" alt="Signature" style="width: 170px; height: 100px; margin-left: 15px;">
+                </div>
+            </div>
+
+
+            <h5 style="margin-top: 20px; margin-bottom: 25px; font-size: small;">Note:-This return shall relate to
+                quarter ending 31st March, 30th June, 30th September, 31st December and shall be rendered to the local
+                Employment Exchange within 30 days after the end of the quarter concerned.</h5>
+
+
+
+
+
+        </div>
+    </div>
+
+
+
+</body>
+
+</html>

@@ -1,0 +1,416 @@
+{% extends 'recruiter/base.html' %}
+{% load page_tags %}
+{% load tz %} 
+{% load static %}
+{% block jobs %}
+<li class="job"><a class="post-new" href="#">Post A new job</a></li>
+<li class="job active"><a href="{% url 'recruiter:list' %}">jobs list</a></li>
+{% endblock %}
+{% block 'stage' %}
+<style>
+
+    #example thead th {
+        background-color: #78ccf1;
+        color: #0c0d0d;
+        text-align: center;
+    }
+
+    .dataTables_wrapper {
+        z-index: 1050 !important;
+        /* Ensure it's above other elements */
+        position: relative;
+        margin-top: 10% !important;
+        /* Adjust based on your navbar height */
+    }
+
+    .dropdown-menu {
+        position: absolute; /* Ensures the dropdown is placed above the other elements */
+        z-index: 1050; /* Set a high enough value */
+    }
+    /* Move the search bar to the left */
+
+.dataTables_wrapper .dataTables_filter {
+    margin-left: 77%;
+    margin-bottom: 20px;
+    
+}
+
+    
+
+    /* Adjust the positioning of the DataTables info text */
+    .dataTables_wrapper .dataTables_info {
+       
+      
+        margin-left: 5%;
+        /* Ensure there’s space below */
+    }
+
+    /* Adjust the positioning of the DataTables length menu */
+    .dataTables_wrapper .dataTables_length {
+        
+        margin-left: 5% ;
+       margin-bottom: -30px;
+    }
+    /* Move the "Previous" and "Next" pagination controls to the left */
+    .dataTables_wrapper .dataTables_paginate {
+        float: left;
+        margin-left: 82%; /* Align with the search bar and pagination filter */
+       
+    }
+    
+    /* Adjust pagination buttons (Previous/Next) styling if needed */
+    .dataTables_wrapper .dataTables_paginate .paginate_button {
+        padding: 6px 12px;
+        margin: 0 2px;
+        background-color: #28aeec; /* Optional: Add color to buttons */
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+
+    /* Style the table rows */
+    #example tbody tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+
+    #example tbody tr:hover {
+        background-color: #e1e1e1;
+    }
+
+    #example td {
+        text-align: center;
+    }
+
+    #example td,
+    #example th {
+        border-bottom: 1px solid #333;
+        /* Adjust color as needed */
+    }
+
+.form-container {
+    background-color: rgb(149, 232, 242);
+  
+    width: 50%;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-container:hover {
+   
+    box-shadow: 0 8px 10px rgba(0, 0, 0, 0.15);
+}
+
+.form-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    margin-right: 10px;
+}
+@import url(https://fonts.googleapis.com/css?family=Montserrat);
+
+
+.moving_down {
+    margin-top: 50px;
+   
+}
+
+.form-section {
+    background: white;
+    border: 0 none;
+    border-radius: 0px;
+    border: #413939 solid 2px;
+    padding: 20px 30px;
+    box-sizing: border-box;
+    width: 90%;
+    margin: 0 auto 20px;
+
+}
+
+.fs-title {
+    font-size: 22px;
+    text-align:center;
+    color: #100848;
+    margin-top: 30px;
+    letter-spacing: 2px;
+    font-weight: 900;
+}
+
+.fs-subtitle {
+    font-weight: normal;
+    font-size: 16px;
+    margin-top: 10px;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+
+.form-section h2,
+.form-section h4,
+.form-section h3 {
+    margin-bottom: 20px;
+}
+
+.form-section input[type="text"],
+.form-section input[type="number"],
+.form-section textarea {
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 0px;
+    margin-bottom: 10px;
+    width: 100%;
+    box-sizing: border-box;
+    font-family: montserrat;
+    color: #2C3E50;
+    font-size: 13px;
+}
+
+.form-section input[type="text"]:focus,
+.form-section input[type="number"]:focus,
+.form-section textarea:focus {
+    border: 1px solid #0920ee;
+    outline-width: 0;
+    transition: All 0.5s ease-in;
+}
+
+.form-section .form-check-inline {
+    display: inline-block;
+    margin-bottom: 20px;
+}
+
+.form-section .form_label {
+    width: 100%;
+    text-align: left;
+    margin: 12px 3px;
+    font-size: 16px;
+    font-weight: 700;
+    color: #413939;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+td,
+th {
+    border: 2px solid #978686;
+    padding: 10px;
+    text-align: center;
+}
+
+th {
+    background-color: #e7e0e0;
+    font-weight: bold;
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+tr:hover {
+    background-color: #e6f7ff;
+}
+
+.header {
+    background-color: #c1dcde;
+}
+
+.highlight {
+    background-color: #efb888;
+}
+
+.error-message {
+    color: red;
+    font-size: 12px;
+    display: block;
+    margin-bottom: 5px;
+}
+
+@media print{
+ 
+    @page {
+        size: auto;
+        margin: 0;
+    }
+    .pagebreak { page-break-before: always; }
+    #menu{
+      display: none;
+    }
+    #header{
+      display:none;
+    }
+    #printhide{
+      display:none;
+    }
+    .statistics_graphs{
+      display:none;
+    }
+    table, th, td {
+      border: 1px solid black;
+    }
+    .stats{
+      margin-left: -104px !important;
+    }
+
+
+
+    #print_page_id{
+      display:block;
+      margin-left:-170px;
+      {% comment %} width:1100px; {% endcomment %}
+    }
+    .table_header{
+      font-size:16px;
+      font-weight:600
+    }
+    .table{
+     
+      font-size:10px !important;
+    }
+    .yourTableTh{
+      background-color: #d7d7d7 !important;
+    }
+    .tr>.td{
+      font-size:10px !important;
+      font-weight: 400;
+     
+    }
+  }
+  .recived_value{
+    font-style: italic;
+      color: red;
+  }
+  .statistics_graphs{
+    margin-left: 2%;
+    margin-right: 2%;
+  }
+</style>
+  <div class="inner_container job_lidt_container" style="
+  margin-left: 120px;  margin-top: 2%; ">
+   
+   
+  <div class="avoid-page-break">
+    <div id="printarea">
+        <div class="moving_down">
+            <div class="container">
+                <div class="form-section">
+                    {% comment %} <h2 class="print-heading fs-title">ER2 Report</h2> {% endcomment %}
+                    <h2 class="fs-title">ER2 Report</h2>
+
+                    <h4 class="print-margin-reduced  text-center"  style="color: #2511ba; font-size: small;">OCCUPATIONAL RETURN TO BE SUBMITTED TO THE LOCAL EMPLOYMENT EXCHANGE ONCE IN TWO YEARS</h4>
+
+                    <h5 style="font-size: x-small; text-align: center;">[Vide the Employment Exchanges (Compulsory Notification of Vacancies) Rules, 1960]</h5>
+
+                    <label class="form_label" for="emp_name"> <strong>Name and address of the Employer :</strong> {{ employer_view.employer_name }}, {{ employer_view.employer_address }}</label>
+
+                    <div class="business-activity-wrapper" style="margin-bottom: 20px;">
+                        <label class="form_label" for="emp_bus_activity"><strong>Nature of Business/Principal Activity: </strong>{{ employer_view.nature_of_business }}</label>
+                        <h6 style="font-size: small; margin-left: 80px; color: #0920ee;">(Describe what the establishment makes or does as its principal activity)</h6>
+                    </div>
+
+                    <table id="er2form-table" class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th colspan="6">
+                                    <div class="mb-3 row">
+                                        <label for="total_employees" class="col-sm-6 col-form-label">1. Total number of persons on the pay rolls of the establishment on (specified date):</label>
+                                        <div class="col-sm-6">
+                                            <input type="text" id="total_employees" name="total_employees" value="{{ employer_view.total_employees }}" required readonly>
+                                            <h6 style="font-size: small; color: #0920ee;">(This figure should include every person whose wage or salary is paid by establishment)</h6>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3 row">
+                                        <label for="total_employees" class="col-sm-12 col-form-label">2. Occupational classification of all employees as given in item I above. (Please give below the number of employees in each occupation separately).</label>
+                                    </div>
+                                </th>
+                            </tr>
+                            <tr>
+                                <th rowspan="1">Occupation</th>
+                                <th colspan="4">Number of employees</th>
+                            </tr>
+                            <tr>
+                                <th>Use exact terms such as Engineer (Mechanical); Teacher (Domestic Science); other on special duty (Actuary); Assistant Director (Metallurgist); Science Assistant (Chemist); Research Officer (Economist); Instructor (Carpenter); Supervisor (Tailor), Fitter (Internal Combustion Engine); Inspector (Sanitary), Superintendent (Office); Apprentice (Electrician) etc.</th>
+                                <th>Men</th>
+                                <th>Women</th>
+                                <th>Total</th>
+                                <th>Please give, as far as possible, approximate number of vacancies in each occupation you are likely to fill during the next calendar year due to retirement expansion or re-organization.</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for value in er2_table %}
+                            <tr>
+                                <td>{{ value.occupation }}</td>
+                                <td>{{ value.men }}</td>
+                                <td>{{ value.women|default:"0" }}</td>
+                                <td>{{ value.total }}</td>
+                                <td>{{ value.approx_vacancies }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td><strong>Total</strong></td>
+                                <td id="total-men"><strong>{{ employer_view.total_men }}</strong></td>
+                                <td id="total-women"><strong>{{ employer_view.total_women }}</strong></td>
+                                <td id="grand-total"><strong>{{ employer_view.grand_total }}</strong></td>
+                                <td id="total-vacancies"><strong>{{ employer_view.total_approx_vacancies }}</strong></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+
+                    <div style="display: flex; justify-content: space-between;">
+                        <div>
+                            <p style="margin-top: 20px;"> <strong>Date :</strong> {{ employer_view.officer_entered_date }}</p>
+                        </div>
+                        
+                        <div style="margin-top: 20px;">
+                            <label class="form_label">Signature of Employer</label>
+                            <img src="{% if employer_view.signature_upload %}{{ request.scheme }}://{{ request.META.HTTP_HOST }}/{{employer_view.signature_upload.url}}{% else %}{% static '/img/dummy.jpg' %}{% endif %}" style="width: 170px; height: 100px; margin-left: 15px;"/>
+                           
+
+                            {% comment %} <img src="{{ employer_view.signature_upload.url }}" alt="Signature" style="width: 170px; height: 100px; margin-left: 15px;"> {% endcomment %}
+                        </div>
+                    </div>    
+                    {% comment %} <a href="../{{ employer_view.signature_upload.url }}"></a> {% endcomment %}
+
+                    <div id="printhide"><button type="button" class="btn btn-danger" onclick="printDiv2()" style="margin-left: 42%;">Print Page</button></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+</section>
+                
+        
+        <script>
+            function printDiv2() {
+           
+            
+                window.print();
+                
+            
+                
+            }
+        </script>
+                    
+                
+                
+             
+          
+        </section>
+                
+
+{% endblock %}
+{% block 'extra_js' %}
+
+
+</script>
+{% endblock %}

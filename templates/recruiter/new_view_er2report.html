@@ -1,0 +1,169 @@
+{% extends 'recruiter/base.html' %}
+{% load page_tags %}
+{% load tz %} 
+{% block jobs %}
+<li class="job"><a class="post-new" href="#">Post A new job</a></li>
+<li class="job active"><a href="{% url 'recruiter:list' %}">jobs list</a></li>
+{% endblock %}
+{% block 'stage' %}
+<style>
+
+    #example thead th {
+        background-color: #78ccf1;
+        color: #0c0d0d;
+        text-align: center;
+    }
+
+    .dataTables_wrapper {
+        z-index: 1050 !important;
+        /* Ensure it's above other elements */
+        position: relative;
+        margin-top: 10% !important;
+        /* Adjust based on your navbar height */
+    }
+
+    .dropdown-menu {
+        position: absolute; /* Ensures the dropdown is placed above the other elements */
+        z-index: 1050; /* Set a high enough value */
+    }
+    /* Move the search bar to the left */
+
+.dataTables_wrapper .dataTables_filter {
+    margin-left: 77%;
+    margin-bottom: 20px;
+    
+}
+
+    
+
+    /* Adjust the positioning of the DataTables info text */
+    .dataTables_wrapper .dataTables_info {
+       
+      
+        margin-left: 5%;
+        /* Ensure there’s space below */
+    }
+
+    /* Adjust the positioning of the DataTables length menu */
+    .dataTables_wrapper .dataTables_length {
+        
+        margin-left: 5% ;
+       margin-bottom: -30px;
+    }
+    /* Move the "Previous" and "Next" pagination controls to the left */
+    .dataTables_wrapper .dataTables_paginate {
+        float: left;
+        margin-left: 82%; /* Align with the search bar and pagination filter */
+       
+    }
+    
+    /* Adjust pagination buttons (Previous/Next) styling if needed */
+    .dataTables_wrapper .dataTables_paginate .paginate_button {
+        padding: 6px 12px;
+        margin: 0 2px;
+        background-color: #28aeec; /* Optional: Add color to buttons */
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+
+    /* Style the table rows */
+    #example tbody tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+
+    #example tbody tr:hover {
+        background-color: #e1e1e1;
+    }
+
+    #example td {
+        text-align: center;
+    }
+
+    #example td,
+    #example th {
+        border-bottom: 1px solid #333;
+        /* Adjust color as needed */
+    }
+
+.form-container {
+    background-color: rgb(149, 232, 242);
+  
+    width: 50%;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-container:hover {
+   
+    box-shadow: 0 8px 10px rgba(0, 0, 0, 0.15);
+}
+
+.form-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    margin-right: 10px;
+}
+
+</style>
+  <div class="inner_container job_lidt_container" style="
+  margin-left: 120px;  margin-top: 2%; ">
+    {% comment %} <div class="tabs">
+      <a href="{% url 'recruiter:list' %}" class="tab {% if not 'inactive' in request.path %}active{% endif %}">Active Jobs</a>
+      <a href="{% url 'recruiter:inactive_jobs' %}" class="tab {% if 'inactive' in request.path %}active{% endif %}">Inactive Jobs</a>
+    </div> {% endcomment %}
+   
+
+            <div class="container">
+               
+                <h2 style="margin-left: 28%; margin-bottom: -80px;"> Occupational Return Reports (ER2) - Biennial</h2>
+
+
+                <div class="container">
+                    
+                    <table id="example" class="display" style="width:90%; margin-left: 5%; " >
+                            <thead>
+                                <tr>
+                
+                                    <th style="background-color: #28aeec;">Submission Date</th>
+                                    <th style="background-color: #28aeec;">Name.</th>
+                                    <th style="background-color: #28aeec;">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for objt in filter_data|dictsortreversed:"submission_date"  %}
+                                <tr>
+                
+                                    <td>{{ objt.submission_date | date:"d-m-Y" }}</td>
+                                    <td>{{ objt.employer_name }}</td>
+                                    <td>
+                                   
+                                                <a href="/recruiter/new_er2_report_detail/{{objt.id}}">
+                                                    <button type="button" class="btn btn-outline-danger btn-sm "><i class="bi bi-eye"></i></button>
+                                                </a>
+                                          
+                                    </td>
+                                    
+                
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                
+                    </div>
+                
+
+{% endblock %}
+{% block 'extra_js' %}
+
+
+</script>
+{% endblock %}

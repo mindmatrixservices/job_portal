@@ -1,0 +1,29 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Job Portal</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <header>
+        <nav style="background-color: #eee; padding: 10px;">
+            <a href="/" style="margin-right: 15px;">Home</a>
+            <a href="/department/" style="margin-right: 15px;">Departments</a>
+            <a href="/jobseeker/" style="margin-right: 15px;">Jobseeker</a>
+            <a href="/recruiter/" style="margin-right: 15px;">Recruiter</a>
+            <a href="/employment_exchange/" style="margin-right: 15px;">Employment Exchange</a>
+        </nav>
+    </header>
+
+    <main style="padding: 20px;">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer style="background-color: #eee; padding: 10px; text-align: center;">
+        <p>&copy; 2025 Job Portal</p>
+    </footer>
+</body>
+</html>

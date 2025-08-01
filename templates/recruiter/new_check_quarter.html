@@ -1,0 +1,93 @@
+{% extends 'recruiter/base.html' %}
+
+
+
+{% block content %}
+<style>
+
+.form-container {
+    background-color: rgb(149, 232, 242);
+    margin-left: 25%;
+    margin-top: 10%;
+    width: 50%;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-container:hover {
+   
+    box-shadow: 0 8px 10px rgba(0, 0, 0, 0.15);
+}
+
+.form-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    margin-right: 10px;
+}
+
+</style>
+<div class="page-header">
+    <h3 class="fw-bold mb-3">Dashboard</h3>
+    <ul class="breadcrumbs mb-3">
+    <li class="nav-home">
+        <a href="#">
+        <i class="icon-home"></i>
+        </a>
+    </li>
+    <li class="separator">
+        <i class="icon-arrow-right"></i>
+    </li>
+    <li class="nav-item">
+        <a href="#">Check Quarter</a>
+    </li>
+  
+    
+    </ul>
+</div>
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Check Quarter</div>
+          </div>
+
+          <div class="card-body">
+            {% if messages %}
+            <div class="alert alert-danger">
+                <ul class="mb-0">
+                    {% for message in messages %}
+                    <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+            
+
+                    <form method="get" action="/recruiter/er1form_save/">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="defaultSelect">Select Quarter</label>
+                            <select id="quarter" name="quarter" class="form-select form-control" >
+                                <option value="31st March">31st March</option>
+                                <option value="30th June">30th June</option>
+                                <option value="30th September">30th September</option>
+                                <option value="31st December">31st  December </option>
+                            </select>
+                            <button type="submit" class="btn btn-info mx-3" >Proceed</button>
+                        </div>
+                       
+                    </form>
+               
+
+          </div>
+        </div>
+      </div>
+
+{% endblock %}
+

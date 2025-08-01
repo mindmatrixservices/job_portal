@@ -1,0 +1,258 @@
+{% extends "base.html" %}
+
+{% block title %}Guidelines - Job Portal{% endblock %}
+
+
+
+
+{% block content %}
+<style>
+    /* Simple Attractive Hero Styles */
+    .guidelines-hero {
+        background-color: #f5f9ff;
+        padding: 3rem 0;
+        margin-top: 2rem;
+        border-bottom: 1px solid #e0e9ff;
+    }
+    
+    .hero-content {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 0 15px;
+    }
+    
+    .guidelines-hero h1 {
+        color: #1a3e72;
+        font-size: 2.2rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    
+    .guidelines-hero .lead {
+        color: #4a5568;
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+    
+    .breadcrumb {
+        padding: 0;
+        margin-bottom: 1.5rem;
+        background: transparent;
+    }
+    
+    .breadcrumb-item a {
+        color: #4a5568;
+        text-decoration: none;
+        transition: color 0.2s;
+    }
+    
+    .breadcrumb-item a:hover {
+        color: #1a3e72;
+        text-decoration: underline;
+    }
+    
+    .breadcrumb-item.active {
+        color: #718096;
+    }
+    
+    .breadcrumb-item + .breadcrumb-item::before {
+        content: ">";
+        padding: 0 8px;
+        color: #a0aec0;
+    }
+    
+    @media (max-width: 768px) {
+        .guidelines-hero {
+            padding: 2rem 0;
+        }
+        
+        .guidelines-hero h1 {
+            font-size: 1.8rem;
+        }
+    }
+    
+    /* Table Section Styles */
+    .guidelines-table {
+        padding: 60px 0;
+    }
+    
+    .section-tittle h3 {
+        color: #1a3e72;
+        font-size: 2rem;
+        margin-bottom: 30px;
+        position: relative;
+        display: inline-block;
+    }
+    
+    .section-tittle h3::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        bottom: -10px;
+        width: 50px;
+        height: 3px;
+        background: #1a3e72;
+    }
+    
+    .govt-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 30px;
+    }
+    
+    .govt-table thead {
+        background-color: #1a3e72;
+        color: white;
+    }
+    
+    .govt-table th {
+        padding: 12px 15px;
+        text-align: left;
+        font-weight: 600;
+    }
+    
+    .govt-table td {
+        padding: 10px 15px;
+        border: 1px solid #ddd;
+        vertical-align: middle;
+    }
+    
+    .govt-table tbody tr:nth-child(even) {
+        background-color: #f8f9fa;
+    }
+    
+    .govt-table tbody tr:hover {
+        background-color: #e9f0f7;
+    }
+    
+    .download-btn {
+        display: inline-block;
+        padding: 6px 12px;
+        background-color: #1a3e72;
+        color: white;
+        border-radius: 4px;
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+    
+    .download-btn:hover {
+        background-color: #0d2b57;
+        color: white;
+        text-decoration: none;
+    }
+    
+    .download-btn i {
+        margin-right: 5px;
+    }
+    
+    /* Responsive Styles */
+    @media (max-width: 992px) {
+        .guidelines-hero {
+            text-align: center;
+            padding: 40px 0;
+        }
+        
+        .hero-content h1 {
+            font-size: 2rem;
+        }
+        
+        .hero-image {
+            margin-top: 30px;
+        }
+        
+        .guidelines-hero::before {
+            width: 100%;
+            opacity: 0.05;
+        }
+    }
+    
+    @media (max-width: 768px) {
+        .table-responsive {
+            overflow-x: auto;
+        }
+        
+        .govt-table {
+            font-size: 14px;
+        }
+        
+        .download-btn {
+            padding: 4px 8px;
+            font-size: 14px;
+        }
+        
+        .section-tittle h3 {
+            font-size: 1.5rem;
+        }
+    }
+</style>
+<main>
+       <!-- Hero Section Start -->
+       <div class="guidelines-hero mt-5">
+        <div class="container">
+            <div class="hero-content">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="/">Home</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Guidelines</li>
+                    </ol>
+                </nav>
+                <h1>Guidelines & User Manuals</h1>
+                <p class="lead">Find all the necessary documents and instructions for using our job portal services</p>
+            </div>
+        </div>
+    </div>
+    <!-- Hero Section End -->
+    
+    <!-- Guidelines Table Start -->
+    <div class="guidelines-table py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="section-tittle text-center mb-40">
+                        <h3>User Manuals and Documents</h3>
+                    </div>
+                    
+                    <div class="table-responsive">
+                        <table class="table table-bordered govt-table">
+                            <thead>
+                                <tr>
+                                    <th>SL No.</th>
+                                    <th>Document Name</th>
+                                    <th>Upload Date</th>
+                                    <th>Doc Size</th>
+                                    <th>Download</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>Jobseeker User Manual</td>
+                                    <td>03/07/2023</td>
+                                    <td>18.5 KB</td>
+                                    <td class="text-center">
+                                        <a href="/downloads/jobseeker-manual.pdf" class="download-btn" download>
+                                            <i class="fas fa-download"></i> Download
+                                        </a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>Employer User Manual</td>
+                                    <td>03/07/2023</td>
+                                    <td>20.8 KB</td>
+                                    <td class="text-center">
+                                        <a href="/downloads/employer-manual.pdf" class="download-btn" download>
+                                            <i class="fas fa-download"></i> Download
+                                        </a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Guidelines Table End -->
+</main>
+{% endblock %}

@@ -1,0 +1,551 @@
+{% extends 'recruiter/base.html' %}
+{% load page_tags %}
+{% load tz %} 
+{% block jobs %}
+{% load static %}
+<li class="job"><a class="post-new" href="#">Post A new job</a></li>
+<li class="job active"><a href="{% url 'recruiter:list' %}">jobs list</a></li>
+{% endblock %}
+{% block 'stage' %}
+<style>
+
+    #example thead th {
+        background-color: #78ccf1;
+        color: #0c0d0d;
+        text-align: center;
+    }
+
+    .dataTables_wrapper {
+        z-index: 1050 !important;
+        /* Ensure it's above other elements */
+        position: relative;
+        margin-top: 10% !important;
+        /* Adjust based on your navbar height */
+    }
+
+    .dropdown-menu {
+        position: absolute; /* Ensures the dropdown is placed above the other elements */
+        z-index: 1050; /* Set a high enough value */
+    }
+    /* Move the search bar to the left */
+
+.dataTables_wrapper .dataTables_filter {
+    margin-left: 77%;
+    margin-bottom: 20px;
+    
+}
+
+    
+
+    /* Adjust the positioning of the DataTables info text */
+    .dataTables_wrapper .dataTables_info {
+       
+      
+        margin-left: 5%;
+        /* Ensure there’s space below */
+    }
+
+    /* Adjust the positioning of the DataTables length menu */
+    .dataTables_wrapper .dataTables_length {
+        
+        margin-left: 5% ;
+       margin-bottom: -30px;
+    }
+    /* Move the "Previous" and "Next" pagination controls to the left */
+    .dataTables_wrapper .dataTables_paginate {
+        float: left;
+        margin-left: 82%; /* Align with the search bar and pagination filter */
+       
+    }
+    
+    /* Adjust pagination buttons (Previous/Next) styling if needed */
+    .dataTables_wrapper .dataTables_paginate .paginate_button {
+        padding: 6px 12px;
+        margin: 0 2px;
+        background-color: #28aeec; /* Optional: Add color to buttons */
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+
+    /* Style the table rows */
+    #example tbody tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+
+    #example tbody tr:hover {
+        background-color: #e1e1e1;
+    }
+
+    #example td {
+        text-align: center;
+    }
+
+    #example td,
+    #example th {
+        border-bottom: 1px solid #333;
+        /* Adjust color as needed */
+    }
+
+.form-container {
+    background-color: rgb(149, 232, 242);
+  
+    width: 50%;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-container:hover {
+   
+    box-shadow: 0 8px 10px rgba(0, 0, 0, 0.15);
+}
+
+.form-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    margin-right: 10px;
+}
+@import url(https://fonts.googleapis.com/css?family=Montserrat);
+
+
+.moving_down {
+    margin-top: 50px;
+   
+}
+
+.form-section {
+    background: white;
+    border: 0 none;
+    border-radius: 0px;
+    border: #413939 solid 2px;
+    padding: 20px 30px;
+    box-sizing: border-box;
+    width: 90%;
+    margin: 0 auto 20px;
+
+}
+
+.fs-title {
+    font-size: 22px;
+    text-align:center;
+    color: #100848;
+    margin-top: 30px;
+    letter-spacing: 2px;
+    font-weight: 900;
+}
+
+.fs-subtitle {
+    font-weight: normal;
+    font-size: 16px;
+    margin-top: 10px;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+
+.form-section h2,
+.form-section h4,
+.form-section h3 {
+    margin-bottom: 20px;
+}
+
+.form-section input[type="text"],
+.form-section input[type="number"],
+.form-section textarea {
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 0px;
+    margin-bottom: 10px;
+    width: 100%;
+    box-sizing: border-box;
+    font-family: montserrat;
+    color: #2C3E50;
+    font-size: 13px;
+}
+
+.form-section input[type="text"]:focus,
+.form-section input[type="number"]:focus,
+.form-section textarea:focus {
+    border: 1px solid #0920ee;
+    outline-width: 0;
+    transition: All 0.5s ease-in;
+}
+
+.form-section .form-check-inline {
+    display: inline-block;
+    margin-bottom: 20px;
+}
+
+.form-section .form_label {
+    width: 100%;
+    text-align: left;
+    margin: 12px 3px;
+    font-size: 16px;
+    font-weight: 700;
+    color: #413939;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+td,
+th {
+    border: 2px solid #978686;
+    padding: 10px;
+    text-align: center;
+}
+
+th {
+    background-color: #e7e0e0;
+    font-weight: bold;
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+tr:hover {
+    background-color: #e6f7ff;
+}
+
+.header {
+    background-color: #c1dcde;
+}
+
+.highlight {
+    background-color: #efb888;
+}
+
+.error-message {
+    color: red;
+    font-size: 12px;
+    display: block;
+    margin-bottom: 5px;
+}
+
+@media print{
+ 
+    @page {
+        size: auto;
+        margin: 0;
+    }
+    .pagebreak { page-break-before: always; }
+    #menu{
+      display: none;
+    }
+    #header{
+      display:none;
+    }
+    #printhide{
+      display:none;
+    }
+    .statistics_graphs{
+      display:none;
+    }
+    table, th, td {
+      border: 1px solid black;
+    }
+    .stats{
+      margin-left: -104px !important;
+    }
+
+
+
+    #print_page_id{
+      display:block;
+      margin-left:-170px;
+      {% comment %} width:1100px; {% endcomment %}
+    }
+    .table_header{
+      font-size:16px;
+      font-weight:600
+    }
+    .table{
+     
+      font-size:10px !important;
+    }
+    .yourTableTh{
+      background-color: #d7d7d7 !important;
+    }
+    .tr>.td{
+      font-size:10px !important;
+      font-weight: 400;
+     
+    }
+  }
+  .recived_value{
+    font-style: italic;
+      color: red;
+  }
+  .statistics_graphs{
+    margin-left: 2%;
+    margin-right: 2%;
+  }
+</style>
+  <div class="inner_container job_lidt_container" style="
+  margin-left: 120px;  margin-top: 2%; ">
+   
+   
+    <div id="printarea">
+        <div class="moving_down">
+            <div class="container">
+                <div class="form-section">
+                    <h2 class="fs-title">ER1 Report</h2>
+        
+                    <h4 style="color: #2511ba; font-size: small; margin-left: 15%;">Quarterly return to be submitted to the local Employment
+                        Exchange for the quarter
+                        ended : {{ employer_view.selected_quarter_user}} </h4>
+        
+        
+                    <h5 style="font-size: smaller;" >The following information is required under the Employment Exchanges
+                        (Compulsory Notification of Vacancies) Rules, 1960 to assist in evaluating trends in employment and for
+                        action to correct imbalances between labour supply and demand.</h5>
+        
+                        <label class="form_label" for="emp_name"> <strong>Name and address of the Employer :</strong> {{ employer_view.emp_name }}, {{ employer_view.emp_address }} </label>
+                  
+                        <div class="business-activity-wrapper">
+                            <label class="form_label" for="emp_bus_activity"><strong>Nature of Business/Principal Activity: </strong>{{ employer_view.emp_nature_of_bussiness }}</label>
+                           
+                        </div>
+            
+            
+                        <div class="business-activity-wrapper">
+                            <label class="form_label"><strong>Whether Head Office or Branch Office: </strong>{{ employer_view.office_type }}</label>
+                           
+                        </div>
+        
+        
+                    <h4 style="margin-top: 20px;">1.(a) Employment</h4>
+                    <table class="table">
+                        <tr>
+                            <th colspan="5" style="background-color: #1f90c3; color: #FFF; padding: 15px; text-align: left;">
+                                Total number of persons including working proprietors/ partners/ commission agents/ contingent
+                                paid and contractual workers on the pay rolls of the establishment excluding part-time workers
+                                and apprentices (The figure should include every person whose wage or salary is paid by the
+                                establishment).
+                            </th>
+                        </tr>
+                        <tr>
+                            <th></th>
+                            <th>On the last working day of the previous quarter</th>
+                            <th>On the last working day of the quarter under report</th>
+                        </tr>
+                        <tr>
+                            <td style="text-align: center; font-size: medium; padding-top: 25px;"><strong>Men</strong></td>
+                            <td><input type="number" name="men_previous_quarter" class="form-control" placeholder="men_p"
+                                    style="margin-top: 10px;" readonly min="0" required
+                                    value="{{ employer_view.men_previous_quarter }}" /></td>
+                            <td><input type="number" name="men_current_quarter" class="form-control" placeholder="men_c"
+                                    style="margin-top: 10px;" readonly min="0" required
+                                    value="{{ employer_view.men_current_quarter }}" /></td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: center; font-size: medium; padding-top: 25px;"><strong>Women</strong></td>
+                            <td><input type="number" name="women_previous_quarter" class="form-control" placeholder="women_p"
+                                    style="margin-top: 10px;" min="0" readonly required
+                                    value="{{ employer_view.women_previous_quarter }}" /></td>
+                            <td><input type="number" name="women_current_quarter" class="form-control" placeholder="women_c"
+                                    style="margin-top: 10px;" min="0" readonly required
+                                    value="{{ employer_view.women_current_quarter }}" /></td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: center; font-size: medium; background-color: #e7e0e0; padding-top: 25px;">
+                                <strong>Total</strong>
+                            </td>
+                            <td style="background-color: #e7e0e0"><input type="number" name="total_previous_quarter"
+                                    class="form-control" placeholder="total_p" style="margin-top: 10px;" readonly min="0"
+                                    required value="{{ employer_view.total_previous_quarter }}" />
+                            </td>
+                            <td style="background-color: #e7e0e0"><input type="number" name="total_current_quarter"
+                                    class="form-control" placeholder="total_c" style="margin-top: 10px;" readonly min="0"
+                                    required value="{{ employer_view.total_current_quarter }}" />
+                            </td>
+                        </tr>
+                    </table>
+                    <div class="pagebreak"> </div>
+        
+                    <label for="emp_reason" style="margin-top: 20px;">(b) Please indicate the main reasons for any increase or
+                        decrease in employment if the increase or decrease is more than 5 percent during the quarter:</label>
+                    <input type="text" class="form-control" style="margin-top: 10px;" min="0" readonly required
+                        value="{{ employer_view.emp_reason }}" />
+        
+                        <h5 style="font-size: small;"><strong>Note:-</strong>Establishments  are reminded of their obligation under the Employment Exchanges
+                            (Compulsory Notification of Vacancies) Act for notifying to Employment Exchanges details of
+                            vacancies specified under the Act, before they are filled.</h5>
+        
+                    <h2 class="fs-title">2 VACANCIES</h2>
+        
+                    <h6 style="font-weight: 700;">2(a). Number of vacancies occurred and notified during the quarter and the number filled during the quarter : {{ employer_view.selected_quarter_user}}</h6>
+        
+                    <table border="1" style="margin-top: 30px;">
+                        <tr>
+        
+                            <th colspan="4" style="text-align: center; background-color: #1f90c3; color: #FFF;">Number
+                                of vacancies which come within the
+                                purview of the Act</th>
+                        </tr>
+                        <tr>
+                            <th rowspan="2" style="text-align: center; background-color: #1f90c3; color: #FFF;">occurred
+                            </th>
+                            <th style="text-align: center; background-color: #1f90c3; color: #FFF;">Notified</th>
+                            <th rowspan="2" style="text-align: center; background-color: #1f90c3; color: #FFF;">Filled
+                            </th>
+                            <th rowspan="2" style="text-align: center; background-color: #1f90c3; color: #FFF;">Sources
+                                (Describe the
+                                source from which filled)
+                            </th>
+        
+                        </tr>
+                        <tr>
+                            <td style="background-color: #1f90c3; color: #FFF;">Employment Exchange</td>
+        
+        
+        
+                        </tr>
+                        <tr>
+                            <td>
+                                <h5>1</h5>
+                            </td>
+                            <td>
+                                <h5>2</h5>
+                            </td>
+                            <td>
+                                <h5>3</h5>
+                            </td>
+                            <td>
+                                <h5>4</h5>
+                            </td>
+        
+                        </tr>
+                        <tr>
+                            <td> <input type="number" name="vacancy_occured" id="vacancy_occured" style="  margin-top: 10px;"
+                                    class="form-control" min="0" readonly required
+                                    value="{{ employer_view.vacancy_occured_purview }}" /></td>
+                            <td>
+                                <p style="font-size: 11px">{{ employer_view.vacancy_emp_exchange_purview }}</p>
+                                {% comment %} <input type="hidden" name="vacancy_emp_exchange" style="  margin-top: 10px;" class="form-control"
+                                    min="0" required value="{{ employer_view.vacancy_emp_exchange_purview }}" readonly /> {% endcomment %}
+                                </td>
+                            <td><input type="number" name="vacancy_filled" id="vacancy_filled" style="  margin-top: 10px;"
+                                    class="form-control" min="0" readonly required
+                                    value="{{ employer_view.vacancy_filled_purview }}" /></td>
+                            <td><input type="text" name="vacancy_source" style="  margin-top: 10px;" class="form-control"
+                                    min="0" readonly required value="{{ employer_view.vacancy_source_purview }}" /></td>
+        
+                        </tr>
+                    </table>
+        
+                    <label class="form_label" for="vacancy_reason_for_not_notifying" style="margin-top: 50px;"> 2(b).
+                        Reasons for not notifying all vacancies occurred during the quarter under report vide 2(a) above Otherwise
+                        give "None" :</label>
+                    <input type="text" name="vacancy_source" style="  margin-top: 10px;" class="form-control" min="0" readonly
+                        required value="{{ employer_view.vacancy_reason_for_not_notifying }}" />
+            <div class="pagebreak"> </div>
+        
+                    <h2 class="fs-title">3.Manpower Shortage</h2>
+        
+                    <h4 class="text-center" style="color: #2511ba; font-size: ">Vacancies/ posts unfilled because of shortage of suitable applicants. </h4>       
+        
+                    <table border="1" style="margin-top: 30px;" id="vacancy-table">
+                        <tr>
+                            <th rowspan="2" style="text-align: center;  background-color: #1f90c3; color: #FFF;">Name of
+                                the occupation or designation of the
+                                post</th>
+                            <th colspan="4" style="text-align: center;  background-color: #1f90c3; color: #FFF;">Number
+                                of unfilled vacancies/ posts</th>
+                        </tr>
+                        <tr>
+                            <th style="text-align: center;  background-color: #1f90c3; color: #FFF;">Essential
+                                Qualification prescribed</th>
+                            <th style="text-align: center;  background-color: #1f90c3; color: #FFF;">Essential
+                                Experience</th>
+                            <th style="text-align: center;  background-color: #1f90c3; color: #FFF;">Experience not
+                                necessary</th>
+                        </tr>
+                        {% for shortage in manpower_shortages %}
+                        <tr>
+                            <td>{{ shortage.mp_shortage_occupation }}</td>
+                            <td>{{ shortage.mp_essential_qual }}</td>
+                            <td>{{ shortage.mp_essential_exp|default:"Not Required" }}</td>
+                            <td>{{ shortage.mp_exp_not }}</td>
+        
+                        </tr>
+                        {% endfor %}
+        
+        
+                    </table>
+        
+                    <label class="form_label" for="dif_occupations" style="margin-top: 20px;">Please list any
+                        other occupations for which this establishment had recently any difficulty in obtaining
+                        suitable applicants Or "None" :
+                    </label>
+                    <textarea id="dif_occupations" rows="4" cols="20" readonly>{{ employer_view.dif_occupations }}</textarea>
+        
+                   
+                    <div style="display: flex; justify-content: space-between;">
+                        <div>
+                            <p style="margin-top: 20px;">To,</p>
+                            <p>The Employment Exchange,{{employer_view.vacancy_emp_exchange_purview}}</p>
+                        </div>
+                        
+                        <div style="margin-top: 20px;">
+                            <label class="form_label">Signature of Employer</label>
+                           
+                             <img src="{% if employer_view.signature_upload %}{{ request.scheme }}://{{ request.META.HTTP_HOST }}/{{employer_view.signature_upload.url}}{% else %}{% static '/img/dummy.jpg' %}{% endif %}" style="width: 170px; height: 100px; margin-left: 15px;"/>
+                           
+                           
+                        </div>
+                    </div>
+                   
+                    
+                <h5 style="margin-top: 20px; margin-bottom: 25px; font-size: small;">Note:-This return shall relate to quarter ending 31st March, 30th June, 30th September, 31st  December and shall be rendered to the local Employment Exchange within 30 days after the end of the quarter concerned.</h5>
+        
+                
+                    <div id="printhide">
+                        <button type="button" class="btn btn-danger btn-print" onclick="printDiv2()" style="margin-left: 42%;" class=>Print Page</button>
+                    </div>
+                    
+               
+            
+        
+                </div>
+            </div>
+        </div>
+        </div>
+                
+        
+        <script>
+            function printDiv2() {
+           
+            
+                window.print();
+                
+            
+                
+            }
+        </script>
+                    
+                
+                
+             
+          
+        </section>
+                
+
+{% endblock %}
+{% block 'extra_js' %}
+
+
+</script>
+{% endblock %}
