@@ -1,0 +1,9 @@
+# Ignore specific file
+config.ini
+
+# Ignore all files with extension
+*.log
+
+# Ignore directory
+node_modules/
+test_folder/
