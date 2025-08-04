@@ -24,11 +24,9 @@ class="d-flex align-items-left align-items-md-center flex-column flex-md-row pt-
     <div class="col-md-5 d-flex align-items-center">
       <label for="exchangeSelect" class="me-2 mb-0">Employment Exchange</label>
       <select class="form-select form-select-sm" id="exchangeSelect" style="width: 300px;">
-        <option>1</option>
-        <option>2</option>
-        <option>3</option>
-        <option>4</option>
-        <option>5</option>
+        {% for emps_exchange in emps_exchanges %}
+        <option>{{emps_exchange.name}}</option>
+        {% endfor %}
       </select>
     </div>
 

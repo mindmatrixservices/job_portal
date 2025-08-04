@@ -16,30 +16,28 @@
 
   </div>
   <div class="row my-5">
-    <form class="d-flex align-items-center w-100 gap-3">
-
+    <form method="post" action="{% url 'department:jobfair_mis' %}" class="d-flex align-items-center w-100 gap-3">
+      {% csrf_token %}
+      
       <div class="col-md-10 d-flex align-items-center">
-        <label for="exchangeSelect" class="me-2 mb-0">Employment Exchange</label>
-        <select class="form-select form-select-sm" id="exchangeSelect" style="width: 100%">
-          <option>1</option>
-          <option>2</option>
-          <option>3</option>
-          <option>4</option>
-          <option>5</option>
+        <label for="employment_exchange" class="me-2 mb-0">Employment Exchange</label>
+        <select class="form-select form-select-sm" id="employment_exchange" name="employment_exchange" required style="width: 100%">
+          <option value="" disabled selected>Select an exchange</option>
+          {% for emps_exchange in emps_exchanges %}
+            <option value="{{ emps_exchange.name }}">{{ emps_exchange.name }}</option>
+          {% endfor %}
         </select>
       </div>
-
-      
-
+    
       <div class="col-md-2">
         <button type="submit" class="btn btn-success btn-sm">Submit</button>
       </div>
-
     </form>
+    
   </div>
 
 
-  
+
 
 
     
@@ -48,69 +46,55 @@
     <div class="col-md-12">
       <div class="card">
         <div class="card-header">
-          {% comment %} <h4 class="card-title">Total Jobseeker: 11313</h4> {% endcomment %}
         </div>
         <div class="card-body">
           <div class="table-responsive">
-            <table
-              id="basic-datatables"
-              class="display table table-striped table-hover"
-            >
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th> Job Fair ID </th>
-                  <th>Start Date	</th>
-                  <th>End Date			</th>
-                  <th>Venue	</th>
-                  <th>No. of Participated Employers		</th>
-                  <th>No. of Job Post	</th>
-                  <th>No. of Participated Jobseekers	</th>
-                  <th>No. of Shortlisted Jobseekers	</th>
-                  <th>No. of Jobseekers placed
-                  </th>
-                </tr>
-              </thead>
-              
-              <tbody>
-                <tr>
-                  <td>1</td>
-                  <td>AS/JF/GHY/0005/2024	</td>
-                  <td>Nov. 29, 2024	</td>
-                  <td>Nov. 29, 2024		</td>
-                  <td>Guwahati	</td>
-                  <td>0</td>
-                  <td>0</td>
-                  <td>0</td>
-                  <td>0</td>
-                  <td>0</td>
-                </tr>
-                <tr>
-                  <td>2</td>
-                  <td>AS/JF/GHY/0006/2024	</td>
-                  <td>Nov. 29, 2024	</td>
-                  <td>Nov. 29, 2024		</td>
-                  <td>Guwahati	</td>
-                  <td>0</td>
-                  <td>0</td>
-                  <td>0</td>
-                  <td>0</td>
-                  <td>0</td>
-                <tr>
-                  <td>3</td>
-                  <td>AS/JF/GHY/0007/2024	</td>
-                  <td>Nov. 29, 2024	</td>
-                  <td>Nov. 29, 2024		</td>
-                  <td>Guwahati	</td>
-                  <td>0</td>
-                  <td>0</td>
-                  <td>0</td>
-                  <td>0</td>
-                  <td>0</td>
-                </tr>
-
-              </tbody>
-            </table>
+            <table class="table table-hover" id="YourTableId1">                
+              <tr class="tr">
+                <th class="th">Job Fair ID		</th>
+                <th class="th" >Start Date 	</th>
+                <th class="th" >End Date 	</th>
+                <th class="th" >Venue 	</th>
+                <th class="th" >No. of Participated Employers		</th>
+                <th class="th" >No. of Job Post </th>
+                <th class="th" >No. of Participated Jobseekers	</th>                    
+                <th class="th" >No. of Shortlisted Jobseekers	</th>                    
+                <th class="th" >No. of Jobseekers placed	</th>                    
+                
+              </tr>
+            <tbody>
+              {% for jobfair in jobfair_list %}
+              <tr class="tr">
+                <td class="td" >{{jobfair.jobfair_id}}</td>
+                <td class="td" >{{ jobfair.start_date }}</td>
+                <td class="td" >{{jobfair.end_date}}</td>
+                <td class="td" >{{jobfair.location}}</td>
+                <td class="td" >
+                  <a  href="" id="{{ jobfair.jobfair_id }}">
+                  {{jobfair.employers}}
+          
+                  </a>
+                </td>
+                <td class="td" >
+                  <a  href="" id="{{ jobfair.jobfair_id }}">
+                  {{jobfair.jobpost_count}} </a>
+                </td>
+                <td class="td" >
+                  <a  href="" id="{{ jobfair.jobfair_id }}">
+                  {{jobfair.participated_jobseekers_count}} </a>
+                </td>
+          
+               
+                <td class="td" >
+                  <a  href="" id="{{ jobfair.jobfair_id }}">
+                  {{jobfair.shortlisted_count}} </a> </td>
+                <td class="td" >
+                  <a  href="" id="{{ jobfair.jobfair_id }}">
+                  {{jobfair.placement_count}} </a> </td>
+              </tr>
+              {%endfor%}
+            </tbody>
+          </table>
           </div>
         </div>
       </div>

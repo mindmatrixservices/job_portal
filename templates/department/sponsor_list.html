@@ -48,7 +48,6 @@
     <div class="col-md-12">
       <div class="card">
         <div class="card-header">
-          {% comment %} <h4 class="card-title">Total Jobseeker: 11313</h4> {% endcomment %}
         </div>
         <div class="card-body">
           <div class="table-responsive">
@@ -58,7 +57,7 @@
             >
               <thead>
                 <tr>
-                  <th>#</th>
+                  
                   <th> Job  ID </th>
                   <th>Job Title		</th>
                   <th>Organisation Name				</th>
@@ -71,17 +70,18 @@
               </thead>
               
               <tbody>
-                <tr>
-                  <td>1</td>
-                  <td>001	</td>
-                  <td>React Job	</td>
-                  <td>ascasc	</td>
-                  <td>June 4, 2025, 10:47 a.m.			
+                {% for job in jobs %}
+                  <tr class="tr ">
+                    <td class="td">{{job.job_id}}</td>
+                    <td class="td">{{ job.title }}</td>
+                    <td class="td">{{job.company.name}}</td>
+                    <td class="td">{{job.post_request_date}}</td>	
                   </td>
                  
                   
                   <td>
-                    <button  class="btn btn-primary btn-sm m-2">View</button>
+                    <button class="btn btn-primary btn-sm m-2" data-bs-toggle="modal" data-bs-target="#myModal1">View</button>
+
                     
                   </td>
                   <td>
@@ -96,7 +96,7 @@
                  
                 </tr>
                 
-
+                {% endfor %}
               </tbody>
             </table>
           </div>
@@ -108,7 +108,58 @@
   </div>
   </div>
 
+<!-- Modal -->
+<div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document" style="
+  width: 86%;
+  margin-left: 200px;
+  max-width: 100%;
+">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      </div>
+      <div class="modal-body">
+        <div>
+          <h3 class="text-primary text-center">Particulars of Candidates are submitted to the..... (Employers/Establishment )......(Auto generated) for the post of (Auto generated) </h3>
+          <table id="YourTableId" class="table table-bordered table-striped table-hover">  
+            <thead>  
+                 
+              <th align="left" class="yourTableTh"> Sl No.</th>  
+              <th align="left" class="yourTableTh"> Name </th> 
+              <th align="left" class="yourTableTh"> Address</th>  
+              <th align="left" class="yourTableTh"> Regn. No </th>  
+              <th align="left" class="yourTableTh"> DOB </th>  
+              <th align="left" class="yourTableTh"> Education Qualification</th>  
+              <th align="left" class="yourTableTh"> Remarkes</th>
+            </thead>  
+            <tbody>
+              <ol>
+              <tr>
+                <td>1</td>
+                <td>Sakil</td>
+                <td>Test Address</td>
+                <td> AS/78965/52/12 </td>
+                <td> 27-10-1996 </td>
+                <td> 12th pass </td>
+                <td> test </td>
+              </tr>
+            </ol>
+            </tbody>  
+          </table> 
+        </div>       
+      
+        
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
 
+        
+        
+      </div>
+    </div>
+  </div>
+</div>
 
 <script>
   var lineChart = document.getElementById("lineChart").getContext("2d"),

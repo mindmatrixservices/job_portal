@@ -16,25 +16,22 @@
 
   </div>
   <div class="row my-5">
-    <form class="d-flex align-items-center w-100 gap-3">
-
+    <form method="post" action="{% url 'department:recruitment_drive_mis' %}" class="d-flex align-items-center w-100 gap-3">
+      {% csrf_token %}
+      
       <div class="col-md-10 d-flex align-items-center">
-        <label for="exchangeSelect" class="me-2 mb-0">Employment Exchange</label>
-        <select class="form-select form-select-sm" id="exchangeSelect" style="width: 100%">
-          <option>1</option>
-          <option>2</option>
-          <option>3</option>
-          <option>4</option>
-          <option>5</option>
+        <label for="employment_exchange" class="me-2 mb-0">Employment Exchange</label>
+        <select class="form-select form-select-sm" id="employment_exchange" name="employment_exchange" required style="width: 100%">
+          <option value="" disabled selected>Select an exchange</option>
+          {% for emps_exchange in emps_exchanges %}
+            <option value="{{ emps_exchange.name }}">{{ emps_exchange.name }}</option>
+          {% endfor %}
         </select>
       </div>
-
-      
-
+    
       <div class="col-md-2">
         <button type="submit" class="btn btn-success btn-sm">Submit</button>
       </div>
-
     </form>
   </div>
 
@@ -48,7 +45,7 @@
     <div class="col-md-12">
       <div class="card">
         <div class="card-header">
-          {% comment %} <h4 class="card-title">Total Jobseeker: 11313</h4> {% endcomment %}
+  
         </div>
         <div class="card-body">
           <div class="table-responsive">
@@ -58,8 +55,7 @@
             >
               <thead>
                 <tr>
-                  <th>#</th>
-                  <th> Job Fair ID </th>
+                  <th> Recruitment Drive ID </th>
                   <th>Start Date	</th>
                   <th>End Date			</th>
                   <th>Venue	</th>
@@ -73,42 +69,36 @@
               </thead>
               
               <tbody>
-                <tr>
-                  <td>1</td>
-                  <td>AS/JF/GHY/0005/2024	</td>
-                  <td>Nov. 29, 2024	</td>
-                  <td>Nov. 29, 2024		</td>
-                  <td>Guwahati	</td>
-                  <td>0</td>
-                  <td>0</td>
-                  <td>0</td>
-                  <td>0</td>
-                  <td>0</td>
-                </tr>
-                <tr>
-                  <td>2</td>
-                  <td>AS/JF/GHY/0006/2024	</td>
-                  <td>Nov. 29, 2024	</td>
-                  <td>Nov. 29, 2024		</td>
-                  <td>Guwahati	</td>
-                  <td>0</td>
-                  <td>0</td>
-                  <td>0</td>
-                  <td>0</td>
-                  <td>0</td>
-                <tr>
-                  <td>3</td>
-                  <td>AS/JF/GHY/0007/2024	</td>
-                  <td>Nov. 29, 2024	</td>
-                  <td>Nov. 29, 2024		</td>
-                  <td>Guwahati	</td>
-                  <td>0</td>
-                  <td>0</td>
-                  <td>0</td>
-                  <td>0</td>
-                  <td>0</td>
-                </tr>
+                {% for recruitmentdrive in recruitmentdrive_list %}
+                <tr class="tr">
+                  <td class="td" >{{recruitmentdrive.jobfair_id}}</td>
+                  <td class="td" >{{ recruitmentdrive.start_date }}</td>
+                  <td class="td" >{{recruitmentdrive.end_date}}</td>
+                  <td class="td" >{{recruitmentdrive.location}}</td>
+                  <td class="td" >
+                    <a  href="" id="{{ recruitmentdrive.jobfair_id }}">
+                    {{recruitmentdrive.employers}}
 
+                    </a>
+                  </td>
+                  <td class="td" >
+                    <a  href="" id="{{ recruitmentdrive.jobfair_id }}">
+                    {{recruitmentdrive.jobpost_count}} </a>
+                  </td>
+                  <td class="td" >
+                    <a  href="" id="{{ recruitmentdrive.jobfair_id }}">
+                    {{recruitmentdrive.participated_jobseekers_count}} </a>
+                  </td>
+
+                 
+                  <td class="td" >
+                    <a  href="" id="{{ recruitmentdrive.jobfair_id }}">
+                    {{recruitmentdrive.shortlisted_count}} </a> </td>
+                  <td class="td" >
+                    <a  href="" id="{{ recruitmentdrive.jobfair_id }}">
+                    {{recruitmentdrive.placement_count}} </a> </td>
+                </tr>
+                {%endfor%}
               </tbody>
             </table>
           </div>
