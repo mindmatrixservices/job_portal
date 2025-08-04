@@ -27,6 +27,7 @@ def home(request):
 
 def login(request):
     return render(request, 'login.html')
+
 def about(request):
     return render(request, 'about.html')
 
@@ -41,6 +42,7 @@ def contactus(request):
 
 def faq(request):
     return render(request, 'faq.html')
+
 def register(request):
     if request.method == 'POST':
         errors = {}
@@ -124,15 +126,16 @@ def register(request):
                 'employment_exchange_name': data['employment_exchange'],
                 'user_type': 'RR'  # Assuming this is for recruiters
             }
-
+            plain_password = user_data.pop('password')  # Removes 'password' from the dict
             company_user = User(**user_data)
+            company_user.set_password(plain_password) 
             company_user.save()
             print(f"User created with ID: {company_user.id}")  # Debug print
 
             # Handle file uploads
             fs = FileSystemStorage()
             file_fields = {
-                'logo': 'logos',
+                'logo': 'logo',
                 'seal': 'scanned_signature',
                 'gst_certificate': 'gst_certificate',
                 'pan_card': 'pan_card'
@@ -258,6 +261,8 @@ class SendOTPView(View):
                 'success': False,
                 'message': str(e)
             }, status=500)
+
+
 def verify_otp(request):
     if request.method == 'POST':
         try:
