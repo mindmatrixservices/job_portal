@@ -341,8 +341,8 @@ def sponsor_list(request):
 
 
 def pending_counselor_requests(request):
-    
-    return render(request, 'department/pending_counselor_requests.html')
+    counsellor = CounsellorDetails.objects.filter(form_status='Yes', status = 'Pending')
+    return render(request, 'department/pending_counselor_requests.html', {'counsellor':counsellor})
 
 def verified_counselor_list(request):
     
