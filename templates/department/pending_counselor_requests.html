@@ -75,13 +75,13 @@
                 {%for coun in counsellor%}
                                             <tr>
                                                 <th scope="row">1</th>
-                                                <td><a href="">{{coun.name}}</a></td>
+                                                <td><a href="{% url 'department:view_cc' coun.user_id %}">{{coun.name}}</a></td>
                                                 <td>{{ coun.upload_at|date:"d/m/Y, g:i A" }}</td>
                                                 <td>{{coun.email}}</td>
                                                 <td>{{coun.mobile}}</td>
                                                 <td>{{coun.c_district}}</td>
                                                 <td>
-                                                    <form method="POST" action="" onsubmit="return confirmreject()">
+                                                    <form method="POST" action="{% url 'department:reject_counselor_list' %}" onsubmit="return confirmreject()">
                                                         {% csrf_token %}
                                                         <input type="hidden" name="record_id" value="{{ coun.user_id }}" >
                                                         <button type="submit" class="btn btn-danger btn-sm">Reject</button>
@@ -92,7 +92,7 @@
                                                     <div class="row">
                                                         <div class="col-6 text-end">
                                                             <!-- Revert Button Form -->
-                                                            <form method="POST" action="" onsubmit="return confirmrevert()">
+                                                            <form method="POST" action="{% url 'department:revert_cc' %}" onsubmit="return confirmrevert()">
                                                                 {% csrf_token %}
                                                                 <input type="hidden" name="record_id" value="{{ coun.user_id }}" >
                                                                 <button type="submit" class="btn btn-warning btn-sm">Revert</button>
@@ -110,7 +110,7 @@
                                                     <div class="row">
                                                         <div class="col-6 text-end">
                                                             <!-- Verify Button Form -->
-                                                            <form method="POST" action="" onsubmit="return confirmverify()">
+                                                            <form method="POST" action="{% url 'department:reject_counselor_list' %}" onsubmit="return confirmverify()">
                                                                 {% csrf_token %}
                                                                 <input type="hidden" name="record_id" value="{{ coun.user_id }}"  >
                                                                 <button type="submit" class="btn btn-success btn-sm">Verify</button>
@@ -139,6 +139,18 @@
 
 
 <script>
+function confirmreject() {
+  return confirm('Are you sure you want to Reject this Counsellor?');
+}
+
+function confirmrevert() {
+  return confirm('Are you sure you want to Revert this Counsellor?');
+}
+
+function confirmverify() {
+  return confirm('Are you sure you want to Verify  this Counsellor?');
+}
+
   var lineChart = document.getElementById("lineChart").getContext("2d"),
     barChart = document.getElementById("barChart").getContext("2d"),
     pieChart = document.getElementById("pieChart").getContext("2d"),

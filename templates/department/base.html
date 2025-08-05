@@ -15,9 +15,10 @@
       href="{% static 'assets/img/kaiadmin/favicon.ico' %}"
       type="image/x-icon"
     />
-
+    
     <!-- Fonts and icons -->
     <script src="{% static 'assets/js/plugin/webfont/webfont.min.js' %}"></script>
+    
     <script>
       WebFont.load({
         google: { families: ["Public Sans:300,400,500,600,700"] },
@@ -301,7 +302,7 @@
                       </a>
                     </li>
                     <li>
-                      <a href="{% url 'department:sponsor_list' %}">
+                      <a href="{% url 'department:reject_counselor_list' %}">
                         <span class="sub-item">Reject Request</span>
                       </a>
                     </li>
@@ -324,7 +325,7 @@
                       </a>
                     </li>
                     <li>
-                      <a href="{% url 'department:assigened_college_requests' %}">
+                      <a href="{% url 'department:assigned_college_requests' %}">
                         <span class="sub-item">Counsellor Assigned</span>
                       </a>
                     </li>
@@ -348,7 +349,7 @@
                       </a>
                     </li>
                     <li>
-                      <a href="{% url 'department:assigened_college_requests' %}">
+                      <a href="{% url 'department:assigned_college_requests' %}">
                         <span class="sub-item">Filter</span>
                       </a>
                     </li>
@@ -617,6 +618,10 @@
 </div>
 <!--   Core JS Files   -->
 <script src="{% static 'assets/js/core/jquery-3.7.1.min.js' %}"></script>
+<script src="https://cdn.jsdelivr.net/npm/moment@2.29.4/moment.min.js"></script>
+
+  <!-- Daterangepicker JS -->
+<script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 <script src="{% static 'assets/js/core/popper.min.js' %}"></script>
 <script src="{% static 'assets/js/core/bootstrap.min.js' %}"></script>
 
@@ -681,6 +686,32 @@
   });
 </script>
 <script>
+  $(function () {
+      $('#periodInput').daterangepicker({
+        autoUpdateInput: false,
+        locale: {
+          cancelLabel: 'Clear'
+        },
+        ranges: {
+          'Today': [moment(), moment()],
+          'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+          'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+          'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+          'This Month': [moment().startOf('month'), moment().endOf('month')],
+          'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+          'Till Last Month': [moment().startOf('year'), moment().subtract(1, 'month').endOf('month')]
+        }
+      });
+
+      $('#periodInput').on('apply.daterangepicker', function (ev, picker) {
+        $(this).val(picker.startDate.format('MMM DD, YYYY') + ' - ' + picker.endDate.format('MMM DD, YYYY'));
+      });
+
+      $('#periodInput').on('cancel.daterangepicker', function (ev, picker) {
+        $(this).val('');
+      });
+    });
+    
   $(document).ready(function () {
     $("#basic-datatables").DataTable({});
 

@@ -58,7 +58,7 @@
             >
               <thead>
                 <tr>
-                  <th>#</th>
+                  <th>Id</th>
                   <th> Counsellor Name </th>
                   <th>Applied Date & Time	</th>
                   <th>Email			</th>
@@ -71,23 +71,36 @@
               </thead>
               
               <tbody>
-                <tr>
-                  <td>1</td>
-                  <td>Wwwe</td>
-                  <td>11/04/2025, 11:36 AM	</td>
-                  <td>eleven@gmail.com	</td>
-                  <td>5465658596</td>
-                  <td>Golaghat</td>
-                  <td>
-                    <button class="btn btn-warning btn-sm">Revert</button>
-                  </td>
-                 
-                  
-                  
-                 
-                </tr>
-                
-
+                {%for coun in counsellor%}
+                                            <tr>
+                                                <th scope="row">1</th>
+                                                <td><a href="{% url 'department:view_cc' coun.user_id %}">{{coun.name}}</a></td>
+                                                <td>{{ coun.upload_at|date:"d/m/Y, g:i A" }}</td>
+                                                <td>{{coun.email}}</td>
+                                                <td>{{coun.mobile}}</td>
+                                                <td>{{coun.c_district}}</td>
+                                            
+                                                <td style="text-align: center;">
+                                                    <div class="row">
+                                                        <div class="col-6 text-end">
+                                                            <!-- Revert Button Form -->
+                                                            <form method="POST" action="{% url 'department:revert_cc' %}">
+                                                                {% csrf_token %}
+                                                                <input type="hidden" name="record_id" value="{{ coun.user_id }}">
+                                                                <button type="submit" class="btn btn-warning btn-sm">Revert</button>
+                                                            </form>
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <div class="spinner-grow text-danger" id="spinner1" style="width: 1rem; height: 1rem; display:none" role="status">
+                                                                <span class="visually-hidden">Loading...</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            
+                                                
+                                            </tr>
+                                            {%endfor%}
               </tbody>
             </table>
           </div>

@@ -18,8 +18,10 @@ urlpatterns = [
     path('sponsor_list/', views.sponsor_list, name='sponsor_list'),
     path('pending_counselor_requests/', views.pending_counselor_requests, name='pending_counselor_requests'),
     path('verified_counselor_list/', views.verified_counselor_list, name='verified_counselor_list'),
+    path('view_cc/<int:user_id>/', views.view_cc, name="view_cc"),
+    path('revert_cc/', views.revert_cc, name="revert_cc"),
     path('reject_counselor_list/', views.reject_counselor_list, name='reject_counselor_list'),
     path('pending_college_requests/', views.pending_college_requests, name='pending_college_requests'),
-    path('assigened_college_requests/', views.assigened_college_requests, name='assigened_college_requests'),
+    path('assigned_college_requests/', views.assigned_college_requests, name='assigned_college_requests'),
     path('vocational_guidance_dashboard/', views.vocational_guidance_dashboard, name='vocational_guidance_dashboard'),
 ]

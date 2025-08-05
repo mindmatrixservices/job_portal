@@ -9,8 +9,7 @@
   class="d-flex align-items-left align-items-md-center flex-column flex-md-row pt-2 pb-4"
   >
   <div>
-    <h3 class="fw-bold mb-3">Assigned College/Institution Requests
-      t</h3>
+    <h3 class="fw-bold mb-3">Assigned College/Institution Requests</h3>
     {% comment %} <h6 class="op-7 mb-2">Dashboard Report till date : Mon Jul 07 2025</h6> {% endcomment %}
   </div>
 
@@ -59,7 +58,7 @@
             >
               <thead>
                 <tr>
-                  <th>#</th>
+                  <th>ID</th>
                   <th> College Name </th>
                   <th>University Name</th>
                   <th>Address			</th>
@@ -75,26 +74,29 @@
               </thead>
               
               <tbody>
-                <tr>
-                  <td>1</td>
-                  <td>Wwwe</td>
-                  <td>11/04/2025, 11:36 AM	</td>
-                  <td>eleven@gmail.com	</td>
-                  <td>5465658596</td>
-                  <td>Golaghat</td>
-                  <td>5465658596</td>
-                  <td>Golaghat</td>
-                  <td>Golaghat</td>
-                 
-                  
-                  <td>
-                    <button class="btn btn-warning btn-sm">Assign Counsellor</button>
-                  </td>
-                 
-                  
-                  
-                 
-                </tr>
+                {% for coun in instreq %}
+                            <tr>
+                              <th scope="row">{{ forloop.counter }}</th>
+                              <td>{{ coun.college_name }}</td>
+                              <td>{{ coun.university_name }}</td>
+                              <td>{{ coun.address }}, {{ coun.district }}, {{ coun.pincode }}</td>
+                              <td>{{ coun.counselling_date|date:"d/m/Y, g:i A" }}</td>
+                              <td>{{ coun.max_students }}</td>
+                              <td>{{ coun.college_email }}</td>
+                              <td>{{ coun.contact_phone }}</td>
+                        
+                              <td>{{ coun.counsellor_name }}</td>
+                        
+                              <td>
+                                <form method="post" action="">
+                                  {% csrf_token %}
+                                  <input type="hidden" name="college_id" value="{{ coun.id }}">
+                                  <input type="hidden" name="counsellor_id" value="{{ coun.assigned_counsellor }}">
+                                  <button type="submit" class="btn btn-warning m-2">Session Completed</button>
+                                </form>
+                              </td>
+                            </tr>
+                          {% endfor %}
                 
 
               </tbody>

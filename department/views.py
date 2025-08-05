@@ -1,6 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from peeldb.models import *
 from django.views.decorators.cache import cache_control, never_cache
+from django.http import JsonResponse
 # from core.models import Department
 
 def home(request):
@@ -303,24 +304,8 @@ def sponsor_list(request):
                 
                 elif "ITI" in str(d.examination_passed):
                     D["iti"] = d.examination_passed
-
-                    # D["percentage"] = d.percentage_of_marks
-                #  print(d.major_elective_subject)
-            
-            #  D["year_of_procurement"]=(list.year_of_procurement).isoformat()
             
             l.append(D)
-        
-            # if s =="":
-            #     s+=str(json.dumps(D))
-            # else:
-            #     s= s+", "+ str(json.dumps(D))
-                
-        # s="[" + s + "]"
-        
-        
-        
-
         response_data = {
         
             "draw": draw,
@@ -344,22 +329,423 @@ def pending_counselor_requests(request):
     counsellor = CounsellorDetails.objects.filter(form_status='Yes', status = 'Pending')
     return render(request, 'department/pending_counselor_requests.html', {'counsellor':counsellor})
 
-def verified_counselor_list(request):
+def view_cc(request,user_id): 
+    print("user id:",user_id)
+    counsellor = CounsellorDetails.objects.filter(user_id=user_id).first()
+    documents = CounsellorDoc.objects.filter(user_id=user_id)
     
-    return render(request, 'department/verified_counselor_list.html')
+    # print("documents:",documents.user_id)
+    for document in documents:
+        print("documents:==",document.file_name)
+    return render(request, 'department/view_cc.html', {
+            "counsellor": counsellor,  # Pass existing data to pre-fill the form
+            "documents": documents, 
+            "MEDIA_URL": settings.MEDIA_URL             
+        }) 
+
+def verified_counselor_list(request):
+    if request.method == "POST":
+        try:
+            unqid = request.POST.get('record_id')
+            print("Inside TRY Function-----------------")
+            counsellor = CounsellorDetails.objects.filter(user_id=unqid).first()
+            counsellor.status = 'Approved'
+            counsellor.save()
+            
+            return redirect("department:pending_cc")
+                
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=400)
+    counsellor = CounsellorDetails.objects.filter(form_status='Yes', status='Approved')
+    return render(request, 'department/verified_counselor_list.html',{'counsellor':counsellor})
 
 def reject_counselor_list(request):
-    
-    return render(request, 'department/reject_counselor_list.html')
+    if request.method == "POST":
+        try:
+            unqid = request.POST.get('record_id')
+            print("Inside TRY Function-----------------")
+            counsellor = CounsellorDetails.objects.filter(user_id=unqid).first()
+            counsellor.status = 'Rejected'
+            counsellor.save()
+            
+            return redirect("department:pending_counselor_requests")
+                
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=400)
+        
+    counsellor = CounsellorDetails.objects.filter(form_status='Yes', status = 'Rejected')
+    return render(request, 'department/reject_counselor_list.html',{'counsellor':counsellor})
+
+def revert_cc(request):
+    if request.method == "POST":
+        try:
+            unqid = request.POST.get('record_id')
+            print("Inside TRY Function-----------------")
+            counsellor = CounsellorDetails.objects.filter(user_id=unqid).first()
+            counsellor.form_status = 'No'
+            counsellor.status = 'Pending'
+            counsellor.save()
+            
+            
+            return redirect("department:pending_counselor_requests")
+                
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=400)
+    counsellor = CounsellorDetails.objects.filter(form_status='Yes')
+    return render(request,"department/pending_cc.html", {'counsellor':counsellor})
 
 def pending_college_requests(request):
-    
-    return render(request, 'department/pending_college_requests.html')
+    if request.method == "POST":
+        print("Enter post=======================")
+        counsellor_id = request.POST.get('counsellor')
+        college_id = request.POST.get('college_id')
+        institution_request_table = institution_request.objects.filter(id=college_id).first()
+        institution_request_table.assigned_counsellor = counsellor_id
+        institution_request_table.status = 'Approved'
+        institution_request_table.save()
+    instreq = institution_request.objects.filter(assigned_counsellor__isnull=True, status = 'Pending')
+    counsellor = CounsellorDetails.objects.filter(form_status='Yes', status='Approved') 
+    return render(request, 'department/pending_college_requests.html',{'instreq':instreq, 'counsellor':counsellor})
 
-def assigened_college_requests(request):
-    
-    return render(request, 'department/assigened_college_requests.html')
+def assigned_college_requests(request):
+    if request.method == "POST":
+        college_id = request.POST.get('college_id')
+        counsellor_id = request.POST.get('counsellor_id')
+        institution = institution_request.objects.filter(id=college_id).first()
+        if institution:
+            institution.status = 'Completed'
+            institution.save()
 
+    instreq = institution_request.objects.filter(assigned_counsellor__isnull=False, status='Approved')
+    counsellors = CounsellorDetails.objects.filter(form_status='Yes', status='Approved')
+
+    # Create a mapping of id → name
+    counsellor_map = {str(c.id): c.name for c in counsellors}
+
+    # 🔁 Inject counsellor name into each item
+    for i in instreq:
+        i.counsellor_name = counsellor_map.get(str(i.assigned_counsellor), "Unknown")
+    return render(request, 'department/assigned_college_requests.html', {'instreq': instreq})
+
+@never_cache
+#@department_login_required
 def vocational_guidance_dashboard(request):
-    
-    return render(request, 'department/vocational_guidance_dashboard.html')
+    # if request.user.is_authenticated:
+    #     if not request.user.is_jobseeker and not request.user.is_recruiter and not request.user.is_agency_recruiter: 
+    if ( request.POST.get("timestamp", "")):
+
+        timestamp = request.POST.get("timestamp")
+        date1 = request.POST.get('timestamp').split(' - ')
+        start_date = datetime.strptime(date1[0], "%b %d, %Y %H:%M")
+        end_date = datetime.strptime(date1[1], "%b %d, %Y %H:%M")
+        start_date1 = start_date.strftime("%b %d, %Y")
+        end_date1 = end_date.strftime("%b %d, %Y")
+        
+        print('start_date:',start_date)
+        print('end_date:',end_date)
+        #----------------------------for CS
+        
+        
+        cs_user_ids = User.objects.filter(user_type='CS',date_joined__range=[start_date, end_date]).values_list('id', flat=True)
+
+        # Step 2: Use these IDs to filter CounsellorDetails
+        cs_details = CounsellorDetails.objects.filter(form_status='Yes', status='Approved',user_id__in=cs_user_ids)
+        
+        filtered_cs_users = User.objects.filter(id__in=cs_details.values_list('user_id', flat=True))
+
+        
+        cs_count = cs_details.count()
+        cs_male_count = filtered_cs_users.filter(gender = 'Male').count()
+        cs_female_count = filtered_cs_users.filter(gender ='Female').count()
+        cs_other_count =  filtered_cs_users.filter(gender ='Other').count()
+        # cs_male_counts =  filtered_cs_users.filter(gender ='Male')
+        # print("cs_male_counts-:",cs_male_counts)
+        
+        print("cs_male_count---------------:",cs_male_count)
+        print("cs_female_count---------------:",cs_female_count)
+        
+        #-----for counsellor pending verify card...start-------- 
+        
+        
+        active_cs = CounsellorDetails.objects.filter(status = 'Pending',form_status='Yes', user_id__in=cs_user_ids)
+        active_cs_count = active_cs.count()
+        for css in active_cs:
+            print(css.user_id)
+        print("active_cs---------------:",active_cs)
+        active_cs_male = 0
+        active_cs_female = 0
+        active_cs_other = 0
+
+        for cs in active_cs:
+            try:
+                user = User.objects.get(id=cs.user_id)
+                print(user.gender)
+                if user.gender.lower() == 'male':
+                    active_cs_male += 1
+                elif user.gender.lower() == 'other':
+                    active_cs_others += 1
+                else :
+                    active_cs_female += 1
+            except User.DoesNotExist:
+                print(f"User with ID {cs.user_id} does not exist.")
+                continue
+            
+        print("total active Counsellors:", active_cs_count)       
+        print("Male active Counsellors:", active_cs_male)
+        print("Female active Counsellors:", active_cs_female)
+        
+        #-----for counsellor pending verify card...end-------- 
+        
+        #-----for counsellor verification not started  card...start
+        # counsellor_user_ids = CounsellorDetails.objects.values_list('user_id', flat=True)
+
+        # # Step 3: Get the count of CS users whose IDs are not in CounsellorDetails
+        # non_active_cs = cs_user_ids.exclude(id__in=counsellor_user_ids)
+        # # non_active_cs = CounsellorDetails.objects.filter(user_id__in=cs_user_ids).exclude(status='Approved')
+        # non_active_cs_count = non_active_cs.count()
+        
+        # non_active_cs_male = 0
+        # non_active_cs_female = 0
+        # non_active_cs_other = 0
+
+        # for cs in non_active_cs:
+        #     try:
+        #         user = User.objects.get(id=cs.user_id)
+        #         print(user.gender)
+        #         if user.gender.lower() == 'male':
+        #             non_active_cs_male += 1
+        #         elif user.gender.lower() == 'other':
+        #             non_active_cs_others += 1
+        #         else :
+        #             non_active_cs_female += 1
+        #     except User.DoesNotExist:
+        #         print(f"User with ID {cs.user_id} does not exist.")
+        #         continue
+        # Step 1: Get CS users within the date range
+        cs_user_ids = User.objects.filter(user_type='CS',date_joined__range=[start_date, end_date]).values_list('id', flat=True)
+        print("cs_user_ids:",cs_user_ids)
+        # Step 2: Get all user_ids from CounsellorDetails
+        counsellor_user_ids = CounsellorDetails.objects.values_list('user_id', flat=True)
+        print("counsellor_user_ids:",counsellor_user_ids)
+        # Step 3: Get CS users (in date range) who are NOT in CounsellorDetails
+        non_active_cs = User.objects.filter(id__in=cs_user_ids).exclude(id__in=counsellor_user_ids)
+        print("non_active_cs:",non_active_cs)
+        non_active_cs_count = non_active_cs.count()
+
+        # Gender counts
+        non_active_cs_male = non_active_cs.filter(gender='Male').count()
+        non_active_cs_female = non_active_cs.filter(gender='Female').count()
+        non_active_cs_other = non_active_cs.filter(gender='Other').count()
+
+
+        print("total nonactive Counsellors:", non_active_cs_count)       
+        print("Male nonactive Counsellors:", non_active_cs_male)
+        print("Female nonactive Counsellors:", non_active_cs_female)
+
+        #-----for counsellor verification not started  card...end 
+        
+        online_total_session_data = Counselling_Booking.objects.filter(counselling_mode='Online',created_at__range = [start_date, end_date])
+        online_total_session = Counselling_Booking.objects.filter(counselling_mode='Online',created_at__range = [start_date, end_date]).count()
+        online_onetoone_session = online_total_session_data.filter(counselling_mode='Online',session_type='One-To-One').count()
+        online_group_session = online_total_session_data.filter(counselling_mode='Online',session_type='Group').count()
+        
+        # online_total_session_co = Counselling_Booking.objects.filter(counselling_mode='Online',created_at__range = [start_date, end_date])
+        # online_onetoone_session_co = online_total_session_co.filter(counselling_mode='Online',session_type='One-To-One')
+        # online_group_session_co = online_total_session_co.filter(counselling_mode='Online',session_type='Group')
+        
+        # print("online_total__co:", online_total_session_co)
+        # print("online_onetoone__co:", online_onetoone_session_co)
+        # print("online_group__co:", online_group_session_co)
+        # print("online_total_session:", online_total_session)       
+        # print("online_onetoone_session:", online_onetoone_session)
+        # print("online_group_session:", online_group_session)
+        
+        offline_total_session_data = Counselling_Booking.objects.filter(counselling_mode='Offline',created_at__range = [start_date, end_date])
+        offline_total_session = Counselling_Booking.objects.filter(counselling_mode='Offline',created_at__range = [start_date, end_date]).count()
+        offline_onetoone_session = offline_total_session_data.filter(counselling_mode='Offline',session_type='One-To-One').count()
+        offline_group_session = offline_total_session_data.filter(counselling_mode='Offline',session_type='Group').count()
+        
+        print("offline_total_session:", offline_total_session)       
+        print("offline_onetoone_session:", offline_onetoone_session)
+        print("offline_group_session:", offline_group_session)
+        
+        top_counsellors = Counselling_Booking.objects.values('counsellor_id').annotate(total=Count('id')).order_by('-total')[:3]
+
+        top_ids = [item['counsellor_id'] for item in top_counsellors]
+        top_dict = {item['counsellor_id']: item['total'] for item in top_counsellors}
+
+        top_counsellors = Counselling_Booking.objects.values('counsellor_id').annotate(total=Count('id')).order_by('-total')[:3]
+        # print(top_counsellors)
+        top_ids = [item['counsellor_id'] for item in top_counsellors]
+
+        # Step 3: Map counsellor_id (reg_no) to session count
+        top_dict = {item['counsellor_id']: item['total'] for item in top_counsellors}
+
+        # Step 4: Get counsellor details by matching reg_no
+        counsellor_details = CounsellorDetails.objects.filter(user_id__in=top_ids) #added user_id inplace of reg_no
+
+        # Step 5: Create a final list with counsellor name and session count
+        final_top_list = []
+        for c in counsellor_details:
+            final_top_list.append({
+                'name': c.name,
+                'total_bookings': top_dict.get(c.user_id, 0)#added user_id inplace of reg_no
+            })
+        # print(final_top_list)
+        #-----------------for cs end-----
+        
+    else:
+        start_date1 = ''
+        end_date1 = ''
+        cs_details = CounsellorDetails.objects.filter(form_status = 'Yes',status='Approved')
+        cs_count = cs_details.count()
+        # cs_male_count =  User.objects.filter(Q(user_type = 'CS') & Q(gender = 'Male')).count()
+        # cs_female_count =  User.objects.filter(Q(user_type = 'CS') & Q(gender = 'Female')).count()
+        # cs_other_count =  User.objects.filter(Q(user_type = 'CS') & Q(gender = 'Others')).count()
+        
+        cs_male_count = 0
+        cs_female_count = 0
+        cs_other_count = 0
+
+        for cs in cs_details:
+            try:
+                user = User.objects.get(id=cs.user_id)
+                print(user.gender)
+                if user.gender.lower() == 'male':
+                    cs_male_count += 1
+                elif user.gender.lower() == 'other':
+                    cs_other_count += 1
+                else :
+                    cs_female_count += 1
+            except User.DoesNotExist:
+                print(f"User with ID {cs.user_id} does not exist.")
+                continue
+        
+        # print("cs_male_count---------------:",cs_male_count)
+        # print("cs_female_count---------------:",cs_female_count) 
+        
+        #-----for counsellor pending verify card...start 
+        active_cs = CounsellorDetails.objects.filter(status = 'Pending',form_status='Yes')
+        active_cs_count = active_cs.count()
+        # print("cs_male_count---------------:",cs_male_count)
+        # print("cs_female_count---------------:",cs_female_count)
+        
+        # counsellor_counts = Counselling_Booking.objects.values('counsellor_id').annotate(total=Count('id'))
+        # print('counsellor_counts:',counsellor_counts)
+        
+        
+        
+        # cs_male =  User.objects.filter(Q(user_type = 'CS') & Q(gender = 'Male'))
+        # cs_female =  User.objects.filter(Q(user_type = 'CS') & Q(gender = 'Female'))
+        # print("cs_male---------------:",cs_male)
+        # print("cs_female---------------:",cs_female)
+        
+        active_cs_male = 0
+        active_cs_female = 0
+        active_cs_other = 0
+
+        for cs in active_cs:
+            try:
+                user = User.objects.get(id=cs.user_id)
+                # print(user.gender)
+                if user.gender.lower() == 'male':
+                    active_cs_male += 1
+                elif user.gender.lower() == 'other':
+                    active_cs_others += 1
+                else :
+                    active_cs_female += 1
+            except User.DoesNotExist:
+                print(f"User with ID {cs.user_id} does not exist.")
+                continue
+
+        # print("total active Counsellors:", active_cs_count)       
+        # print("Male active Counsellors:", active_cs_male)
+        # print("Female active Counsellors:", active_cs_female)
+        
+        #-----for counsellor pending verify card...end-------- 
+        
+        #-----for counsellor verification not started  card...start 
+        cs_user_ids = User.objects.filter(user_type='CS').values_list('id', flat=True)
+        
+        
+        counsellor_user_ids = CounsellorDetails.objects.values_list('user_id', flat=True)
+
+        # Step 3: Get the count of CS users whose IDs are not in CounsellorDetails
+        non_active_cs = cs_user_ids.exclude(id__in=counsellor_user_ids)
+        non_active_cs_count = non_active_cs.count()
+        
+        non_active_cs_male = non_active_cs.filter(gender = 'Male').count()
+        non_active_cs_female = non_active_cs.filter(gender ='Female').count()
+        non_active_cs_other = non_active_cs.filter(gender ='Other').count()
+        
+
+        # print("total nonactive Counsellors:", non_active_cs_count)       
+        # print("Male nonactive Counsellors:", non_active_cs_male)
+        # print("Female nonactive Counsellors:", non_active_cs_female)
+        
+        #-----for counsellor verification not started  card...end----------
+        
+        online_total_session = Counselling_Booking.objects.filter(counselling_mode='Online').count()
+        online_onetoone_session = Counselling_Booking.objects.filter(counselling_mode='Online',session_type='One-To-One').count()
+        online_group_session = Counselling_Booking.objects.filter(counselling_mode='Online',session_type='Group').count()
+        
+        # print("online_total_session:", online_total_session)       
+        # print("online_onetoone_session:", online_onetoone_session)
+        # print("online_group_session:", online_group_session)
+        
+        offline_total_session = Counselling_Booking.objects.filter(counselling_mode='Offline').count()
+        offline_onetoone_session = Counselling_Booking.objects.filter(counselling_mode='Offline',session_type='One-To-One').count()
+        offline_group_session = Counselling_Booking.objects.filter(counselling_mode='Offline',session_type='Group').count()
+        
+        # print("offline_total_session:", offline_total_session)       
+        # print("offline_onetoone_session:", offline_onetoone_session)
+        # print("offline_group_session:", offline_group_session)
+        
+        # top_counsellors = Counselling_Booking.objects.values('counsellor_id').annotate(total=Count('id')).order_by('-total')[:3]
+        
+        
+        # # Convert to dictionary {counsellor_id: count}
+        # top_dict = {item['counsellor_id']: item['total'] for item in top_counsellors}
+        
+        top_counsellors = Counselling_Booking.objects.values('counsellor_id').annotate(total=Count('id')).order_by('-total')[:3]
+        # print(top_counsellors)
+        top_ids = [item['counsellor_id'] for item in top_counsellors]
+
+        # Step 3: Map counsellor_id (reg_no) to session count
+        top_dict = {item['counsellor_id']: item['total'] for item in top_counsellors}
+
+        # Step 4: Get counsellor details by matching reg_no
+        counsellor_details = CounsellorDetails.objects.filter(user_id__in=top_ids) #added user_id inplace of reg_no
+
+        # Step 5: Create a final list with counsellor name and session count
+        final_top_list = []
+        for c in counsellor_details:
+            final_top_list.append({
+                'name': c.name,
+                'total_bookings': top_dict.get(c.user_id, 0)
+            })
+        print(final_top_list)
+        # Sort list by total_bookings in descending order
+        final_top_list.sort(key=lambda x: x['total_bookings'], reverse=True)
+        print(final_top_list)
+    return render(request, 'department/vocational_guidance_dashboard.html', {'cs_count' : cs_count,
+                                                                      'cs_other_count' : cs_other_count,
+                                                                      'cs_female_count' : cs_female_count, 
+                                                                      'cs_male_count' : cs_male_count,
+                                                                      'active_cs_count' : active_cs_count,
+                                                                      'active_cs_male' : active_cs_male,
+                                                                      'active_cs_female' : active_cs_female,
+                                                                      'active_cs_other' : active_cs_other,
+                                                                      'non_active_cs_male' : non_active_cs_male,
+                                                                      'non_active_cs_female' : non_active_cs_female,
+                                                                      'non_active_cs_count' : non_active_cs_count,
+                                                                      'non_active_cs_other' : non_active_cs_other,
+                                                                      'online_onetoone_session' : online_onetoone_session,
+                                                                      'online_total_session' : online_total_session,
+                                                                      'online_group_session' : online_group_session,
+                                                                      'offline_onetoone_session' : offline_onetoone_session,
+                                                                      'offline_total_session' : offline_total_session,
+                                                                      'offline_group_session': offline_group_session,
+                                                                      'final_top_list': final_top_list, 
+                                                                      'start_date1': start_date1,
+                                                                      'end_date1': end_date1})
