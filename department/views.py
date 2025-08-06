@@ -16,9 +16,116 @@ def old_mis_dashboard(request):
     
     return render(request, 'department/old_mis_dashboard.html')
 
+@never_cache
+#@department_login_required
 def job_portal_mis_dashboard(request):
+    # if request.user.is_authenticated:
+    #     if not request.user.is_jobseeker and not request.user.is_recruiter and not request.user.is_agency_recruiter: 
+    if ( request.POST.get("timestamp", "")):
+
+        timestamp = request.POST.get("timestamp")
+        date1 = request.POST.get('timestamp').split(' - ')
+        if len(date1[0].split()) == 3:
+            start_string = date1[0] + " 00:00"
+        else:
+            start_string = date1[0]
+        start_date = datetime.strptime(start_string, "%b %d, %Y %H:%M")
+
+        # Handle end date
+        if len(date1[1].split()) == 3:
+            end_string = date1[1] + " 00:00"
+        else:
+            end_string = date1[1]
+        end_date = datetime.strptime(end_string, "%b %d, %Y %H:%M")
+        start_date1 = start_date.strftime("%b %d, %Y")
+        end_date1 = end_date.strftime("%b %d, %Y")
+        print("start date:",start_date)
+        print("end_date:",end_date)
+        jobseeker_details = User.objects.filter(user_type = 'JS', date_joined__range = [start_date, end_date])
+        jobseeker_count = jobseeker_details.count()
+        jobseeker_male_count =  jobseeker_details.filter(Q(user_type = 'JS') & Q(gender = 'Male') | Q(gender = 'M')).count()
+        jobseeker_female_count =  jobseeker_details.filter(Q(user_type = 'JS') & Q(gender = 'Female')| Q(gender = 'F')).count()
+        jobseeker_other_count =  jobseeker_details.filter(Q(user_type = 'JS') & Q(gender = 'Others')).count()
+        employer_count = User.objects.filter(user_type = 'RR', date_joined__range = [start_date, end_date]).count()
+        jobpost_details = JobPost.objects.filter(published_on__range = [start_date, end_date])
+        jobpost_count = jobpost_details.count()
+        open_count = jobpost_details.filter(mode_of_recruitment = 'Open(Self Management)').count()
+        jobfair_count = jobpost_details.filter(mode_of_recruitment = 'Career Center/Employment Exchange', job_post_options = 'JobFair').count()
+        sponsoring_count = jobpost_details.filter(mode_of_recruitment = 'Career Center/Employment Exchange', job_post_options = 'Sponsoring').count()
+        applied_jobs = AppliedJobs.objects.filter(job_post__published_on__range = [start_date, end_date])
+        shortlist_details = applied_jobs.filter(Q(status = 'Shortlisted') |Q(status = 'Selected')).count()
+        shortlist_open_count = applied_jobs.filter(Q(job_post__mode_of_recruitment = 'Open(Self Management)') & (Q(status = 'Shortlisted') |Q(status = 'Selected'))).count()
+        shortlist_sponsor_count = applied_jobs.filter(Q(job_post__mode_of_recruitment = 'Career Center/Employment Exchange') & Q(job_post__job_post_options = 'JobFair') & (Q(status = 'Shortlisted') |Q(status = 'Selected'))).count()
+        shortlist_rd_count = applied_jobs.filter(Q(job_post__mode_of_recruitment = 'Career Center/Employment Exchange') & Q(job_post__job_post_options = 'Sponsoring') & (Q(status = 'Shortlisted') |Q(status = 'Selected'))).count()
+        placement_details = applied_jobs.filter(Q(status = 'Selected')).count()
+        placement_open_count = applied_jobs.filter(Q(job_post__mode_of_recruitment = 'Open(Self Management)') & Q(status = 'Selected')).count()
+        placement_sponsor_count = applied_jobs.filter(Q(job_post__mode_of_recruitment = 'Career Center/Employment Exchange') & Q(job_post__job_post_options = 'JobFair') & Q(status = 'Selected')).count()
+        placement_rd_count = applied_jobs.filter(Q(job_post__mode_of_recruitment = 'Career Center/Employment Exchange') & Q(job_post__job_post_options = 'Sponsoring') & Q(status = 'Selected')).count()
+
+    else:
+        start_date1 = ''
+        end_date1 = ''
+        jobseeker_details = User.objects.filter(user_type = 'JS')
+        jobseeker_count = jobseeker_details.count()
+        jobseeker_male_count =  User.objects.filter(Q(user_type = 'JS') & Q(gender = 'Male') | Q(gender = 'M')).count()
+        jobseeker_female_count =  User.objects.filter(Q(user_type = 'JS') & Q(gender = 'Female')| Q(gender = 'F')).count()
+        jobseeker_other_count =  User.objects.filter(Q(user_type = 'JS') & Q(gender = 'Others')).count()
+        employer_count = User.objects.filter(user_type = 'RR').count()
+        jobpost_details = JobPost.objects.all()
+        jobpost_count = jobpost_details.count()
+        open_count = jobpost_details.filter(mode_of_recruitment = 'Open(Self Management)').count()
+        jobfair_count = jobpost_details.filter(mode_of_recruitment = 'Career Center/Employment Exchange', job_post_options = 'JobFair').count()
+        sponsoring_count = jobpost_details.filter(mode_of_recruitment = 'Career Center/Employment Exchange', job_post_options = 'Sponsoring').count()
+        shortlist_details = AppliedJobs.objects.filter(Q(status = 'Shortlisted') |Q(status = 'Selected')).count()
+        shortlist_open_count = AppliedJobs.objects.filter(Q(job_post__mode_of_recruitment = 'Open(Self Management)') & (Q(status = 'Shortlisted') |Q(status = 'Selected'))).count()
+        shortlist_sponsor_count = AppliedJobs.objects.filter(Q(job_post__mode_of_recruitment = 'Career Center/Employment Exchange') & Q(job_post__job_post_options = 'JobFair') & (Q(status = 'Shortlisted') |Q(status = 'Selected'))).count()
+        shortlist_rd_count = AppliedJobs.objects.filter(Q(job_post__mode_of_recruitment = 'Career Center/Employment Exchange') & Q(job_post__job_post_options = 'Sponsoring') & (Q(status = 'Shortlisted') |Q(status = 'Selected'))).count()
+        placement_details = AppliedJobs.objects.filter(Q(status = 'Selected')).count()
+        placement_open_count = AppliedJobs.objects.filter(Q(job_post__mode_of_recruitment = 'Open(Self Management)') & Q(status = 'Selected')).count()
+        placement_sponsor_count = AppliedJobs.objects.filter(Q(job_post__mode_of_recruitment = 'Career Center/Employment Exchange') & Q(job_post__job_post_options = 'JobFair') & Q(status = 'Selected')).count()
+        placement_rd_count = AppliedJobs.objects.filter(Q(job_post__mode_of_recruitment = 'Career Center/Employment Exchange') & Q(job_post__job_post_options = 'Sponsoring') & Q(status = 'Selected')).count()
+
+    # Get the third-highest score
+    top_score_details = Employment_Exchange_Performance.objects.order_by('-score')[:3]
+    # Get the top three scores and ties
     
-    return render(request, 'department/job_portal_mis_dashboard.html')
+    top_dict = {}
+    for details in top_score_details:
+        top_dict[details.employment_exchange]={}
+        top_dict[details.employment_exchange]['score']=details.score
+        
+    # Get the third-lowest score
+    bottom_score_details = Employment_Exchange_Performance.objects.order_by('score')[:3]
+    
+    bottom_dict={}
+    
+    for details in bottom_score_details:
+        bottom_dict[details.employment_exchange]={}
+        bottom_dict[details.employment_exchange]['score']=details.score
+    emps_exchanges= New_Employment_Exchange.objects.all()
+    formatted_date = datetime.today().strftime("%a %b %d %Y")
+    return render(request, 'department/job_portal_mis_dashboard.html',{ "formatted_end_date": formatted_date,'emps_exchanges':emps_exchanges,
+                                                                    'jobseeker_count' : jobseeker_count,
+                                                                      'jobseeker_other_count' : jobseeker_other_count,
+                                                                      'jobseeker_female_count' : jobseeker_female_count, 
+                                                                      'jobseeker_male_count' : jobseeker_male_count,
+                                                                      'employer_count' : employer_count,
+                                                                      'jobpost_count' : jobpost_count,
+                                                                      'open_count' : open_count,
+                                                                      'jobfair_count' : jobfair_count,
+                                                                      'sponsoring_count' : sponsoring_count,
+                                                                      'shortlist_details' : shortlist_details,
+                                                                      'shortlist_open_count': shortlist_open_count,
+                                                                      'shortlist_sponsor_count': shortlist_sponsor_count,
+                                                                      'shortlist_rd_count': shortlist_rd_count,
+                                                                      'placement_open_count': placement_open_count,
+                                                                      'placement_sponsor_count': placement_sponsor_count,
+                                                                      'placement_rd_count': placement_rd_count,
+                                                                      'placement_details' : placement_details,
+                                                                      'top_dict': top_dict,
+                                                                      'bottom_dict': bottom_dict, 
+                                                                      'start_date1': start_date1,
+                                                                      'end_date1': end_date1})
 
 def jobseeker_mis(request):
     
@@ -435,9 +542,21 @@ def vocational_guidance_dashboard(request):
     if ( request.POST.get("timestamp", "")):
 
         timestamp = request.POST.get("timestamp")
-        date1 = request.POST.get('timestamp').split(' - ')
-        start_date = datetime.strptime(date1[0], "%b %d, %Y %H:%M")
-        end_date = datetime.strptime(date1[1], "%b %d, %Y %H:%M")
+        date1 = timestamp.split(' - ')
+        # Handle start date
+        if len(date1[0].split()) == 3:
+            start_string = date1[0] + " 00:00"
+        else:
+            start_string = date1[0]
+        start_date = datetime.strptime(start_string, "%b %d, %Y %H:%M")
+
+        # Handle end date
+        if len(date1[1].split()) == 3:
+            end_string = date1[1] + " 00:00"
+        else:
+            end_string = date1[1]
+        end_date = datetime.strptime(end_string, "%b %d, %Y %H:%M")
+
         start_date1 = start_date.strftime("%b %d, %Y")
         end_date1 = end_date.strftime("%b %d, %Y")
         

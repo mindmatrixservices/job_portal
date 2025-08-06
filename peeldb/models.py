@@ -1030,9 +1030,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     session_id = models.CharField(max_length=100, blank=True, null=True)
     coun_booking = models.ManyToManyField(Counselling_Booking, blank=True)
     booking_flag = models.IntegerField(default=1)
-    logo = models.CharField(max_length=800, null=True, blank=True)
-    gst_certificate = models.CharField(max_length=800, null=True, blank=True)
-    pan_card = models.CharField(max_length=800, null=True, blank=True)
+    # logo = models.CharField(max_length=800, null=True, blank=True)
+    # gst_certificate = models.CharField(max_length=800, null=True, blank=True)
+    # pan_card = models.CharField(max_length=800, null=True, blank=True)
     objects = UserManager()
 
 
